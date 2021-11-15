@@ -8,7 +8,7 @@ class LinearFMWaveform: public PulsedWaveform {
     // Sweep bandwidth (Hz)
     double bandwidth;
     
-    std::vector<std::complex<float>> sample();
+    std::vector<std::complex<double>> sample();
     LinearFMWaveform();
     LinearFMWaveform(double bandwidth, double pulsewidth, double prf, double sampRate);
     ~LinearFMWaveform();

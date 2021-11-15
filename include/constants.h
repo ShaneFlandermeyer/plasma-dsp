@@ -4,6 +4,6 @@
 #include <complex>
 
 // Imaginary number J
-const std::complex<float> Im(0, 1);
+const std::complex<double> Im(0, 1);
 
 #endif

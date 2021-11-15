@@ -10,7 +10,7 @@ class Waveform {
     // Waveform sample rate
     double sampRate;
     // Return a vector containing the waveform samples
-    virtual std::vector<std::complex<float>> sample() = 0;
+    virtual std::vector<std::complex<double>> sample() = 0;
 };
 
 #endif

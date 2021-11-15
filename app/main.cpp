@@ -2,10 +2,11 @@
 #include <set>
 #include <iostream>
 #include "LinearFMWaveform.h"
+#include "SquareWave.h"
 
 int main() {
   using namespace matplot;
-  auto wave = LinearFMWaveform(10e6,100e-6,1e3,20e6);
+  auto wave = SquareWaveform(100e-6,1e3,20e6);
   auto data = wave.sample();
   std::vector<float> data_real(data.size());
   for (size_t i = 0; i < data.size(); i++) {
