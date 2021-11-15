@@ -29,10 +29,10 @@ LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
 }
 
 LinearFMWaveform::LinearFMWaveform(){
-  d_bandwidth = 0;
-  d_pulsewidth = 0;
-  d_sampRate = 0;
-  d_prf = 0;
+  bandwidth(0);
+  pulsewidth(0);
+  sampRate(0);
+  prf(0);
 }
 
 LinearFMWaveform::~LinearFMWaveform() {}

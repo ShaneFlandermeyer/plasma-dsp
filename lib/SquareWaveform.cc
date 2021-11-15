@@ -21,6 +21,15 @@ std::vector<std::complex<double>> SquareWaveform::sample() {
 }
 
 /*
+ * Default constructor
+ */
+SquareWaveform::SquareWaveform() {
+  pulsewidth(0);
+  prf(0);
+  sampRate(0);
+}
+
+/*
  * Non-trivial constructor
  */
 SquareWaveform::SquareWaveform(double pulsewidth, double prf, double sampRate) {
