@@ -22,10 +22,10 @@ std::vector<std::complex<double>> LinearFMWaveform::sample() {
 
 LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
                                    double prf, double sampRate) {
-  d_bandwidth = bandwidth;
-  d_pulsewidth = pulsewidth;
-  d_prf = prf;
-  d_sampRate = sampRate;
+  this->bandwidth(bandwidth);
+  this->pulsewidth(pulsewidth);
+  this->prf(prf);
+  this->sampRate(sampRate);
 }
 
 LinearFMWaveform::LinearFMWaveform(){

@@ -15,7 +15,7 @@ std::vector<std::complex<double>> SquareWaveform::sample() {
   // TODO: Get the normalization right here
   double mag = 1;
   for (size_t i = 0; i < nSampsPulse; i++) {
-    out[i] = std::complex<double>(mag,0);
+    out[i] = std::complex<double>(mag, 0);
   }
   return out;
 }
@@ -24,9 +24,9 @@ std::vector<std::complex<double>> SquareWaveform::sample() {
  * Non-trivial constructor
  */
 SquareWaveform::SquareWaveform(double pulsewidth, double prf, double sampRate) {
-  d_pulsewidth = pulsewidth;
-  d_prf = prf;
-  d_sampRate = sampRate;
+  this->pulsewidth(pulsewidth);
+  this->prf(prf);
+  this->sampRate(sampRate);
 }
 
 /*

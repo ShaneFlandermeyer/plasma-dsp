@@ -4,6 +4,8 @@
 class SquareWaveform : public PulsedWaveform {
   public:
     std::vector<std::complex<double>> sample();
+    // Constructors and destructors
+    SquareWaveform();
     SquareWaveform(double pulsewidth, double prf, double sampRate);
     ~SquareWaveform();
 };
