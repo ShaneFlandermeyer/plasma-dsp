@@ -1,13 +1,8 @@
 #include "LinearFMWaveform.h"
 
-LinearFMWaveform::LinearFMWaveform() {
-  bandwidth = 0;
-  pulsewidth = 0;
-  sampRate = 0;
-  prf = 0;
-}
-LinearFMWaveform::~LinearFMWaveform() {}
-
+/*
+ * Generate a PRI of data for the given waveform
+ */
 std::vector<std::complex<float>> LinearFMWaveform::sample() {
   // Imaginary number J
   std::complex<float> Im(0, 1);
@@ -26,3 +21,19 @@ std::vector<std::complex<float>> LinearFMWaveform::sample() {
   }
   return wave;
 }
+
+LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth, double prf, double sampRate) {
+  this->bandwidth = bandwidth;
+  this->pulsewidth = pulsewidth;
+  this->prf = prf;
+  this->sampRate = sampRate;  
+}
+
+LinearFMWaveform::LinearFMWaveform() {
+  bandwidth = 0;
+  pulsewidth = 0;
+  sampRate = 0;
+  prf = 0;
+}
+
+LinearFMWaveform::~LinearFMWaveform() {}
