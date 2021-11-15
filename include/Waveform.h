@@ -15,8 +15,8 @@ class Waveform {
   // Return a vector containing the waveform samples for one PRI
   virtual std::vector<std::complex<double>> sample() = 0;
   // Getters and setters
-  double sampRate() const { return d_sampRate; }
-  void sampRate(double sampRate) { d_sampRate = sampRate; }
+  auto sampRate() const { return d_sampRate; }
+  auto sampRate(double sampRate) { d_sampRate = sampRate; }
 };
 
 #endif

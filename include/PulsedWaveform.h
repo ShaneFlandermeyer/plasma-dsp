@@ -10,9 +10,9 @@ class PulsedWaveform : public Waveform {
 
  public:
   // Getters and setters
-  double prf() const { return d_prf; }
-  void prf(double prf) { d_prf = prf; }
-  double pulsewidth() const { return d_pulsewidth; }
-  void pulsewidth(double pulsewidth) { d_pulsewidth = pulsewidth; }
+  auto prf() const { return d_prf; }
+  auto prf(double prf) { d_prf = prf; }
+  auto pulsewidth() const { return d_pulsewidth; }
+  auto pulsewidth(double pulsewidth) { d_pulsewidth = pulsewidth; }
 };
 #endif

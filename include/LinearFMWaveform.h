@@ -12,8 +12,8 @@ class LinearFMWaveform : public PulsedWaveform {
   // Return a vector containing the waveform samples for one PRI
   std::vector<std::complex<double>> sample();
   // Getters and setters
-  double bandwidth() const { return d_bandwidth; }
-  void bandwidth(double bandwidth) { d_bandwidth = bandwidth; }
+  auto bandwidth() const { return d_bandwidth; }
+  auto bandwidth(double bandwidth) { d_bandwidth = bandwidth; }
 
   // Constructors and destructors
   LinearFMWaveform();
