@@ -22,14 +22,15 @@ std::vector<std::complex<float>> LinearFMWaveform::sample() {
   return wave;
 }
 
-LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth, double prf, double sampRate) {
+LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
+                                   double prf, double sampRate) {
   this->bandwidth = bandwidth;
   this->pulsewidth = pulsewidth;
   this->prf = prf;
-  this->sampRate = sampRate;  
+  this->sampRate = sampRate;
 }
 
-LinearFMWaveform::LinearFMWaveform() {
+LinearFMWaveform::LinearFMWaveform(){
   bandwidth = 0;
   pulsewidth = 0;
   sampRate = 0;
