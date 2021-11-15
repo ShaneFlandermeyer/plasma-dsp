@@ -4,8 +4,6 @@
  * Generate a PRI of data for the given waveform
  */
 std::vector<std::complex<float>> LinearFMWaveform::sample() {
-  // Imaginary number J
-  std::complex<float> Im(0, 1);
   // Sample interval
   float ts = 1 / sampRate;
   // Number of samples per pulse

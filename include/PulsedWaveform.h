@@ -1,5 +1,5 @@
-#ifndef PULSEDWAVEFORM_H
-#define PULSEDWAVEFORM_H
+#ifndef PULSED_WAVEFORM_H
+#define PULSED_WAVEFORM_H
 #include "Waveform.h"
 class PulsedWaveform: public Waveform {
   public:

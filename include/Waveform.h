@@ -3,6 +3,7 @@
 
 #include <complex>
 #include <vector>
+#include "constants.h"
 
 class Waveform {
   public:

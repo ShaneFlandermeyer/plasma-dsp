@@ -1,5 +1,6 @@
 # List of header files
 set(WAVEFORM_HEADERS
+  consants.h
   Waveform.h
   PulsedWaveform.h
   LinearFMWaveform.h)

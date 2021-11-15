@@ -1,5 +1,5 @@
-#ifndef LINEARFMWAVEFORM_H
-#define LINEARfMWAVEFORM_H
+#ifndef LINEAR_FM_WAVEFORM_H
+#define LINEAR_FM_WAVEFORM_H
 
 #include "Waveform.h"
 #include "PulsedWaveform.h"
