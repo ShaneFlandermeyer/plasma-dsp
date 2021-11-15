@@ -9,7 +9,11 @@ class LinearFMWaveform: public Waveform {
     double pulsewidth;
     double sampRate;
     double prf;
-    
+    std::vector<std::complex<float>> sample();
+    LinearFMWaveform();
+    ~LinearFMWaveform();
 };
+
+
 
 #endif

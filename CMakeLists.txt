@@ -9,7 +9,10 @@ set(CMAKE_CXX_STANDARD 20)
 ########################################################################
 # External packages
 ########################################################################
-find_package(Matplot++ REQUIRED)
+find_package(Matplot++ REQUIRED QUIET)
+if(Matplot++_FOUND)
+  message(STATUS "Matplot++ found")
+endif(Matplot++_FOUND)
 
 
 ########################################################################

@@ -1,12 +1,11 @@
 #include <matplot/matplot.h>
 #include <set>
+#include <iostream>
+#include "LinearFMWaveform.h"
 
 int main() {
-  using namespace matplot;
-
-  std::set<std::vector<double>> Y = {
-      {16, 5, 9, 4}, {2, 11, 7, 14}, {3, 10, 6, 15}, {13, 8, 12, 1}};
-  plot(Y);
-  show();
+  // using namespace matplot;
+  auto wave = LinearFMWaveform();
+  std::cout << wave.prf << std::endl;
   return 0;
 }
