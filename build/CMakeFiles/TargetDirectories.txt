@@ -1,8 +1,0 @@
-/home/shane/src/waveform/build/CMakeFiles/rebuild_cache.dir
-/home/shane/src/waveform/build/CMakeFiles/edit_cache.dir
-/home/shane/src/waveform/build/include/CMakeFiles/rebuild_cache.dir
-/home/shane/src/waveform/build/include/CMakeFiles/edit_cache.dir
-/home/shane/src/waveform/build/lib/CMakeFiles/rebuild_cache.dir
-/home/shane/src/waveform/build/lib/CMakeFiles/edit_cache.dir
-/home/shane/src/waveform/build/app/CMakeFiles/rebuild_cache.dir
-/home/shane/src/waveform/build/app/CMakeFiles/edit_cache.dir
