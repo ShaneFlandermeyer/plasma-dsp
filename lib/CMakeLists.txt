@@ -1,5 +1,6 @@
 # Waveform lib source files
 list(APPEND WAVEFORM_SOURCES
+  PulsedWaveform.cc
   SquareWaveform.cc
   LinearFMWaveform.cc)
 set(WAVEFORM_SOURCES "${WAVEFORM_SOURCES}" PARENT_SCOPE)
