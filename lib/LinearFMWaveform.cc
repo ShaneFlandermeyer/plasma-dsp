@@ -8,10 +8,8 @@ std::vector<std::complex<double>> LinearFMWaveform::sample() {
   double ts = 1 / sampRate();
   // Number of samples per pulse
   int nSampsPulse = static_cast<int>(sampRate() * pulsewidth());
-  // TODO: Handle multiple PRF values
-  int nSampsPri = static_cast<int>(sampRate() / prf()[0]);
   double t;
-  std::vector<std::complex<double>> wave(nSampsPri, 0);
+  std::vector<std::complex<double>> wave(nSampsPulse, 0);
   for (int n = 0; n < nSampsPulse; n++) {
     t = n * ts;
     double phase =
@@ -23,6 +21,14 @@ std::vector<std::complex<double>> LinearFMWaveform::sample() {
 
 LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
                                    double prf, double sampRate) {
+  this->bandwidth(bandwidth);
+  this->pulsewidth(pulsewidth);
+  this->prf(prf);
+  this->sampRate(sampRate);
+}
+
+LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
+                                   std::vector<double> prf, double sampRate) {
   this->bandwidth(bandwidth);
   this->pulsewidth(pulsewidth);
   this->prf(prf);

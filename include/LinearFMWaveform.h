@@ -19,6 +19,8 @@ class LinearFMWaveform : public PulsedWaveform {
   LinearFMWaveform();
   LinearFMWaveform(double bandwidth, double pulsewidth, double prf,
                    double sampRate);
+  LinearFMWaveform(double bandwidth, double pulsewidth, std::vector<double> prf,
+                   double sampRate);
   ~LinearFMWaveform();
 };
 
