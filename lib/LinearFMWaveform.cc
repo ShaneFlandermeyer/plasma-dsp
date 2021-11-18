@@ -1,8 +1,5 @@
 #include "LinearFMWaveform.h"
 
-/*
- * Generate a PRI of data for the given waveform
- */
 std::vector<std::complex<double>> LinearFMWaveform::sample() {
   // Sample interval
   double ts = 1 / sampRate();

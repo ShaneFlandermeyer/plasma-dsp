@@ -3,16 +3,11 @@
 #include <iostream>
 #include <numeric>
 
-std::vector<std::complex<double>> PulsedWaveform::getWaveform() {
+std::vector<std::complex<double>> PulsedWaveform::step() {
   // Compute a vector of PRIs
   std::vector<double> pri;
   std::transform(d_prf.begin(), d_prf.end(), std::back_inserter(pri),
                  [](double prf) { return 1 / prf; });
-  // Total time duration of the waveform
-  auto duration = std::accumulate(pri.begin(), pri.end(), 0.0);
-  // Total number of samples in the PRF schedule
-  auto nSampsTotal = static_cast<int>(duration * d_sampRate);
-  std::vector<std::complex<double>> wave(nSampsTotal);
   // Store the sample rate in a separate variable for lambda functions
   auto sampRate = d_sampRate;
   // Number of samples for every PRI
@@ -27,6 +22,12 @@ std::vector<std::complex<double>> PulsedWaveform::getWaveform() {
                    std::plus<int>());
   // Assign values to the nonzero indices
   // TODO: Investigate std::generate for this
+  // Total time duration of the waveform
+  auto duration = std::accumulate(pri.begin(), pri.end(), 0.0);
+  // Total number of samples in the PRF schedule
+  auto nSampsTotal = static_cast<int>(duration * d_sampRate);
+  std::vector<std::complex<double>> wave(nSampsTotal);
+  // Generate the waveform
   for (int index : startIndex) {
     auto data = sample();
     auto nSampsPulse = data.size();

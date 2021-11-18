@@ -11,9 +11,7 @@ std::vector<std::complex<double>> SquareWaveform::sample() {
   int nSampsPulse = static_cast<int>(pulsewidth() * sampRate());
   // Output vector
   std::vector<std::complex<double>> wave(nSampsPulse);
-  // TODO: Do I want to normalize here?
-  double mag = 1;
-  std::fill(wave.begin(), wave.end(), std::complex<double>(mag, 0));
+  std::fill(wave.begin(), wave.end(), std::complex<double>(1, 0));
   return wave;
 }
 
