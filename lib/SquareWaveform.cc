@@ -9,7 +9,8 @@ std::vector<std::complex<double>> SquareWaveform::sample() {
   // Number of samples per pulse
   int nSampsPulse = static_cast<int>(pulsewidth() * sampRate());
   // Number of samples per PRF
-  int nSampsPri = static_cast<int>(sampRate() / prf());
+  // TODO: Handle multiple PRF values
+  int nSampsPri = static_cast<int>(sampRate() / prf()[0]);
   // Output vector
   std::vector<std::complex<double>> out(nSampsPri);
   // TODO: Get the normalization right here
