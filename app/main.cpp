@@ -20,7 +20,11 @@ int main() {
   for (size_t i = 0; i < data.size(); i++) {
     data_real[i] = data[i].real();
   }
-  plot(data_real);
+  // plot(data_real);
+  // show();
+
+  auto win = window::blackman(50);
+  plot(win);
   show();
   return 0;
 }

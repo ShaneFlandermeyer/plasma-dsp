@@ -13,11 +13,21 @@
 namespace window {
 
   /**
-   * @brief Create a rectangular window of length n
+   * @brief Rectangular window of length n
    * 
    * @param n 
    * @return std::vector<float> 
    */
   std::vector<double> rectangular(int n);
+
+  /**
+   * @brief blackman window of length n
+   * 
+   * @param n 
+   * @return std::vector<double> 
+   */
+  std::vector<double> blackman(int n);
+
+
 
 }  // namespace window
