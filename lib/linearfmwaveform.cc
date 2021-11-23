@@ -1,4 +1,4 @@
-#include "LinearFMWaveform.h"
+#include "linearfmwaveform.h"
 
 std::vector<std::complex<double>> LinearFMWaveform::sample() {
   // Sample interval

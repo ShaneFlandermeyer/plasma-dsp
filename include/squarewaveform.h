@@ -1,6 +1,6 @@
 #ifndef SQUARE_WAVE_H
 #define SQUARE_WAVE_H
-#include "PulsedWaveform.h"
+#include "pulsedwaveform.h"
 
 /**
  * @brief A square (constant-amplitude) pulsed waveform.

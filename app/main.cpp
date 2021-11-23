@@ -3,8 +3,8 @@
 #include <iostream>
 #include <set>
 
-#include "LinearFMWaveform.h"
-#include "SquareWaveform.h"
+#include "linearfmwaveform.h"
+#include "squarewaveform.h"
 
 using namespace matplot;
 int main() {

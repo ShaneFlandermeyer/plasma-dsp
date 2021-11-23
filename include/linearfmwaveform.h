@@ -1,8 +1,8 @@
 #ifndef LINEAR_FM_WAVEFORM_H
 #define LINEAR_FM_WAVEFORM_H
 
-#include "PulsedWaveform.h"
-#include "Waveform.h"
+#include "pulsedwaveform.h"
+#include "waveform.h"
 
 /**
  * @brief A linear frequency-modulated waveform.

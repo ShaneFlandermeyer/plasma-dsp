@@ -1,6 +1,6 @@
 #ifndef PULSED_WAVEFORM_H
 #define PULSED_WAVEFORM_H
-#include "Waveform.h"
+#include "waveform.h"
 
 /**
  * @brief An abstract base class for pulsed waveforms.
