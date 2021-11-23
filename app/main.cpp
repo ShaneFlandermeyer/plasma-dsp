@@ -5,6 +5,7 @@
 
 #include "linearfmwaveform.h"
 #include "squarewaveform.h"
+#include "window.h"
 
 using namespace matplot;
 int main() {

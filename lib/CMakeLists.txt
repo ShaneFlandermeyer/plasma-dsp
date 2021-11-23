@@ -1,8 +1,9 @@
 # Waveform lib source files
 list(APPEND WAVEFORM_SOURCES
+  linearfmwaveform.cc
   pulsedwaveform.cc
   squarewaveform.cc
-  linearfmwaveform.cc)
+  window.cc)
 set(WAVEFORM_SOURCES "${WAVEFORM_SOURCES}" PARENT_SCOPE)
 # Create the waveform library
 add_library(waveform SHARED ${WAVEFORM_SOURCES})

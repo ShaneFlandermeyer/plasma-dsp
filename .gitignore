@@ -34,3 +34,7 @@
 # Build folders
 *.vscode/*
 *build/*
+
+# Doxygen
+html/
+latex/
