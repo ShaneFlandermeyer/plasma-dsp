@@ -28,6 +28,22 @@ namespace window {
    */
   std::vector<double> blackman(int n);
 
+  /**
+   * @brief hamming window of length n
+   * 
+   * @param n 
+   * @return std::vector<double> 
+   */
+  std::vector<double> hamming(int n);
+
+  /**
+   * @brief hanning window of length n
+   * 
+   * @param n 
+   * @return std::vector<double> 
+   */
+  std::vector<double> hanning(int n);
+
 
 
 }  // namespace window
