@@ -35,4 +35,20 @@ static std::vector<T> fftshift(std::vector<T> in) {
   return out;
 }
 
+/**
+ * @brief Inverse zero-frequency component shift
+ *
+ * @tparam T Input vector element data type
+ * @param in Input vector
+ * @return std::vector<T> Shifted output vector
+ */
+template <typename T>
+static std::vector<T> ifftshift(std::vector<T> in) {
+  auto out = in;
+  auto len = out.size();
+  auto center = (int)floor(len / 2);
+  std::rotate(out.begin(), out.begin() + center, out.end());
+  return out;
+}
+
 #endif
