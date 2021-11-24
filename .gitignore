@@ -38,3 +38,4 @@
 # Doxygen
 html/
 latex/
+*.bak

@@ -2,6 +2,7 @@
 list(APPEND WAVEFORM_SOURCES
   linearfmwaveform.cc
   pulsedwaveform.cc
+  spectrogram.cc
   squarewaveform.cc
   window.cc)
 set(WAVEFORM_SOURCES "${WAVEFORM_SOURCES}" PARENT_SCOPE)
