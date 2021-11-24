@@ -5,6 +5,7 @@ set(WAVEFORM_HEADERS
   pulsedwaveform.h
   spectrogram.h
   squarewaveform.h
+  utils.h
   waveform.h)
 # Make headers visible to the entire project
 set(WAVEFORM_HEADERS "${WAVEFORM_HEADERS}" PARENT_SCOPE)

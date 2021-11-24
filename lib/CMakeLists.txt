@@ -4,6 +4,7 @@ list(APPEND WAVEFORM_SOURCES
   pulsedwaveform.cc
   spectrogram.cc
   squarewaveform.cc
+  utils.cc
   window.cc)
 set(WAVEFORM_SOURCES "${WAVEFORM_SOURCES}" PARENT_SCOPE)
 # Create the waveform library
