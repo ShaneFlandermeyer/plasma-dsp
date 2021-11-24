@@ -12,5 +12,5 @@ std::vector<std::complex<double>> fft(std::vector<std::complex<double>> &in) {
   fftw_execute(p);
   fftw_destroy_plan(p);
   return out;
-
 }
+

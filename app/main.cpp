@@ -20,6 +20,7 @@ int main() {
   auto data = wave.step();
 
   auto freq = fft(data);
+  freq = fftshift(freq);
   auto freqdb = std::vector<double>(freq.size());
   std::transform(freq.begin(),freq.end(),freqdb.begin(),[](std::complex<double> &x){return 10*std::log10(std::abs(x));});
   plot(freqdb);
