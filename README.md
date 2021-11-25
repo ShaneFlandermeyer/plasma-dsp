@@ -44,3 +44,4 @@ There is currently no way to install the tool.
 - A matrix class
 - Phase coded waveforms
 - CMake installation option
+- New name (plasma-dsp?)
