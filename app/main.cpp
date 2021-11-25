@@ -24,7 +24,7 @@ int main() {
   auto noverlap = 64;
   auto nfft = 256;
   auto win = window::hamming(nfft);
-  auto spectro = spectrogram(data,sampRate,win,nfft,noverlap);
+  auto spectro = spectrogram(data,win,nfft,noverlap);
   image(spectro);
   colorbar();
   show();
