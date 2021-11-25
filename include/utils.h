@@ -51,4 +51,21 @@ static std::vector<T> ifftshift(std::vector<T> in) {
   return out;
 }
 
+/**
+ * @brief Convert the input vector from linear scale to db
+ *
+ * TODO: Add a parameter for power vs voltage quantities
+ *
+ * @tparam T Element type of the input vector
+ * @param in Input data
+ * @return std::vector<T> Output data
+ */
+template <typename T>
+static std::vector<T> db(std::vector<T> &in) {
+  auto out = in;
+  std::transform(out.begin(), out.end(), out.begin(),
+                 [](T &x) { return 10 * log10(x); });
+  return out;
+}
+
 #endif

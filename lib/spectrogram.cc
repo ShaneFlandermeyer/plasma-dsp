@@ -16,7 +16,7 @@ std::vector<std::vector<std::complex<double>>> stft(
     auto xi = std::vector<std::complex<double>>(window.size());
     // Apply window function
     for (auto iWindow = 0; iWindow < window.size(); iWindow++)
-      xi[iWindow] = x[iStart+iWindow] * window[iWindow];
+      xi[iWindow] = x[iStart + iWindow] * window[iWindow];
     // Apply DFT
     X[iVec] = fft(xi);
   }
@@ -24,8 +24,8 @@ std::vector<std::vector<std::complex<double>>> stft(
 }
 
 std::vector<std::vector<double>> spectrogram(
-    std::vector<std::complex<double>> x, std::vector<double> window,
-    int nfft, int noverlap) {
+    std::vector<std::complex<double>> x, std::vector<double> window, int nfft,
+    int noverlap) {
   // Compute the short-time fourier transform
   auto X = stft(x, window, nfft, noverlap);
   // Magnitude squared
