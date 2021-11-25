@@ -5,6 +5,7 @@ project(WAVEFORM VERSION 1.0 LANGUAGES CXX)
 # Configure Compiler
 ########################################################################
 set(CMAKE_CXX_STANDARD 20)
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 ########################################################################
 # External packages
