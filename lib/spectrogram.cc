@@ -13,10 +13,11 @@ std::vector<std::vector<std::complex<double>>> stft(
       k, std::vector<std::complex<double>>(nfft));
   for (auto iStart = 0, iVec = 0; iStart < x.size() - window.size();
        iStart += hopSize, iVec++) {
-    // Apply window function
-    for (auto iWindow = 0; iWindow < window.size(); iWindow++)
-      X[iVec][iWindow] = x[iStart + iWindow] * window[iWindow];
-    // Comput the FFT of the segment
+    // Apply the window
+    std::transform(x.begin() + iStart, x.begin() + iStart + window.size(),
+                   window.begin(), X[iVec].begin(),
+                   std::multiplies<std::complex<double>>());
+    // Compute the FFT
     X[iVec] = fft(X[iVec]);
   }
   return X;
