@@ -9,16 +9,15 @@ std::vector<std::vector<std::complex<double>>> stft(
   // Number of columns in the STFT matrix
   auto k = (int)floor((x.size() - noverlap) / hopSize);
   // STFT matrix
-  auto X = std::vector<std::vector<std::complex<double>>>(k);
+  auto X = std::vector<std::vector<std::complex<double>>>(
+      k, std::vector<std::complex<double>>(nfft));
   for (auto iStart = 0, iVec = 0; iStart < x.size() - window.size();
        iStart += hopSize, iVec++) {
-    // Windowed input values
-    auto xi = std::vector<std::complex<double>>(window.size());
     // Apply window function
     for (auto iWindow = 0; iWindow < window.size(); iWindow++)
-      xi[iWindow] = x[iStart + iWindow] * window[iWindow];
-    // Apply DFT
-    X[iVec] = fft(xi);
+      X[iVec][iWindow] = x[iStart + iWindow] * window[iWindow];
+    // Comput the FFT of the segment
+    X[iVec] = fft(X[iVec]);
   }
   return X;
 }
