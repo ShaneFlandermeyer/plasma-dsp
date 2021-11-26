@@ -1,3 +1,5 @@
+#ifndef WINDOW_H
+#define WINDOW_H
 /**
  * @file window.h
  * @author Shane Flandermeyer (shaneflandermeyer@gmail.com)
@@ -47,3 +49,4 @@ namespace window {
 
 
 }  // namespace window
+#endif
