@@ -8,15 +8,30 @@
 
 // TODO: These are currently passed by value, but moving data might be expensive
 
+
 /**
  * @brief Wrapper function for computing a forward FFT with FFTW3
- *
- * TODO: Overload this to allow user-defined FFT lengths
- *
- * @param in The input data
- * @return std::vector<std::complex<double>> The DFT of the input
+ * 
+ * TODO: Currently computes the complex FFT regardless of the input data type
+ * 
+ * @tparam T Input data type
+ * @param in Input data
+ * @return std::vector<std::complex<double>> Complex DFT of the input 
  */
-std::vector<std::complex<double>> fft(std::vector<std::complex<double>> &in);
+template <typename T>
+std::vector<std::complex<double>> fft(std::vector<T> &in) {
+  // FFT size
+  auto n = in.size();
+  // Output vector
+  std::vector<std::complex<double>> out(n);
+  // FFT plan
+  auto p = fftw_plan_dft_1d(n, reinterpret_cast<fftw_complex *>(&in[0]),
+                            reinterpret_cast<fftw_complex *>(&out[0]),
+                            FFTW_FORWARD, FFTW_ESTIMATE);
+  fftw_execute(p);
+  fftw_destroy_plan(p);
+  return out;
+}
 
 /**
  * @brief Shift the zero frequency component to the center of the spectrum
@@ -67,5 +82,7 @@ static std::vector<T> db(std::vector<T> &in) {
                  [](T &x) { return 10 * log10(x); });
   return out;
 }
+
+
 
 #endif
