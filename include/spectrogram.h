@@ -13,6 +13,7 @@
 /**
  * @brief Short-time Fourier transform (STFT)
  *
+ * @tparam T Input type
  * @param x Input signal
  * @param fs Sample Rate
  * @param window Spectral window
@@ -30,13 +31,15 @@ std::vector<std::vector<std::complex<double>>> stft(std::vector<T> x,
   // STFT matrix
   auto X = std::vector<std::vector<std::complex<double>>>(
       k, std::vector<std::complex<double>>(nfft));
+  // One window length of time series data
+  auto xi = std::vector<T>(window.size());
   for (auto iStart = 0, iVec = 0; iStart < x.size() - window.size();
        iStart += hopSize, iVec++) {
     // Apply the window
     std::transform(x.begin() + iStart, x.begin() + iStart + window.size(),
-                   window.begin(), X[iVec].begin(), std::multiplies<T>());
+                   window.begin(), xi.begin(), std::multiplies<T>());
     // Compute the FFT
-    X[iVec] = fft(X[iVec]);
+    X[iVec] = fft(xi);
   }
   return X;
 }
@@ -44,6 +47,7 @@ std::vector<std::vector<std::complex<double>>> stft(std::vector<T> x,
 /**
  * @brief Plot the spectrogram (frequency vs. time) of a signal
  *
+ * @tparam T Input type
  * @param x Input signal
  * @param window Spectral window
  * @param nfft Number of DFT points
