@@ -1,9 +1,11 @@
 # List of header files
 set(WAVEFORM_HEADERS
-  consants.h
-  waveform.h
+  constants.h
+  linearfmwaveform.h
   pulsedwaveform.h
+  spectrogram.h
   squarewaveform.h
-  linearfmwaveform.h)
+  utils.h
+  waveform.h)
 # Make headers visible to the entire project
 set(WAVEFORM_HEADERS "${WAVEFORM_HEADERS}" PARENT_SCOPE)
