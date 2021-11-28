@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(WAVEFORM VERSION 1.0 LANGUAGES CXX)
+project(plasma-dsp VERSION 1.0 LANGUAGES CXX)
 
 ########################################################################
 # Configure Compiler
