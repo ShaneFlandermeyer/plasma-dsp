@@ -1,6 +1,6 @@
 # plasma-dsp
 
-A free and open-source C++ signal processing library primarily for generating 
+A free and open-source C++ signal processing library primarily for generating
 and analyzing RF waveforms.
 
 ## Modules and Features
