@@ -1,5 +1,5 @@
 # List of header files
-set(WAVEFORM_HEADERS
+set(PLASMA_HEADERS
   constants.h
   linearfmwaveform.h
   pulsedwaveform.h
@@ -8,4 +8,4 @@ set(WAVEFORM_HEADERS
   utils.h
   waveform.h)
 # Make headers visible to the entire project
-set(WAVEFORM_HEADERS "${WAVEFORM_HEADERS}" PARENT_SCOPE)
+set(PLASMA_HEADERS "${PLASMA_HEADERS}" PARENT_SCOPE)

@@ -1,4 +1,4 @@
-# waveform
+# plasma-dsp
 
 A free and open-source C++ library for generating and analyzing RF waveforms.
 
@@ -44,4 +44,3 @@ There is currently no way to install the tool.
 - A matrix class
 - Phase coded waveforms
 - CMake installation option
-- New name (plasma-dsp?)
