@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# Build folders
+*.vscode/*
+*build/*
+
+# Doxygen
+html/
+latex/
+*.bak
