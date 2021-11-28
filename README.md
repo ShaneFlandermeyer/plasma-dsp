@@ -1,9 +1,7 @@
 # plasma-dsp
 
-A free and open-source C++ library for generating and analyzing RF waveforms.
-
-Depending on how it develops,
-I may expand this out to a more complete DSP library like liquid-dsp.
+A free and open-source C++ signal processing library primarily for generating 
+and analyzing RF waveforms.
 
 ## Modules and Features
 
@@ -44,3 +42,4 @@ There is currently no way to install the tool.
 - A matrix class
 - Phase coded waveforms
 - CMake installation option
+  
