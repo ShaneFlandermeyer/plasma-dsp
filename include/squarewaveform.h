@@ -1,10 +1,10 @@
-#ifndef SQUARE_WAVE_H
-#define SQUARE_WAVE_H
+#ifndef B13D1A87_AACE_484D_9498_899C106CD35A
+#define B13D1A87_AACE_484D_9498_899C106CD35A
 #include "pulsedwaveform.h"
 
 /**
  * @brief A square (constant-amplitude) pulsed waveform.
- * 
+ *
  */
 class SquareWaveform : public PulsedWaveform {
  public:
@@ -16,29 +16,30 @@ class SquareWaveform : public PulsedWaveform {
   std::vector<std::complex<double>> sample();
   /**
    * @brief Construct a new Square Waveform object
-   * 
+   *
    */
   SquareWaveform();
   /**
    * @brief Construct a new Square Waveform object
-   * 
-   * @param pulsewidth 
-   * @param prf 
-   * @param sampRate 
+   *
+   * @param pulsewidth
+   * @param prf
+   * @param sampRate
    */
   SquareWaveform(double pulsewidth, double prf, double sampRate);
   /**
    * @brief Construct a new Square Waveform object
-   * 
-   * @param pulsewidth 
-   * @param prf 
-   * @param sampRate 
+   *
+   * @param pulsewidth
+   * @param prf
+   * @param sampRate
    */
   SquareWaveform(double pulsewidth, std::vector<double> prf, double sampRate);
   /**
    * @brief Destroy the Square Waveform object
-   * 
+   *
    */
   ~SquareWaveform();
 };
-#endif
+
+#endif /* B13D1A87_AACE_484D_9498_899C106CD35A */

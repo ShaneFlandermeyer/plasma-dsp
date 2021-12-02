@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef B5F351BB_C14A_43DF_A96F_0159BAC8AD27
+#define B5F351BB_C14A_43DF_A96F_0159BAC8AD27
 
 #include <fftw3.h>
 
@@ -119,4 +119,4 @@ static std::vector<T> db(std::vector<T> &in) {
   return out;
 }
 
-#endif
+#endif /* B5F351BB_C14A_43DF_A96F_0159BAC8AD27 */

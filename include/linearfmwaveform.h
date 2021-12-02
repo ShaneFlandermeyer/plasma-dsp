@@ -1,5 +1,5 @@
-#ifndef LINEAR_FM_WAVEFORM_H
-#define LINEAR_FM_WAVEFORM_H
+#ifndef BD5E6A09_B96F_4379_84DF_C755B8C14BF8
+#define BD5E6A09_B96F_4379_84DF_C755B8C14BF8
 
 #include "pulsedwaveform.h"
 #include "waveform.h"
@@ -65,4 +65,4 @@ class LinearFMWaveform : public PulsedWaveform {
   ~LinearFMWaveform();
 };
 
-#endif
+#endif /* BD5E6A09_B96F_4379_84DF_C755B8C14BF8 */

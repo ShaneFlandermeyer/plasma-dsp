@@ -1,5 +1,5 @@
-#ifndef SPECTROGRAM_H
-#define SPECTROGRAM_H
+#ifndef F49FC95E_8968_41E0_96E1_16209F637F93
+#define F49FC95E_8968_41E0_96E1_16209F637F93
 
 #include <fftw3.h>
 #include <matplot/matplot.h>
@@ -78,4 +78,4 @@ std::vector<std::vector<double>> spectrogram(const std::vector<T> &x,
   return spectro;
 }
 
-#endif  // SPECTROGRAM_H
+#endif /* F49FC95E_8968_41E0_96E1_16209F637F93 */

@@ -1,5 +1,5 @@
-#ifndef WAVEFORM_H
-#define WAVEFORM_H
+#ifndef EB650315_AD21_460C_9B80_13EA6DC8F155
+#define EB650315_AD21_460C_9B80_13EA6DC8F155
 
 #include <complex>
 #include <vector>
@@ -8,7 +8,7 @@
 
 /**
  * @brief Abstract base class for waveform objects.
- * 
+ *
  */
 class Waveform {
  protected:
@@ -18,15 +18,15 @@ class Waveform {
  public:
   /**
    * @brief Generate a single pulse of the waveform.
-   * 
-   * @return std::vector<std::complex<double>> 
+   *
+   * @return std::vector<std::complex<double>>
    */
   // TODO: Rename this (Candidates: pulse)
   virtual std::vector<std::complex<double>> sample() = 0;
   /**
    * @brief Generate the full PRF schedule defined by the waveform object.
-   * 
-   * @return std::vector<std::complex<double>> 
+   *
+   * @return std::vector<std::complex<double>>
    */
   // TODO: Rename this
   virtual std::vector<std::complex<double>> step() = 0;
@@ -35,4 +35,4 @@ class Waveform {
   auto sampRate(double sampRate) { d_sampRate = sampRate; }
 };
 
-#endif
+#endif /* EB650315_AD21_460C_9B80_13EA6DC8F155 */
