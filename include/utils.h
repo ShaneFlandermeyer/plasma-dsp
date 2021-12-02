@@ -8,19 +8,32 @@
 #include <vector>
 
 /**
- * @brief Convert a vector (or vector of vectors) to an eigen matrix object
+ * @brief Convert a vector to an eigen matrix object
  *
- * @tparam Scalar Data type of the matrix elements
- * @tparam Container Type of container storing the data
- * @param vectors Data to be converted
- * @return Eigen::Matrix<Scalar, -1, -1> Eigen matrix of the data
+ * @tparam T the data type of the vector elements
+ * @param data Data to be converted
  */
-template <typename Scalar, typename Container>
-inline static Eigen::Matrix<Scalar, -1, -1> toEigen(const Container &vectors) {
-  Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> M(
-      vectors.size(), vectors.front().size());
-  for (size_t i = 0; i < vectors.size(); i++)
-    for (size_t j = 0; j < vectors.front().size(); j++) M(i, j) = vectors[i][j];
+template <typename T>
+inline static Eigen::Matrix<T, Eigen::Dynamic, 1> toEigen(
+    const std::vector<T> &data) {
+  Eigen::Matrix<T, Eigen::Dynamic, 1> M(data.size(), 1);
+  for (size_t i = 0; i < data.size(); i++) M(i) = data[i];
+  return M;
+}
+
+/**
+ * @brief Convert a vector of vectors to an eigen matrix object
+ *
+ * @tparam T the data type of the vector elements
+ * @param data Data to be converted
+ */
+template <typename T>
+inline static Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> toEigen(
+    const std::vector<std::vector<T>> &data) {
+  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> M(data.size(),
+                                                     data.front().size());
+  for (size_t i = 0; i < data.size(); i++)
+    for (size_t j = 0; j < data.front().size(); j++) M(i, j) = data[i][j];
   return M;
 }
 

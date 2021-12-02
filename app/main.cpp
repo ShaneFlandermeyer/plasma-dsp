@@ -27,30 +27,13 @@ int main() {
     x.push_back(
         cos(2 * M_PI * t * (f0 + (f1 - f0) * pow(t, 2) / (3 * pow(t1, 2)))));
   }
-  // plot(x);
-  // show();
 
   // Short time fourier transform equation
   auto noverlap = 120;
   auto nfft = 128;
   auto win = window::hamming(nfft);
-  auto spectro = stft(x, win, nfft, noverlap).transpose();
-  // To vector of vectors
-  // TODO: Implement this as an efficient, general function
-  auto specVec = std::vector<std::vector<std::complex<double>>>(
-      spectro.rows(), std::vector<std::complex<double>>(spectro.cols()));
-  for (int i = 0; i < spectro.rows(); i++) {
-    for (int j = 0; j < spectro.cols(); j++) {
-      specVec[i][j] = spectro(i, j);
-    }
-  }
-  // Magnitude squared
-  auto mag = std::vector<std::vector<double>>(specVec.size(),std::vector<double>(specVec[0].size()));
-  for (int iVec = 0; iVec < specVec.size(); iVec++) {
-    std::transform(specVec[iVec].begin(), specVec[iVec].end(), mag[iVec].begin(),
-                   [](std::complex<double> x) { return pow(abs(x), 2); });
-  }
-  image(mag);
+  auto spectro = spectrogram(x, win, nfft, noverlap);
+  image(spectro);
   colorbar();
   show();
   return 0;
