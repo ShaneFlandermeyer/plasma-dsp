@@ -29,10 +29,9 @@ using namespace Eigen;
  * @param noverlap Number of overlapped samples
  */
 template <typename T1, typename T2>
-Matrix<std::complex<double>, Dynamic, Dynamic> stft(const std::vector<T1> &signal,
-                                                    const std::vector<T2> &window,
-                                                    const int nFFT,
-                                                    const int nOverlap) {
+std::vector<std::vector<std::complex<double>>> stft(
+    const std::vector<T1> &signal, const std::vector<T2> &window,
+    const int nFFT, const int nOverlap) {
   Matrix<T1, Dynamic, 1> x = toEigen<T1>(signal);
   Matrix<T2, Dynamic, 1> win = toEigen<T2>(window);
   // Hop size between successive DFTs
@@ -54,7 +53,7 @@ Matrix<std::complex<double>, Dynamic, Dynamic> stft(const std::vector<T1> &signa
     stft.col(iCol) = tmpOut;
   }
 
-  return stft;
+  return fromEigen<std::complex<double>>(stft);
 }
 
 /**
@@ -69,12 +68,13 @@ Matrix<std::complex<double>, Dynamic, Dynamic> stft(const std::vector<T1> &signa
 template <typename T>
 std::vector<std::vector<double>> spectrogram(const std::vector<T> &x,
                                              const std::vector<double> &window,
-                                             const int nfft, const int noverlap) {
+                                             const int nfft,
+                                             const int noverlap) {
   // Compute the short-time fourier transform
-  auto X = stft(x, window, nfft, noverlap);
+  auto X = toEigen(stft(x, window, nfft, noverlap));
   // Magnitude squared
   MatrixXd mag2 = X.array().abs2();
-  auto spectro = fromEigen<double,MatrixXd>(mag2);
+  auto spectro = fromEigen<double, MatrixXd>(mag2);
   return spectro;
 }
 
