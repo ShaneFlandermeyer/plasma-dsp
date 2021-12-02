@@ -15,6 +15,11 @@
 using namespace Eigen;
 /**
  * @brief Short-time Fourier transform (STFT)
+ * 
+ * This function currently computes the two-sided STFT over the interval
+ * [0,2*pi) rad/sample. 
+ * 
+ * TODO: Extend this to centered and one-sided transforms as well
  *
  * @tparam T Input type
  * @param x Input signal
@@ -22,56 +27,36 @@ using namespace Eigen;
  * @param nfft Number of DFT points
  * @param noverlap Number of overlapped samples
  */
-template <typename T>
-Matrix<std::complex<double>, Dynamic, Dynamic> stft(std::vector<T> x, std::vector<T> window,
-                                 const int nFFT = 512,
-                                 const int nOverlap = 256) {
-  FFT<T> fft;
-  // fft.SetFlag(FFT<T>::HalfSpectrum);
+template <typename T1, typename T2>
+Matrix<std::complex<double>, Dynamic, Dynamic> stft(std::vector<T1> x,
+                                                    std::vector<T2> window,
+                                                    const int nFFT = 512,
+                                                    const int nOverlap = 256) {
+  // Hop size between successive DFTs
   auto hopSize = window.size() - nOverlap;
+  // Number of columns in the DFT matrix
   auto nCol = (int)floor((x.size() - nOverlap) / hopSize);
   // STFT matrix
   Matrix<std::complex<double>, Dynamic, Dynamic> stft(nFFT, nCol);
-  Matrix<T, Dynamic, 1> xi;
-  Matrix<T, Dynamic, 1> win =
-      Map<Matrix<T, Dynamic, 1>>(window.data(), window.size());
+  Matrix<T1, Dynamic, 1> xi;
+  Matrix<T2, Dynamic, 1> win =
+      Map<Matrix<T2, Dynamic, 1>>(window.data(), window.size());
   Matrix<std::complex<double>, Dynamic, 1> tmpOut;
+
+  // FFT object setup
+  FFT<T2> fft;
   for (auto iCol = 0; iCol < nCol; iCol++) {
     // Multiply the current segment by the window
-    xi = Map<Matrix<T, Dynamic, 1>>(x.data() + iCol * hopSize, window.size());
+    xi = Map<Matrix<T1, Dynamic, 1>>(x.data() + iCol * hopSize, window.size());
     xi = xi.array() * win.array();
-    // std::cout << xi << std::endl;
     // Compute the FFT of the windowed segment
     fft.fwd(tmpOut, xi);
     // Store the result in the columns of the STFT matrix
     stft.col(iCol) = tmpOut;
   }
+
   return stft;
 }
-// template <typename T>
-// std::vector<std::vector<std::complex<double>>> stft(std::vector<T> x,
-//                                                     std::vector<double>
-//                                                     window, int nfft, int
-//                                                     noverlap) {
-//   // Hop size
-//   auto hopSize = window.size() - noverlap;
-//   // Number of columns in the STFT matrix
-//   auto k = (int)floor((x.size() - noverlap) / hopSize);
-//   // STFT matrix
-//   auto X = std::vector<std::vector<std::complex<double>>>(
-//       k, std::vector<std::complex<double>>(nfft));
-//   // One window length of time series data
-//   auto xi = std::vector<T>(window.size());
-//   for (auto iStart = 0, iVec = 0; iStart < x.size() - window.size();
-//        iStart += hopSize, iVec++) {
-//     // Apply the window
-//     std::transform(x.begin() + iStart, x.begin() + iStart + window.size(),
-//                    window.begin(), xi.begin(), std::multiplies<T>());
-//     // Compute the FFT
-//     X[iVec] = fft(xi);
-//   }
-//   return X;
-// }
 
 /**
  * @brief Plot the spectrogram (frequency vs. time) of a signal

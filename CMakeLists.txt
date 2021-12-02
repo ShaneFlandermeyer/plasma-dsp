@@ -5,6 +5,7 @@ project(plasma-dsp VERSION 1.0 LANGUAGES CXX)
 # Configure Compiler
 ########################################################################
 set(CMAKE_CXX_STANDARD 20)
+add_definitions(-DEIGEN_FFTW_DEFAULT)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 ########################################################################

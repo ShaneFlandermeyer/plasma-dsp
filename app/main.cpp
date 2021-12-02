@@ -17,6 +17,7 @@ int main() {
   // auto sampRate = 20e6;
   // auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
   // auto x = wave.step();
+
   auto dt = 0.001;
   auto f0 = 50;
   auto f1 = 250;
@@ -33,9 +34,24 @@ int main() {
   auto noverlap = 120;
   auto nfft = 128;
   auto win = window::hamming(nfft);
-  auto spectro = stft(x, win, nfft, noverlap);
-  // image(spectro);
-  // colorbar();
-  // show();
+  auto spectro = stft(x, win, nfft, noverlap).transpose();
+  // To vector of vectors
+  // TODO: Implement this as an efficient, general function
+  auto specVec = std::vector<std::vector<std::complex<double>>>(
+      spectro.rows(), std::vector<std::complex<double>>(spectro.cols()));
+  for (int i = 0; i < spectro.rows(); i++) {
+    for (int j = 0; j < spectro.cols(); j++) {
+      specVec[i][j] = spectro(i, j);
+    }
+  }
+  // Magnitude squared
+  auto mag = std::vector<std::vector<double>>(specVec.size(),std::vector<double>(specVec[0].size()));
+  for (int iVec = 0; iVec < specVec.size(); iVec++) {
+    std::transform(specVec[iVec].begin(), specVec[iVec].end(), mag[iVec].begin(),
+                   [](std::complex<double> x) { return pow(abs(x), 2); });
+  }
+  image(mag);
+  colorbar();
+  show();
   return 0;
 }
