@@ -9,7 +9,7 @@
 class PhaseCodedWaveform : virtual public Waveform {
  protected:
   int d_nChips;
-  int d_chipwidth;
+  double d_chipwidth;
   std::vector<double> d_code;
 
  public:
