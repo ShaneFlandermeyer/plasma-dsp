@@ -33,7 +33,7 @@ int main() {
   auto nfft = 128;
   auto win = window::hamming(nfft);
   auto spectro = spectrogram(x, win, nfft, noverlap);
-  image(spectro);
+  image(spectro,true);
   colorbar();
   show();
   return 0;
