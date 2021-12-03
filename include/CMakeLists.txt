@@ -1,7 +1,10 @@
 # List of header files
 set(PLASMA_HEADERS
+  barkercode.h
   constants.h
   linearfmwaveform.h
+  phasecode.h
+  phasecodedwaveform.h
   pulsedwaveform.h
   spectrogram.h
   squarewaveform.h

@@ -3,6 +3,21 @@
 #include <iostream>
 #include <numeric>
 
+PulsedWaveform::PulsedWaveform() : Waveform() {
+  d_prf = std::vector<double>();
+  d_pulsewidth = 0;
+}
+
+PulsedWaveform::PulsedWaveform(double pulsewidth, double prf) {
+  d_pulsewidth = pulsewidth;
+  d_prf = {prf};
+}
+
+PulsedWaveform::PulsedWaveform(double pulsewidth, std::vector<double> prf) {
+  d_pulsewidth = pulsewidth;
+  d_prf = prf;
+}
+
 std::vector<std::complex<double>> PulsedWaveform::step() {
   // Compute a vector of PRIs
   std::vector<double> pri;
@@ -29,7 +44,7 @@ std::vector<std::complex<double>> PulsedWaveform::step() {
   std::vector<std::complex<double>> wave(nSampsTotal);
   // Generate the waveform
   for (int index : startIndex) {
-    auto data = sample();
+    auto data = pulse();
     auto nSampsPulse = data.size();
     for (int ii = 0; ii < nSampsPulse; ii++) {
       wave[index + ii] = data[ii];
