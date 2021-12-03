@@ -7,6 +7,7 @@ list(APPEND PLASMA_SOURCES
   pulsedwaveform.cc
   squarewaveform.cc
   utils.cc
+  waveform.cc
   window.cc)
 set(PLASMA_SOURCES "${PLASMA_SOURCES}" PARENT_SCOPE)
 # Create the waveform library

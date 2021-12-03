@@ -29,9 +29,30 @@ class Waveform {
    */
   // TODO: Rename this
   virtual std::vector<std::complex<double>> step() = 0;
-  // Getters and setters
+  /**
+   * @brief Get the sample rate
+   * 
+   * @return auto sample rate
+   */
   auto sampRate() const { return d_sampRate; }
+  /**
+   * @brief Set the sample rate
+   * 
+   * @param sampRate 
+   * @return auto 
+   */
   auto sampRate(double sampRate) { d_sampRate = sampRate; }
+  /**
+   * @brief Construct a new Waveform object
+   * 
+   */
+  Waveform();
+  /**
+   * @brief Construct a new Waveform object
+   * 
+   * @param sampRate Sample Rate
+   */
+  Waveform(double sampRate);
 };
 
 #endif /* EB650315_AD21_460C_9B80_13EA6DC8F155 */
