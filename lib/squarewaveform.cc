@@ -1,11 +1,8 @@
 #include "squarewaveform.h"
 
-#include <cmath>
 #include <algorithm>
+#include <cmath>
 
-/*
- * Return a complete PRF of a square wave
- */
 std::vector<std::complex<double>> SquareWaveform::pulse() {
   // Number of samples per pulse
   int nSampsPulse = static_cast<int>(pulsewidth() * sampRate());
@@ -15,31 +12,13 @@ std::vector<std::complex<double>> SquareWaveform::pulse() {
   return wave;
 }
 
-/*
- * Default constructor
- */
-SquareWaveform::SquareWaveform() {
-  pulsewidth(0);
-  prf(0);
-  sampRate(0);
-}
+SquareWaveform::SquareWaveform() : PulsedWaveform() {}
 
-/*
- * Non-trivial constructor
- */
-SquareWaveform::SquareWaveform(double pulsewidth, double prf, double sampRate) {
-  this->pulsewidth(pulsewidth);
-  this->prf(prf);
-  this->sampRate(sampRate);
-}
+SquareWaveform::SquareWaveform(double pulsewidth, double prf, double sampRate)
+    : PulsedWaveform(pulsewidth, prf, sampRate) {}
 
-SquareWaveform::SquareWaveform(double pulsewidth, std::vector<double> prf, double sampRate) {
-  this->pulsewidth(pulsewidth);
-  this->prf(prf);
-  this->sampRate(sampRate);
-}
+SquareWaveform::SquareWaveform(double pulsewidth, std::vector<double> prf,
+                               double sampRate)
+    : PulsedWaveform(pulsewidth, prf, sampRate) {}
 
-/*
- * Destructor
- */
 SquareWaveform::~SquareWaveform() {}
