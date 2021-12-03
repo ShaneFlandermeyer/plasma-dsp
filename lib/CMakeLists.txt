@@ -1,6 +1,7 @@
 # Waveform lib source files
 list(APPEND PLASMA_SOURCES
   linearfmwaveform.cc
+  phasecodedwaveform.cc
   pulsedwaveform.cc
   squarewaveform.cc
   utils.cc

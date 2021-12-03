@@ -13,10 +13,11 @@ using namespace matplot;
 int main() {
   auto bandwidth = 10e6;
   auto pulsewidth = 100e-6;
-  auto prf = {10e3};
+  std::vector<double> prf = {10e3};
   auto sampRate = 20e6;
   auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
   auto x = wave.step();
+  
 
   // auto dt = 0.001;
   // auto f0 = 50;

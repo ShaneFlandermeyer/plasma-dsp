@@ -45,7 +45,7 @@ class PulsedWaveform : public Waveform {
    * @param prf
    * @return auto
    */
-  auto prf(std::vector<double> prf) { d_prf = prf; }
+  auto prf(const std::vector<double> &prf) { d_prf = prf; }
   /**
    * @brief Set the pulse width
    *
