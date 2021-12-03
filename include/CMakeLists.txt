@@ -2,6 +2,7 @@
 set(PLASMA_HEADERS
   constants.h
   linearfmwaveform.h
+  phasecode.h
   phasecodedwaveform.h
   pulsedwaveform.h
   spectrogram.h
