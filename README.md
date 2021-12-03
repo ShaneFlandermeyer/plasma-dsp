@@ -7,8 +7,10 @@ and analyzing RF waveforms.
 
 ### Waveforms
 
-- Square wave
+- Barker Codes
 - Linear FM
+- Square wave
+
 
 ### Windows
 
@@ -24,10 +26,11 @@ and analyzing RF waveforms.
 
 ## Dependencies
 
+- [Eigen](https://eigen.tuxfamily.org/)
 - [FFTW3](https://www.fftw.org/)
 - [Matplot++](https://alandefreitas.github.io/matplotplusplus/)
 
-When the tool is more mature, I plan on dropping the Matplot++ dependency.
+When the tool is more mature, I might make the Matplot++ dependency optional.
 
 ## Installation
 
@@ -35,11 +38,9 @@ The easiest way to use this tool is to obtain the source code from git
 
   <https://github.com/ShaneFlandermeyer/waveform.git>
 
-There is currently no way to install the tool.
+There is currently no way to install the tool system-wide.
 
 ## Wishlist
 
-- A matrix class
-- Phase coded waveforms
-- CMake installation option
+- CMake system installation option
   
