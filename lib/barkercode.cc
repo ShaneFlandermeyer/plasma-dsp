@@ -1,10 +1,21 @@
 #include "barkercode.h"
 
-BarkerCode::BarkerCode() {
-  d_nChips = 0;
-  d_chipwidth = 0;
-  d_code = std::vector<double>();
-}
+BarkerCode::BarkerCode() {}
+
+BarkerCode::BarkerCode(int n)
+    : PhaseCodedWaveform(n, 0, PhaseCode::generate_code(PhaseCode::BARKER, n)),
+      PulsedWaveform() {}
+
+BarkerCode::BarkerCode(int n, double chipwidth, double prf, double sampRate)
+    : PhaseCodedWaveform(n, chipwidth,
+                         PhaseCode::generate_code(PhaseCode::BARKER, n)),
+      PulsedWaveform(n * chipwidth, prf, sampRate) {}
+
+BarkerCode::BarkerCode(int n, double chipwidth, std::vector<double> prf,
+                       double sampRate)
+    : PhaseCodedWaveform(n, chipwidth,
+                         PhaseCode::generate_code(PhaseCode::BARKER, n)),
+      PulsedWaveform(n * chipwidth, prf, sampRate) {}
 
 std::vector<std::complex<double>> BarkerCode::pulse() {
   return PhaseCodedWaveform::pulse();
