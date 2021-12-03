@@ -53,8 +53,27 @@ class PulsedWaveform : public Waveform {
    * @return auto
    */
   auto pulsewidth(double pulsewidth) { d_pulsewidth = pulsewidth; }
-
-  
+  /**
+   * @brief Construct a new Pulsed Waveform object
+   *
+   */
+  PulsedWaveform();
+  /**
+   * @brief Construct a new Pulsed Waveform object
+   *
+   * @param pulsewidth Pulse width (s)
+   * @param prf Pulse repetition frequency (Hz)
+   * @param sampRate Sample Rate
+   */
+  PulsedWaveform(double pulsewidth, double prf, double sampRate);
+  /**
+   * @brief Construct a new Pulsed Waveform object
+   *
+   * @param pulsewidth Pulse width (s)
+   * @param prf Pulse repetition frequency (Hz)
+   * @param sampRate Sample Rate
+   */
+  PulsedWaveform(double pulsewidth, std::vector<double> prf, double sampRate);
 };
 
 #endif /* D468419A_4F55_442A_997B_F6CD1989C7F6 */
