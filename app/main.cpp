@@ -17,6 +17,7 @@ int main() {
   auto sampRate = 20e6;
   auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
   auto x = wave.step();
+
   // auto dt = 0.001;
   // auto f0 = 50;
   // auto f1 = 250;
@@ -26,15 +27,13 @@ int main() {
   //   x.push_back(
   //       cos(2 * M_PI * t * (f0 + (f1 - f0) * pow(t, 2) / (3 * pow(t1, 2)))));
   // }
-  // plot(x);
-  // show();
 
   // Short time fourier transform equation
-  auto noverlap = 64;
-  auto nfft = 256;
+  auto noverlap = 120;
+  auto nfft = 128;
   auto win = window::hamming(nfft);
   auto spectro = spectrogram(x, win, nfft, noverlap);
-  image(spectro);
+  image(spectro,true);
   colorbar();
   show();
   return 0;

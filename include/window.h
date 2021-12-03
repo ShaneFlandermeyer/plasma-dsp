@@ -1,5 +1,3 @@
-#ifndef WINDOW_H
-#define WINDOW_H
 /**
  * @file window.h
  * @author Shane Flandermeyer (shaneflandermeyer@gmail.com)
@@ -10,43 +8,45 @@
  * @copyright Copyright (c) 2021
  *
  */
+
+#ifndef E9175048_C018_4B5C_ACDB_4A0C0931BB61
+#define E9175048_C018_4B5C_ACDB_4A0C0931BB61
 #include <vector>
 
 namespace window {
 
-  /**
-   * @brief Rectangular window of length n
-   * 
-   * @param n 
-   * @return std::vector<float> 
-   */
-  std::vector<double> rectangular(int n);
+/**
+ * @brief Rectangular window of length n
+ *
+ * @param n
+ * @return std::vector<float>
+ */
+std::vector<double> rectangular(int n);
 
-  /**
-   * @brief blackman window of length n
-   * 
-   * @param n 
-   * @return std::vector<double> 
-   */
-  std::vector<double> blackman(int n);
+/**
+ * @brief blackman window of length n
+ *
+ * @param n
+ * @return std::vector<double>
+ */
+std::vector<double> blackman(int n);
 
-  /**
-   * @brief hamming window of length n
-   * 
-   * @param n 
-   * @return std::vector<double> 
-   */
-  std::vector<double> hamming(int n);
+/**
+ * @brief hamming window of length n
+ *
+ * @param n
+ * @return std::vector<double>
+ */
+std::vector<double> hamming(int n);
 
-  /**
-   * @brief hanning window of length n
-   * 
-   * @param n 
-   * @return std::vector<double> 
-   */
-  std::vector<double> hanning(int n);
-
-
+/**
+ * @brief hanning window of length n
+ *
+ * @param n
+ * @return std::vector<double>
+ */
+std::vector<double> hanning(int n);
 
 }  // namespace window
-#endif
+
+#endif /* E9175048_C018_4B5C_ACDB_4A0C0931BB61 */

@@ -1,47 +1,59 @@
-#ifndef SPECTROGRAM_H
-#define SPECTROGRAM_H
+#ifndef F49FC95E_8968_41E0_96E1_16209F637F93
+#define F49FC95E_8968_41E0_96E1_16209F637F93
 
 #include <fftw3.h>
 #include <matplot/matplot.h>
 
+#include <Eigen/Dense>
 #include <complex>
 #include <iostream>
+#include <unsupported/Eigen/FFT>
 #include <vector>
 
 #include "utils.h"
 
+using namespace Eigen;
 /**
  * @brief Short-time Fourier transform (STFT)
  *
- * @tparam T Input type
+ * This function currently computes the two-sided STFT over the interval
+ * [0,2*pi) rad/sample.
+ *
+ * TODO: Extend this to centered and one-sided transforms as well
+ *
+ * @tparam T1 Input signal data type
+ * @tparam T2 Window data type
  * @param x Input signal
- * @param fs Sample Rate
  * @param window Spectral window
  * @param nfft Number of DFT points
  * @param noverlap Number of overlapped samples
  */
-template <typename T>
-std::vector<std::vector<std::complex<double>>> stft(std::vector<T> x,
-                                                    std::vector<double> window,
-                                                    int nfft, int noverlap) {
-  // Hop size
-  auto hopSize = window.size() - noverlap;
-  // Number of columns in the STFT matrix
-  auto k = (int)floor((x.size() - noverlap) / hopSize);
+template <typename T1, typename T2>
+std::vector<std::vector<std::complex<double>>> stft(
+    const std::vector<T1> &signal, const std::vector<T2> &window,
+    const int nFFT, const int nOverlap) {
+  Matrix<T1, Dynamic, 1> x = toEigen<T1>(signal);
+  Matrix<T2, Dynamic, 1> win = toEigen<T2>(window);
+  // Hop size between successive DFTs
+  auto hopSize = window.size() - nOverlap;
+  // Number of columns in the DFT matrix
+  auto nCol = (int)floor((signal.size() - nOverlap) / hopSize);
   // STFT matrix
-  auto X = std::vector<std::vector<std::complex<double>>>(
-      k, std::vector<std::complex<double>>(nfft));
-  // One window length of time series data
-  auto xi = std::vector<T>(window.size());
-  for (auto iStart = 0, iVec = 0; iStart < x.size() - window.size();
-       iStart += hopSize, iVec++) {
-    // Apply the window
-    std::transform(x.begin() + iStart, x.begin() + iStart + window.size(),
-                   window.begin(), xi.begin(), std::multiplies<T>());
-    // Compute the FFT
-    X[iVec] = fft(xi);
+  Matrix<std::complex<double>, Dynamic, Dynamic> stft(nFFT, nCol);
+  Matrix<T1, Dynamic, 1> xi;
+  Matrix<std::complex<double>, Dynamic, 1> tmpOut;
+  // FFT object setup
+  FFT<T2> fft;
+  for (auto iCol = 0; iCol < nCol; iCol++) {
+    // Windowed time segment
+    xi = x.segment(iCol * hopSize, window.size()).array() * win.array();
+    // Compute the FFT of the windowed segment
+    fft.fwd(tmpOut, xi);
+    // Store the result in the columns of the STFT matrix
+    stft.col(iCol) = tmpOut;
   }
-  return X;
+
+  return fromEigen<std::complex<double>>(stft);
 }
 
 /**
@@ -54,20 +66,16 @@ std::vector<std::vector<std::complex<double>>> stft(std::vector<T> x,
  * @param noverlap Number of overlapped samples
  */
 template <typename T>
-std::vector<std::vector<double>> spectrogram(std::vector<T> x,
-                                             std::vector<double> window,
-                                             int nfft, int noverlap) {
+std::vector<std::vector<double>> spectrogram(const std::vector<T> &x,
+                                             const std::vector<double> &window,
+                                             const int nfft,
+                                             const int noverlap) {
   // Compute the short-time fourier transform
-  auto X = stft(x, window, nfft, noverlap);
+  auto X = toEigen(stft(x, window, nfft, noverlap));
   // Magnitude squared
-  auto spectro = std::vector<std::vector<double>>(X.size());
-  for (int iVec = 0; iVec < spectro.size(); iVec++) {
-    spectro[iVec] = std::vector<double>(X[iVec].size());
-    std::transform(X[iVec].begin(), X[iVec].end(), spectro[iVec].begin(),
-                   [](std::complex<double> x) { return pow(abs(x), 2); });
-  }
-
+  MatrixXd mag2 = X.array().abs2();
+  auto spectro = fromEigen<double, MatrixXd>(mag2);
   return spectro;
 }
 
-#endif  // SPECTROGRAM_H
+#endif /* F49FC95E_8968_41E0_96E1_16209F637F93 */

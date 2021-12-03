@@ -1,10 +1,10 @@
-#ifndef PULSED_WAVEFORM_H
-#define PULSED_WAVEFORM_H
+#ifndef D468419A_4F55_442A_997B_F6CD1989C7F6
+#define D468419A_4F55_442A_997B_F6CD1989C7F6
 #include "waveform.h"
 
 /**
  * @brief An abstract base class for pulsed waveforms.
- * 
+ *
  */
 class PulsedWaveform : public Waveform {
  protected:
@@ -22,36 +22,37 @@ class PulsedWaveform : public Waveform {
   std::vector<std::complex<double>> step();
   /**
    * @brief Get the PRF schedule.
-   * 
-   * @return auto 
+   *
+   * @return auto
    */
   auto prf() const { return d_prf; }
   /**
    * @brief Get the pulse width.
-   * 
-   * @return auto 
+   *
+   * @return auto
    */
   auto pulsewidth() const { return d_pulsewidth; }
   /**
    * @brief Set the PRF as a double
-   * 
-   * @param prf 
-   * @return auto 
+   *
+   * @param prf
+   * @return auto
    */
   auto prf(double prf) { d_prf.push_back(prf); }
   /**
    * @brief Set the PRF as a vector
-   * 
-   * @param prf 
-   * @return auto 
+   *
+   * @param prf
+   * @return auto
    */
   auto prf(std::vector<double> prf) { d_prf = prf; }
   /**
    * @brief Set the pulse width
-   * 
-   * @param pulsewidth 
-   * @return auto 
+   *
+   * @param pulsewidth
+   * @return auto
    */
   auto pulsewidth(double pulsewidth) { d_pulsewidth = pulsewidth; }
 };
-#endif
+
+#endif /* D468419A_4F55_442A_997B_F6CD1989C7F6 */
