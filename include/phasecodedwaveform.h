@@ -12,8 +12,50 @@ class PhaseCodedWaveform : public Waveform {
   std::vector<double> d_code;
 
  public:
-  auto code() const {return d_code;}
-  auto code(const std::vector<double>& code) {d_code = code;}
+  /**
+   * @brief Get the phase code vector
+   *
+   * @return auto
+   */
+  auto code() const { return d_code; }
+
+  /**
+   * @brief Get the number of chips
+   *
+   * @return int
+   */
+  auto nChips() const { return d_nChips; }
+
+  /**
+   * @brief Get the chip width
+   *
+   * @return int
+   */
+  auto chipWidth() const { return d_chipwidth; }
+
+  /**
+   * @brief Set the phase code vector
+   *
+   * @param code New code values
+   * @return auto
+   */
+  auto code(const std::vector<double>& code) { d_code = code; }
+
+  /**
+   * @brief Set the number of chips
+   *
+   * @param nChips
+   * @return auto
+   */
+  auto nChips(int nChips) { d_nChips = nChips; };
+
+  /**
+   * @brief Set the chip width
+   *
+   * @param chipWidth New chip width
+   * @return auto
+   */
+  auto chipwidth(int chipwidth) { d_chipwidth = chipwidth; };
 };
 
 #endif /* F76EB5C6_3C7E_46B6_AC56_C303873CDA4A */
