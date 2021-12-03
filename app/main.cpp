@@ -8,6 +8,7 @@
 #include "squarewaveform.h"
 #include "utils.h"
 #include "window.h"
+#include "phasecode.h"
 
 using namespace matplot;
 int main() {
