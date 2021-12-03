@@ -37,7 +37,7 @@ class PhaseCodedWaveform : public Waveform {
    *
    * @return int
    */
-  auto chipWidth() const { return d_chipwidth; }
+  auto chipwidth() const { return d_chipwidth; }
 
   /**
    * @brief Set the phase code vector
@@ -62,6 +62,21 @@ class PhaseCodedWaveform : public Waveform {
    * @return auto
    */
   auto chipwidth(int chipwidth) { d_chipwidth = chipwidth; };
+
+  /**
+   * @brief Construct a new Phase Coded Waveform object
+   * 
+   */
+  PhaseCodedWaveform();
+
+  /**
+   * @brief Construct a new Phase Coded Waveform object
+   * 
+   * @param nChips Number of phase code values
+   * @param chipwidth Duration of each code value (seconds)
+   * @param code Vector of code values
+   */
+  PhaseCodedWaveform(int nChips, double chipwidth, std::vector<double> code);
 };
 
 #endif /* F76EB5C6_3C7E_46B6_AC56_C303873CDA4A */
