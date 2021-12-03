@@ -5,7 +5,6 @@
 #include "pulsedwaveform.h"
 
 class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
-  // TODO: Constructors
  public:
   /**
    * @brief Generate data for a single pulse

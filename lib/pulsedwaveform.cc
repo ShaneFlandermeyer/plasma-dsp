@@ -8,12 +8,12 @@ PulsedWaveform::PulsedWaveform() : Waveform() {
   d_pulsewidth = 0;
 }
 
-PulsedWaveform::PulsedWaveform(double pulsewidth, double prf, double sampRate) : Waveform(sampRate) {
+PulsedWaveform::PulsedWaveform(double pulsewidth, double prf) {
   d_pulsewidth = pulsewidth;
   d_prf = {prf};
 }
 
-PulsedWaveform::PulsedWaveform(double pulsewidth, std::vector<double> prf, double sampRate) : Waveform(sampRate) {
+PulsedWaveform::PulsedWaveform(double pulsewidth, std::vector<double> prf) {
   d_pulsewidth = pulsewidth;
   d_prf = prf;
 }

@@ -6,7 +6,7 @@
  * @brief An abstract base class for pulsed waveforms.
  *
  */
-class PulsedWaveform : public Waveform {
+class PulsedWaveform : virtual public Waveform {
  protected:
   // Pulse repetition frequency (Hz)
   std::vector<double> d_prf;
@@ -63,17 +63,15 @@ class PulsedWaveform : public Waveform {
    *
    * @param pulsewidth Pulse width (s)
    * @param prf Pulse repetition frequency (Hz)
-   * @param sampRate Sample Rate
    */
-  PulsedWaveform(double pulsewidth, double prf, double sampRate);
+  PulsedWaveform(double pulsewidth, double prf);
   /**
    * @brief Construct a new Pulsed Waveform object
    *
    * @param pulsewidth Pulse width (s)
    * @param prf Pulse repetition frequency (Hz)
-   * @param sampRate Sample Rate
    */
-  PulsedWaveform(double pulsewidth, std::vector<double> prf, double sampRate);
+  PulsedWaveform(double pulsewidth, std::vector<double> prf);
 };
 
 #endif /* D468419A_4F55_442A_997B_F6CD1989C7F6 */

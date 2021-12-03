@@ -15,10 +15,10 @@ std::vector<std::complex<double>> SquareWaveform::pulse() {
 SquareWaveform::SquareWaveform() : PulsedWaveform() {}
 
 SquareWaveform::SquareWaveform(double pulsewidth, double prf, double sampRate)
-    : PulsedWaveform(pulsewidth, prf, sampRate) {}
+    : Waveform(sampRate), PulsedWaveform(pulsewidth, prf) {}
 
 SquareWaveform::SquareWaveform(double pulsewidth, std::vector<double> prf,
                                double sampRate)
-    : PulsedWaveform(pulsewidth, prf, sampRate) {}
+    : Waveform(sampRate), PulsedWaveform(pulsewidth, prf) {}
 
 SquareWaveform::~SquareWaveform() {}

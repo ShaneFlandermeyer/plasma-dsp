@@ -3,9 +3,10 @@
 
 #include <vector>
 
+#include "constants.h"
 #include "waveform.h"
 
-class PhaseCodedWaveform : public Waveform {
+class PhaseCodedWaveform : virtual public Waveform {
  protected:
   int d_nChips;
   int d_chipwidth;
@@ -65,18 +66,19 @@ class PhaseCodedWaveform : public Waveform {
 
   /**
    * @brief Construct a new Phase Coded Waveform object
-   * 
+   *
    */
   PhaseCodedWaveform();
 
   /**
    * @brief Construct a new Phase Coded Waveform object
-   * 
+   *
    * @param nChips Number of phase code values
    * @param chipwidth Duration of each code value (seconds)
    * @param code Vector of code values
    */
   PhaseCodedWaveform(int nChips, double chipwidth, std::vector<double> code);
+
 };
 
 #endif /* F76EB5C6_3C7E_46B6_AC56_C303873CDA4A */

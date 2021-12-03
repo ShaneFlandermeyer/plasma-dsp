@@ -20,13 +20,13 @@ LinearFMWaveform::LinearFMWaveform() : PulsedWaveform() { d_bandwidth = 0; }
 
 LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
                                    double prf, double sampRate)
-    : PulsedWaveform(pulsewidth, prf, sampRate) {
+    : Waveform(sampRate), PulsedWaveform(pulsewidth, prf) {
   d_bandwidth = bandwidth;
 }
 
 LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
                                    std::vector<double> prf, double sampRate)
-    : PulsedWaveform(pulsewidth, prf, sampRate) {
+    : Waveform(sampRate), PulsedWaveform(pulsewidth, prf) {
   d_bandwidth = bandwidth;
 }
 
