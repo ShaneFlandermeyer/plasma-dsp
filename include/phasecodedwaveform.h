@@ -13,6 +13,12 @@ class PhaseCodedWaveform : public Waveform {
 
  public:
   /**
+   * @brief Generate a single pulse of the waveform.
+   *
+   * @return std::vector<std::complex<double>> The pulse data
+   */
+  virtual std::vector<std::complex<double>> pulse();
+  /**
    * @brief Get the phase code vector
    *
    * @return auto

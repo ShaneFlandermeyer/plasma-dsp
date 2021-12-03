@@ -1,6 +1,6 @@
 #include "linearfmwaveform.h"
 
-std::vector<std::complex<double>> LinearFMWaveform::sample() {
+std::vector<std::complex<double>> LinearFMWaveform::pulse() {
   // Sample interval
   double ts = 1 / sampRate();
   // Number of samples per pulse

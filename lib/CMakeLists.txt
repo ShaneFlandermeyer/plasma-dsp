@@ -1,5 +1,6 @@
 # Waveform lib source files
 list(APPEND PLASMA_SOURCES
+  barkercode.cc
   linearfmwaveform.cc
   phasecode.cc
   phasecodedwaveform.cc

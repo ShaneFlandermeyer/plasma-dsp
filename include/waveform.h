@@ -21,8 +21,7 @@ class Waveform {
    *
    * @return std::vector<std::complex<double>>
    */
-  // TODO: Rename this (Candidates: pulse)
-  virtual std::vector<std::complex<double>> sample() = 0;
+  virtual std::vector<std::complex<double>> pulse() = 0;
   /**
    * @brief Generate the full PRF schedule defined by the waveform object.
    *

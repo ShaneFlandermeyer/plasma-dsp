@@ -53,6 +53,8 @@ class PulsedWaveform : public Waveform {
    * @return auto
    */
   auto pulsewidth(double pulsewidth) { d_pulsewidth = pulsewidth; }
+
+  
 };
 
 #endif /* D468419A_4F55_442A_997B_F6CD1989C7F6 */
