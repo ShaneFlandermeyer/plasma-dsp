@@ -1,6 +1,7 @@
 #ifndef C8DA77F0_9C11_4535_8359_C56C62F68E47
 #define C8DA77F0_9C11_4535_8359_C56C62F68E47
 
+#include <cmath>
 #include <stdexcept>
 #include <string>
 #include <vector>

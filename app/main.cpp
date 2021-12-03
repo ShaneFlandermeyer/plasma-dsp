@@ -18,6 +18,7 @@ int main() {
   auto sampRate = 20e6;
   auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
   auto x = wave.step();
+  auto code = PhaseCode::generate_code(PhaseCode::BARKER, 13);
   
 
   // auto dt = 0.001;

@@ -10,23 +10,31 @@ std::vector<double> barker(int n) {
   switch (n) {
     case 2:
       code = {0, 1};
+      break;
     case 3:
       code = {0, 0, 1};
+      break;
     case 4:
       code = {0, 0, 0, 1};
+      break;
     case 5:
       code = {0, 0, 0, 1, 0};
+      break;
     case 7:
       code = {0, 0, 0, 1, 1, 0, 1};
+      break;
     case 11:
       code = {0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1};
+      break;
     case 13:
       code = {0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0};
+      break;
     default:
-      throw std::invalid_argument(
-          "Invalid barker code length: " + std::to_string(n));
+      throw std::invalid_argument("Invalid barker code length: " +
+                                  std::to_string(n));
   }
-  // TODO: Convert this to a complex exponential
+  std::transform(code.begin(), code.end(), code.begin(),
+                 [](auto &c) { return c * M_PI; });
   return code;
 }
 
