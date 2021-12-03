@@ -15,10 +15,10 @@ using namespace matplot;
 int main() {
   auto bandwidth = 10e6;
   auto pulsewidth = 100e-6;
-  std::vector<double> prf = {1e3};
+  std::vector<double> prf = {10e3};
   auto sampRate = 20e6;
   auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
-  auto x = wave.step();
+  auto x = wave.pulseTrain();
   auto barker = BarkerCode(13,pulsewidth/13,prf,sampRate);
   auto pulse = barker.pulse();
   auto real = std::vector<double>(pulse.size());

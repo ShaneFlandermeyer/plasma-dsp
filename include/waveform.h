@@ -28,7 +28,7 @@ class Waveform {
    * @return std::vector<std::complex<double>>
    */
   // TODO: Rename this
-  virtual std::vector<std::complex<double>> step() = 0;
+  virtual std::vector<std::complex<double>> pulseTrain() = 0;
   /**
    * @brief Get the sample rate
    * 

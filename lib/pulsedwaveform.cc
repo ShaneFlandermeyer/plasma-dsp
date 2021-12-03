@@ -18,7 +18,7 @@ PulsedWaveform::PulsedWaveform(double pulsewidth, std::vector<double> prf) {
   d_prf = prf;
 }
 
-std::vector<std::complex<double>> PulsedWaveform::step() {
+std::vector<std::complex<double>> PulsedWaveform::pulseTrain() {
   // Compute a vector of PRIs
   std::vector<double> pri;
   std::transform(d_prf.begin(), d_prf.end(), std::back_inserter(pri),

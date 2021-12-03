@@ -19,7 +19,7 @@ class PulsedWaveform : virtual public Waveform {
    *
    * @return std::vector<std::complex<double>>
    */
-  std::vector<std::complex<double>> step();
+  std::vector<std::complex<double>> pulseTrain();
   /**
    * @brief Get the PRF schedule.
    *
