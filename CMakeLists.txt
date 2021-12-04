@@ -7,12 +7,14 @@ if(EXISTS "${LOC_PATH}")
     message(FATAL_ERROR "You cannot build in a source directory (or any directory with a CMakeLists.txt file). Please make a build subdirectory. Feel free to remove CMakeCache.txt and CMakeFiles.")
 endif()
 
+
 ########################################################################
 # Configure Compiler
 ########################################################################
 set(CMAKE_CXX_STANDARD 20)
 add_definitions(-DEIGEN_FFTW_DEFAULT)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+
 
 ########################################################################
 # External packages
@@ -27,11 +29,8 @@ if (Eigen3_FOUND)
 endif(Eigen3_FOUND)
 
 
-
-
 ########################################################################
 # Add subdirectories
 ########################################################################
-add_subdirectory(include)
 add_subdirectory(lib)
 add_subdirectory(app)

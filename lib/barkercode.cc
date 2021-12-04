@@ -1,4 +1,4 @@
-#include "barkercode.h"
+#include "plasma-dsp/barkercode.h"
 
 BarkerCode::BarkerCode() {}
 
