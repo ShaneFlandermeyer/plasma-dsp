@@ -14,7 +14,9 @@ endif()
 # Configure Compiler
 ########################################################################
 set(CMAKE_CXX_STANDARD 20)
-add_definitions(-DEIGEN_FFTW_DEFAULT)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+add_compile_definitions(EIGEN_FFTW_DEFAULT)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 # Include custom cmake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

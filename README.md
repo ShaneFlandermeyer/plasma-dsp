@@ -11,7 +11,6 @@ and analyzing RF waveforms.
 - Linear FM
 - Square wave
 
-
 ### Windows
 
 - Rectangular
