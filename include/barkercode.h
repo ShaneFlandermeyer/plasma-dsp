@@ -17,7 +17,7 @@ class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
    *
    * @return std::vector<std::complex<double>> Pulse data for at least 1 PRF
    */
-  std::vector<std::complex<double>> step();
+  std::vector<std::complex<double>> pulseTrain();
 
   /**
    * @brief Construct a new Barker Code object
