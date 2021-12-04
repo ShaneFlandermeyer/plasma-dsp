@@ -43,4 +43,5 @@ There is currently no way to install the tool system-wide.
 ## Wishlist
 
 - CMake system installation option
-  
+- FMCW waveforms
+- PCFM

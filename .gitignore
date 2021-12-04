@@ -32,8 +32,8 @@
 *.app
 
 # Build folders
-*.vscode/*
-*build/*
+.vscode/*
+build/*
 
 # Doxygen
 html/
