@@ -40,5 +40,6 @@ endif(Eigen3_FOUND)
 # ##############################################################################
 # Add subdirectories
 # ##############################################################################
+add_subdirectory(include/plasma-dsp)
 add_subdirectory(lib)
 add_subdirectory(app)
