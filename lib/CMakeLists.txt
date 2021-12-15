@@ -23,11 +23,11 @@ target_include_directories(
   PUBLIC $<INSTALL_INTERFACE:include>)
 target_link_libraries(plasma-dsp Eigen3::Eigen)
 
-# TODO: Make this work
+# Install the shared library file
 install(TARGETS plasma-dsp
-  DESTINATION lib)
-# # TODO: Complete this
-# install(TARGETS plasma-dsp
-#     LIBRARY DESTINATION lib
-# )
+  EXPORT plasma-dsp
+  DESTINATION ${PLASMA_LIB_DIR})
+# Install the cmake config file
+install(EXPORT plasma-dsp
+  DESTINATION ${PLASMA_CMAKE_DIR})
 

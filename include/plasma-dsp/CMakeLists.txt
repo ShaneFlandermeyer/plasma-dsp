@@ -17,5 +17,5 @@ list(APPEND
 # System-wide installation
 install(FILES
   ${PLASMA_HEADERS}
-  DESTINATION include/plasma-dsp
+  DESTINATION ${PLASMA_INCLUDE_DIR}
 )

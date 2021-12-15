@@ -25,17 +25,27 @@ option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(BuildType)
 
-# ##############################################################################
-# External packages
-# ##############################################################################
+########################################################################
+# Install directories
+########################################################################
+
+# CMake module base path
+if (NOT CMAKE_MODULES_DIR)
+  set(CMAKE_MODULES_DIR lib/cmake)
+endif()
+
+set(PLASMA_INCLUDE_DIR include/plasma-dsp/${CMAKE_BUILD_TYPE})
+set(PLASMA_LIB_DIR     lib/plasma-dsp/${CMAKE_BUILD_TYPE})
+set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma-dsp)
+########################################################################
+# Find build dependencies
+########################################################################
 find_package(Matplot++ REQUIRED)
-if(Matplot++_FOUND)
-  message(STATUS "Matplot++ found")
-endif(Matplot++_FOUND)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-if(Eigen3_FOUND)
-  message(STATUS "Eigen3 found")
-endif(Eigen3_FOUND)
+
+########################################################################
+# TODO: Create uninstall target
+########################################################################
 
 # ##############################################################################
 # Add subdirectories
@@ -43,3 +53,11 @@ endif(Eigen3_FOUND)
 add_subdirectory(include/plasma-dsp)
 add_subdirectory(lib)
 add_subdirectory(app)
+
+########################################################################
+# Install cmake search helper for this library
+########################################################################
+
+install(FILES cmake/plasma-dsp-config.cmake
+    DESTINATION ${PLASMA_CMAKE_DIR}
+)
