@@ -35,7 +35,7 @@ if (NOT CMAKE_MODULES_DIR)
 endif()
 
 set(PLASMA_INCLUDE_DIR include/plasma-dsp/${CMAKE_BUILD_TYPE})
-set(PLASMA_LIB_DIR     lib/plasma-dsp/${CMAKE_BUILD_TYPE})
+set(PLASMA_LIB_DIR     lib)
 set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma-dsp)
 ########################################################################
 # Find build dependencies
