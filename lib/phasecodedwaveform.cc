@@ -29,4 +29,11 @@ PhaseCodedWaveform::PhaseCodedWaveform(int nChips, double chipwidth,
   d_nChips = nChips;
   d_chipwidth = chipwidth;
   d_code = code;
+
+  // Check that the number of samples per chip is an integer
+  auto eps = std::numeric_limits<double>::epsilon();
+  auto temp = d_sampRate * chipwidth;
+  if (std::abs(temp - std::round(temp)) > 1e-10) {
+    throw std::invalid_argument("The number of samples per chip must be an integer.");
+  }
 }

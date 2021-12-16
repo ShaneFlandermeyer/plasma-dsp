@@ -19,10 +19,4 @@ BarkerCode::BarkerCode(int n, double chipwidth, std::vector<double> prf,
       PhaseCodedWaveform(n, chipwidth,
                          PhaseCode::generate_code(PhaseCode::BARKER, n)),
       PulsedWaveform(n * chipwidth, prf) {
-
-  auto eps = std::numeric_limits<double>::epsilon();
-  auto temp = sampRate * chipwidth;
-  if (std::abs(temp - std::round(temp)) > 1e-10) {
-    throw std::invalid_argument("The number of samples per chip must be an integer.");
-  }
 }
