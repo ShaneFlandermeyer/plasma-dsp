@@ -34,9 +34,10 @@ if (NOT CMAKE_MODULES_DIR)
   set(CMAKE_MODULES_DIR lib/cmake)
 endif()
 
-set(PLASMA_INCLUDE_DIR include/plasma-dsp/${CMAKE_BUILD_TYPE})
+set(PLASMA_INCLUDE_DIR include/${CMAKE_PROJECT_NAME})
 set(PLASMA_LIB_DIR     lib)
 set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma-dsp)
+
 ########################################################################
 # Find build dependencies
 ########################################################################
@@ -44,8 +45,16 @@ find_package(Matplot++ REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 ########################################################################
-# TODO: Create uninstall target
+# Create uninstall target
 ########################################################################
+configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+@ONLY)
+
+add_custom_target(uninstall
+    ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+    )
 
 # ##############################################################################
 # Add subdirectories
