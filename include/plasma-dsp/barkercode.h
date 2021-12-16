@@ -4,21 +4,9 @@
 #include "phasecodedwaveform.h"
 #include "pulsedwaveform.h"
 
+// TODO: It might be worth it to create a PhaseCodedPulsedWaveform class
 class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
  public:
-  /**
-   * @brief Generate data for a single pulse
-   *
-   * @return std::vector<std::complex<double>> Pulse data
-   */
-  std::vector<std::complex<double>> pulse();
-  /**
-   * @brief Generate data for a full PRF schedule
-   *
-   * @return std::vector<std::complex<double>> Pulse data for at least 1 PRF
-   */
-  std::vector<std::complex<double>> pulseTrain();
-
   /**
    * @brief Construct a new Barker Code object
    *

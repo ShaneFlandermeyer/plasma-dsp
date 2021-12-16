@@ -1,4 +1,4 @@
-#include "plasma-dsp/phasecode.h"
+#include "phasecode.h"
 /**
  * @brief Generate a barker code of length n
  *

@@ -19,9 +19,10 @@ add_library(plasma-dsp SHARED ${PLASMA_SOURCES})
 # Specify the library include dirs
 target_include_directories(
   plasma-dsp PRIVATE
-  PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/plasma-dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
 target_link_libraries(plasma-dsp Eigen3::Eigen fftw3)
+
 # Install the shared library file
 install(TARGETS plasma-dsp
   EXPORT plasma-dsp

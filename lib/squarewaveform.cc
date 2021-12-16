@@ -1,4 +1,4 @@
-#include "plasma-dsp/squarewaveform.h"
+#include "squarewaveform.h"
 
 #include <algorithm>
 #include <cmath>

@@ -1,6 +1,9 @@
-#include "plasma-dsp/phasecodedwaveform.h"
+#include "phasecodedwaveform.h"
 
 #include <iostream>
+#include <limits>
+
+
 std::vector<std::complex<double>> PhaseCodedWaveform::pulse() {
   // Oversampling factor
   int nSampsChip = std::round(d_chipwidth * sampRate());
@@ -17,6 +20,8 @@ PhaseCodedWaveform::PhaseCodedWaveform() {
   d_nChips = 0;
   d_chipwidth = 0;
   d_code = std::vector<double>();
+
+  
 }
 
 PhaseCodedWaveform::PhaseCodedWaveform(int nChips, double chipwidth,
