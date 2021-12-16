@@ -1,4 +1,4 @@
-#include "barkercode.h"
+#include "plasma-dsp/barkercode.h"
 
 BarkerCode::BarkerCode() {}
 
@@ -23,6 +23,6 @@ std::vector<std::complex<double>> BarkerCode::pulse() {
   return PhaseCodedWaveform::pulse();
 }
 
-std::vector<std::complex<double>> BarkerCode::step() {
-  return PulsedWaveform::step();
+std::vector<std::complex<double>> BarkerCode::pulseTrain() {
+  return PulsedWaveform::pulseTrain();
 }

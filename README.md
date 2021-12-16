@@ -11,7 +11,6 @@ and analyzing RF waveforms.
 - Linear FM
 - Square wave
 
-
 ### Windows
 
 - Rectangular
@@ -36,11 +35,12 @@ When the tool is more mature, I might make the Matplot++ dependency optional.
 
 The easiest way to use this tool is to obtain the source code from git
 
-  <https://github.com/ShaneFlandermeyer/waveform.git>
+  <https://github.com/ShaneFlandermeyer/plasma-dsp>
 
 There is currently no way to install the tool system-wide.
 
 ## Wishlist
 
 - CMake system installation option
-  
+- FMCW waveforms
+- PCFM
