@@ -4,6 +4,7 @@ list(
   PLASMA_SOURCES
   barkercode.cc
   linearfmwaveform.cc
+  pcfm.cc
   phasecode.cc
   phasecodedwaveform.cc
   pulsedwaveform.cc
