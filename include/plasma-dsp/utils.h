@@ -5,8 +5,8 @@
 
 #include <Eigen/Dense>
 #include <complex>
+#include <unsupported/Eigen/FFT>
 #include <vector>
-
 /**
  * @brief Convert a vector to an eigen matrix object
  *
@@ -100,6 +100,40 @@ static std::vector<T> ifftshift(std::vector<T> in) {
   auto center = (int)floor(len / 2);
   std::rotate(out.begin(), out.begin() + center, out.end());
   return out;
+}
+
+/**
+ * @brief Compute the 1D convolution of two input vectors
+ *
+ * @tparam T Input data type
+ * @param in1 1st input vector
+ * @param in2 2nd input vector
+ * @return std::vector<T> Convolution of the two input vectors with length
+ * length(in1)+length(in2)-1
+ */
+template <typename T>
+std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
+  Eigen::FFT<T> fft;
+  std::vector<std::complex<double>> fin1, fin2, product;
+  std::vector<T> result;
+  // Convolution length
+  size_t N = in1.size() + in2.size() - 1;
+  // Zero pad signals to the appropriate length
+  std::vector<T> in1Pad = in1;
+  std::vector<T> in2Pad = in2;
+  in1Pad.resize(N, 0);
+  in2Pad.resize(N, 0);
+  // Forward FFT of the inputs
+  fft.fwd(fin1, in1Pad);
+  fft.fwd(fin2, in2Pad);
+  // Element-wise multiplication
+  std::transform(fin1.begin(), fin1.end(), fin2.begin(),
+                 std::back_inserter(product),
+                 std::multiplies<std::complex<double>>());
+
+  // Inverse FFT of the product
+  fft.inv(result, product);
+  return result;
 }
 
 /**
