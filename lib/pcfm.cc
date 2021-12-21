@@ -1,9 +1,5 @@
 #include "pcfm.h"
 
-#include <iostream>
-
-#include "utils.h"
-
 namespace plasma {
 
 PCFMWaveform::PCFMWaveform() {
@@ -14,6 +10,7 @@ PCFMWaveform::PCFMWaveform() {
 PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
                            const std::vector<double>& filter) {
   // Normalize the shaping filter to integrate to unity
+  // TODO: Use decltype(filter)::value_type(0) instead of 0.0
   auto sum = std::accumulate(filter.begin(), filter.end(), 0.0);
   d_filter = std::vector<double>(filter.size());
   std::transform(filter.begin(), filter.end(), d_filter.begin(),
@@ -34,7 +31,8 @@ PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
   std::adjacent_difference(d_code.begin(), d_code.end(), diff.begin());
   for (int i = 0; i < diff.size(); i++) alpha[i * nSampsChip] = diff[i];
   // Convolve phase difference code with shaping filter
-  auto alphaFilt = filt(d_filter, std::vector<double>(1, 1), alpha);
+  auto one = std::vector<double>(1,1);
+  auto alphaFilt = plasma::filter(filter, one, alpha);
   // Integrate frequency back to phase
   std::partial_sum(alphaFilt.begin(), alphaFilt.end(), phase.begin(),
                    std::plus<double>());

@@ -131,6 +131,7 @@ static std::vector<T> ifftshift(std::vector<T> in) {
  */
 template <typename T>
 std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
+  // TODO: Do this with the fft() function defined in this file
   Eigen::FFT<T> fft;
   std::vector<std::complex<double>> fin1, fin2, product;
   std::vector<T> result;
@@ -171,9 +172,8 @@ std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
  * @param x Input vector
  * @return std::vector<T> Filtered output vector
  */
-// TODO: This name conflicts with stuff in PCFM. Change in namespace refactoring
 template <typename T>
-std::vector<T> filt(const std::vector<T> &b, const std::vector<T> &a,
+std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
                     const std::vector<T> &x) {
   // TODO: Make IIR filters work
   // Compute the filter response as a difference equation

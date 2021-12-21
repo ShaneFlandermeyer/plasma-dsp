@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "pulsedwaveform.h"
+#include "utils.h"
 
 namespace plasma {
 
