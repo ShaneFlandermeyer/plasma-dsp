@@ -1,13 +1,10 @@
 #ifndef B5F351BB_C14A_43DF_A96F_0159BAC8AD27
 #define B5F351BB_C14A_43DF_A96F_0159BAC8AD27
 
-#include <fftw3.h>
-
 #include <Eigen/Dense>
 #include <complex>
 #include <unsupported/Eigen/FFT>
 #include <vector>
-#include <iostream>
 namespace plasma {
 /**
  * @brief Convert a vector to an eigen matrix object
@@ -63,7 +60,7 @@ inline static std::vector<std::vector<Scalar>> fromEigen(const Matrix &M) {
  * @return std::vector<std::complex<double>> DFT of the input
  */
 template <typename T>
-std::vector<std::complex<double>> fft(const std::vector<T> &in) {
+inline std::vector<std::complex<double>> fft(const std::vector<T> &in) {
   Eigen::FFT<T> fft;
   std::vector<std::complex<double>> result;
   fft.fwd(result, in);
@@ -79,7 +76,7 @@ std::vector<std::complex<double>> fft(const std::vector<T> &in) {
  * @return std::vector<std::complex<double>>
  */
 template <typename T>
-std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
+inline std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
   Eigen::FFT<T> fft;
   // Compute and return the forward FFT
   std::vector<std::complex<double>> result(N);
@@ -89,13 +86,13 @@ std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
 
 /**
  * @brief Inverse fast Fourier Transform (IFFT)
- * 
+ *
  * @tparam T Input type
  * @param in Input data
- * @return std::vector<T> Inverse FFT of input 
+ * @return std::vector<T> Inverse FFT of input
  */
 template <typename T>
-std::vector<T> ifft(const std::vector<std::complex<T>> &in) {
+inline std::vector<T> ifft(const std::vector<std::complex<T>> &in) {
   std::vector<T> result;
   Eigen::FFT<T> fft;
   // Inverse FFT of the product
@@ -111,7 +108,7 @@ std::vector<T> ifft(const std::vector<std::complex<T>> &in) {
  * @return std::vector<T> Shifted output vector
  */
 template <typename T>
-static std::vector<T> fftshift(std::vector<T> in) {
+inline std::vector<T> fftshift(std::vector<T> in) {
   auto out = in;
   auto len = out.size();
   auto center = (int)floor(len / 2);
@@ -128,7 +125,7 @@ static std::vector<T> fftshift(std::vector<T> in) {
  * @return std::vector<T> Shifted output vector
  */
 template <typename T>
-static std::vector<T> ifftshift(std::vector<T> in) {
+inline std::vector<T> ifftshift(std::vector<T> in) {
   auto out = in;
   auto len = out.size();
   auto center = (int)floor(len / 2);
@@ -146,14 +143,14 @@ static std::vector<T> ifftshift(std::vector<T> in) {
  * length(in1)+length(in2)-1
  */
 template <typename T>
-std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
+inline std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
   std::vector<std::complex<double>> fin1, fin2, product;
   // std::vector<T> result;
   // Convolution length
   size_t N = in1.size() + in2.size() - 1;
   // Multiply the inputs in the frequency domain
-  fin1 = fft(in1,N);
-  fin2 = fft(in2,N);
+  fin1 = fft(in1, N);
+  fin2 = fft(in2, N);
   std::transform(fin1.begin(), fin1.end(), fin2.begin(),
                  std::back_inserter(product),
                  std::multiplies<std::complex<double>>());
@@ -179,8 +176,8 @@ std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
  * @return std::vector<T> Filtered output vector
  */
 template <typename T>
-std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
-                    const std::vector<T> &x) {
+inline std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
+                      const std::vector<T> &x) {
   // TODO: Make IIR filters work
   // Compute the filter response as a difference equation
   auto y = std::vector<T>(x.size());
@@ -203,7 +200,7 @@ std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
  * @return std::vector<T> Output data
  */
 template <typename T>
-static std::vector<T> db(std::vector<T> &in) {
+inline std::vector<T> db(std::vector<T> &in) {
   auto out = in;
   std::transform(out.begin(), out.end(), out.begin(),
                  [](T &x) { return 10 * log10(x); });
