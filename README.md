@@ -7,7 +7,9 @@ and analyzing RF waveforms.
 
 ### Waveforms
 
-- Barker Codes
+- Phase codes
+  - Barker
+  - Frank
 - Linear FM
 - Polyphase-coded FM (PCFM)
 - Square wave

@@ -40,11 +40,35 @@ std::vector<double> barker(int n) {
   return code;
 }
 
+/**
+ * @brief Generate a Frank code of (perfect square) length-M
+ * 
+ * @param M Code length
+ * @return std::vector<double> 
+ */
+std::vector<double> frank(int M) {
+  // TODO: Check that M is a perfect square (i.e., L is an integer)
+  auto L = std::sqrt(M);
+  std::vector<double> code(M);
+  for (auto n = 0; n < L; n++) {
+    for (auto k = 0; k < L; k++) {
+      code[n * L + k] = std::fmod((2 * M_PI / L) * (n * k),2 * M_PI);
+    }
+  }
+  return code;
+}
+
 std::vector<double> PhaseCode::generate_code(codeType type, int n) {
   std::vector<double> code;
   switch (type) {
     case BARKER:
       code = barker(n);
+      break;
+    case FRANK:
+      code = frank(n);
+      break;
+    default:
+      throw std::invalid_argument("Invalid phase code type");
       break;
   }
   return code;
