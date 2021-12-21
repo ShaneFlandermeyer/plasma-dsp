@@ -27,7 +27,7 @@ PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
   std::adjacent_difference(code.begin(), code.end(), diff.begin());
   for (int i = 0; i < diff.size(); i++) alpha[i * nSampsChip] = diff[i];
   // Convolve phase difference code with shaping filter
-  auto alphaFilt = conv(alpha, filter);
+  auto alphaFilt = filt(filter,std::vector<double>(1,1),alpha);
   // Integrate frequency back to phase
   std::partial_sum(alphaFilt.begin(), alphaFilt.end(), phase.begin(),
                    std::plus<double>());

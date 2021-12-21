@@ -64,24 +64,24 @@ template <typename T>
 std::vector<std::complex<double>> fft(const std::vector<T> &in) {
   Eigen::FFT<T> fft;
   std::vector<std::complex<double>> result;
-  fft.fwd(result,in);
+  fft.fwd(result, in);
   return result;
 }
 
 /**
  * @brief Matlab-like syntax for computing a forward FFT with FFTW3
- * 
+ *
  * @tparam T Input type
  * @param in Input data vector
  * @param N FFT length
- * @return std::vector<std::complex<double>> 
+ * @return std::vector<std::complex<double>>
  */
 template <typename T>
 std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
   Eigen::FFT<T> fft;
   std::vector<std::complex<double>> result;
   result.resize(N);
-  fft.fwd(result,in);
+  fft.fwd(result, in);
   return result;
 }
 
@@ -150,6 +150,39 @@ std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
   // Inverse FFT of the product
   fft.inv(result, product);
   return result;
+}
+
+/**
+ * @brief Filter the data in vector x with the filter described by A and B
+ *
+ * The input-output description of the filter on a vector in the Z-transform
+ * domain is a rational transfer function:
+ *
+ * Y(z) = (b[1]+b[2]z^-1+...+b[nb+1]z^-nb)/(1+a[1]z^-1+...+a[na+1]z^-na)X(z)
+ *
+ * where na is the feedback (IIR) filter order, nb is the feedforward (FIR)
+ * filter order
+ *
+ * @tparam T Input type
+ * @param b Numerator filter coefficients
+ * @param a Denominator filter coefficients
+ * @param x Input vector
+ * @return std::vector<T> Filtered output vector
+ */
+// TODO: This name conflicts with stuff in PCFM. Change in namespace refactoring
+template <typename T>
+std::vector<T> filt(const std::vector<T> &b, const std::vector<T> &a,
+                    const std::vector<T> &x) {
+  // TODO: Make IIR filters work
+  // Compute the filter response as a difference equation
+  auto y = std::vector<T>(x.size());
+  for (int i = 0; i < x.size(); i++) {
+    y[i] = 0;
+    for (int j = 0; j < std::min((int)b.size(), i + 1); j++) {
+      y[i] += b[j] * x[i - j];
+    }
+  }
+  return y;
 }
 
 /**
