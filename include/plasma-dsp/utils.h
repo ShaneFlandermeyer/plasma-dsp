@@ -7,7 +7,7 @@
 #include <complex>
 #include <unsupported/Eigen/FFT>
 #include <vector>
-
+#include <iostream>
 namespace plasma {
 /**
  * @brief Convert a vector to an eigen matrix object
@@ -80,13 +80,26 @@ std::vector<std::complex<double>> fft(const std::vector<T> &in) {
  */
 template <typename T>
 std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
-  // Resize the input vector
-  std::vector<T> inPad = in;
-  inPad.resize(N);
   Eigen::FFT<T> fft;
   // Compute and return the forward FFT
-  std::vector<std::complex<double>> result;
-  fft.fwd(result, inPad);
+  std::vector<std::complex<double>> result(N);
+  fft.fwd(&result[0], &in[0], N);
+  return result;
+}
+
+/**
+ * @brief Inverse fast Fourier Transform (IFFT)
+ * 
+ * @tparam T Input type
+ * @param in Input data
+ * @return std::vector<T> Inverse FFT of input 
+ */
+template <typename T>
+std::vector<T> ifft(const std::vector<std::complex<T>> &in) {
+  std::vector<T> result;
+  Eigen::FFT<T> fft;
+  // Inverse FFT of the product
+  fft.inv(result, in);
   return result;
 }
 
@@ -124,7 +137,7 @@ static std::vector<T> ifftshift(std::vector<T> in) {
 }
 
 /**
- * @brief Compute the 1D convolution of two input vectors
+ * @brief Compute the 1D convolution of two input vectors using the FFT
  *
  * @tparam T Input data type
  * @param in1 1st input vector
@@ -134,10 +147,8 @@ static std::vector<T> ifftshift(std::vector<T> in) {
  */
 template <typename T>
 std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
-  // TODO: Do this with the fft() function defined in this file
-  
   std::vector<std::complex<double>> fin1, fin2, product;
-  std::vector<T> result;
+  // std::vector<T> result;
   // Convolution length
   size_t N = in1.size() + in2.size() - 1;
   // Multiply the inputs in the frequency domain
@@ -146,9 +157,7 @@ std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
   std::transform(fin1.begin(), fin1.end(), fin2.begin(),
                  std::back_inserter(product),
                  std::multiplies<std::complex<double>>());
-  Eigen::FFT<T> fft;
-  // Inverse FFT of the product
-  fft.inv(result, product);
+  auto result = ifft(product);
   return result;
 }
 
