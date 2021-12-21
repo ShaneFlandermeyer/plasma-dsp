@@ -100,9 +100,6 @@ inline std::vector<std::complex<double>> fft(std::vector<T> &in, int N = -1) {
   return out;
 }
 
-template <typename T>
-std::vector<T> ifft(std::vector<std::complex<double>> in, int N = -1) {}
-
 /**
  * @brief Inverse fast Fourier Transform (IFFT)
  *
@@ -110,10 +107,16 @@ std::vector<T> ifft(std::vector<std::complex<double>> in, int N = -1) {}
  * @param in Input data
  * @return std::vector<T> Inverse FFT of input
  */
+template <typename T>
+std::vector<T> ifft(std::vector<std::complex<double>> in, int N = -1) {}
+
 template <>
 std::vector<double> ifft<double>(std::vector<std::complex<double>> in, int N) {
+  // Create output vector
   if (N == -1) N = in.size();
+  in.resize(N);
   auto out = std::vector<double>(N);
+  // Create plan and compute IFFT
   fftw_plan p = fftw_plan_dft_c2r_1d(
       N, reinterpret_cast<fftw_complex *>(in.data()),
       reinterpret_cast<double *>(out.data()), FFTW_ESTIMATE);
@@ -123,17 +126,11 @@ std::vector<double> ifft<double>(std::vector<std::complex<double>> in, int N) {
   return out;
 }
 
-/**
- * @brief Inverse fast Fourier Transform (IFFT)
- *
- * @tparam T Input type
- * @param in Input data
- * @return std::vector<T> Inverse FFT of input
- */
 template <>
 std::vector<std::complex<double>> ifft<std::complex<double>>(
     std::vector<std::complex<double>> in, int N) {
   if (N == -1) N = in.size();
+  in.resize(N);
   auto out = std::vector<std::complex<double>>(N);
   fftw_plan p = fftw_plan_dft_1d(N, reinterpret_cast<fftw_complex *>(in.data()),
                                  reinterpret_cast<fftw_complex *>(out.data()),
