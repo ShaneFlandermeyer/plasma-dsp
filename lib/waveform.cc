@@ -1,9 +1,8 @@
 #include "waveform.h"
 
-Waveform::Waveform() {
-  d_sampRate = 0;
-}
+namespace plasma {
 
-Waveform::Waveform(double sampRate) {
-  d_sampRate = sampRate;
-}
+Waveform::Waveform() { d_sampRate = 0; }
+
+Waveform::Waveform(double sampRate) { d_sampRate = sampRate; }
+}  // namespace plasma

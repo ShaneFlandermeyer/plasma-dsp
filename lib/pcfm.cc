@@ -4,6 +4,8 @@
 
 #include "utils.h"
 
+namespace plasma {
+
 PCFMWaveform::PCFMWaveform() {
   d_code = std::vector<double>();
   d_filter = std::vector<double>();
@@ -14,10 +16,10 @@ PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
   // Normalize the shaping filter to integrate to unity
   auto sum = std::accumulate(filter.begin(), filter.end(), 0.0);
   d_filter = std::vector<double>(filter.size());
-  std::transform(filter.begin(),filter.end(),d_filter.begin(),
-                 [sum](const auto &x){return x/sum;});
+  std::transform(filter.begin(), filter.end(), d_filter.begin(),
+                 [sum](const auto& x) { return x / sum; });
   d_code = code;
-  
+
   // Phase difference vector
   auto diff = std::vector<double>(d_code.size());
   // Number of samples per chip
@@ -32,7 +34,7 @@ PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
   std::adjacent_difference(d_code.begin(), d_code.end(), diff.begin());
   for (int i = 0; i < diff.size(); i++) alpha[i * nSampsChip] = diff[i];
   // Convolve phase difference code with shaping filter
-  auto alphaFilt = filt(d_filter,std::vector<double>(1,1),alpha);
+  auto alphaFilt = filt(d_filter, std::vector<double>(1, 1), alpha);
   // Integrate frequency back to phase
   std::partial_sum(alphaFilt.begin(), alphaFilt.end(), phase.begin(),
                    std::plus<double>());
@@ -45,3 +47,4 @@ std::vector<std::complex<double>> PCFMWaveform::pulse() {
   // TODO: Update the waveform whenever the code or filter changes
   return d_waveform;
 }
+}  // namespace plasma

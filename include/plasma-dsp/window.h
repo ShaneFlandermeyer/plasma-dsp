@@ -13,7 +13,7 @@
 #define E9175048_C018_4B5C_ACDB_4A0C0931BB61
 #include <vector>
 
-namespace window {
+namespace plasma {
 
 /**
  * @brief Rectangular window of length n
@@ -47,6 +47,6 @@ std::vector<double> hamming(int n);
  */
 std::vector<double> hanning(int n);
 
-}  // namespace window
+}  // namespace plasma
 
 #endif /* E9175048_C018_4B5C_ACDB_4A0C0931BB61 */

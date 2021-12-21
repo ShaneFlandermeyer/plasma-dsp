@@ -1,6 +1,8 @@
 #include "barkercode.h"
 
 #include <iostream>
+
+namespace plasma {
 BarkerCode::BarkerCode() {}
 
 BarkerCode::BarkerCode(int n)
@@ -20,3 +22,4 @@ BarkerCode::BarkerCode(int n, double chipwidth, std::vector<double> prf,
                          PhaseCode::generate_code(PhaseCode::BARKER, n)),
       PulsedWaveform(n * chipwidth, prf) {
 }
+}  // namespace plasma

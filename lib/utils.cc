@@ -1,5 +1,6 @@
 #include "utils.h"
 
+namespace plasma {
 std::vector<std::complex<double>> fft(std::vector<std::complex<double>> &in) {
   // FFT size
   auto n = in.size();
@@ -26,4 +27,5 @@ std::vector<std::complex<double>> fft(std::vector<double> &in) {
   fftw_execute(p);
   fftw_destroy_plan(p);
   return out;
+}
 }

@@ -8,6 +8,8 @@
  * @brief A linear frequency-modulated waveform.
  *
  */
+
+namespace plasma {
 class LinearFMWaveform : public PulsedWaveform {
  protected:
   // Sweep bandwidth (Hz)
@@ -64,5 +66,5 @@ class LinearFMWaveform : public PulsedWaveform {
    */
   ~LinearFMWaveform() = default;
 };
-
+}
 #endif /* BD5E6A09_B96F_4379_84DF_C755B8C14BF8 */

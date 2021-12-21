@@ -7,6 +7,8 @@
 #include <complex>
 #include <unsupported/Eigen/FFT>
 #include <vector>
+
+namespace plasma {
 /**
  * @brief Convert a vector to an eigen matrix object
  *
@@ -201,5 +203,6 @@ static std::vector<T> db(std::vector<T> &in) {
                  [](T &x) { return 10 * log10(x); });
   return out;
 }
+}  // namespace plasma
 
 #endif /* B5F351BB_C14A_43DF_A96F_0159BAC8AD27 */

@@ -12,6 +12,7 @@
 
 #include "utils.h"
 
+namespace plasma {
 using namespace Eigen;
 /**
  * @brief Short-time Fourier transform (STFT)
@@ -77,5 +78,7 @@ std::vector<std::vector<double>> spectrogram(const std::vector<T> &x,
   auto spectro = fromEigen<double, MatrixXd>(mag2);
   return spectro;
 }
+
+} // namespace plasma
 
 #endif /* F49FC95E_8968_41E0_96E1_16209F637F93 */
