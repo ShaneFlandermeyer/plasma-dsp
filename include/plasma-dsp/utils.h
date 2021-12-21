@@ -100,6 +100,9 @@ inline std::vector<std::complex<double>> fft(std::vector<T> &in, int N = -1) {
   return out;
 }
 
+template <typename T>
+std::vector<T> ifft(std::vector<std::complex<double>> in, int N = -1) {}
+
 /**
  * @brief Inverse fast Fourier Transform (IFFT)
  *
@@ -107,28 +110,38 @@ inline std::vector<std::complex<double>> fft(std::vector<T> &in, int N = -1) {
  * @param in Input data
  * @return std::vector<T> Inverse FFT of input
  */
-inline void ifft(std::vector<std::complex<double>> in, std::vector<double> &out,
-                 int N = -1) {
+template <>
+std::vector<double> ifft<double>(std::vector<std::complex<double>> in, int N) {
   if (N == -1) N = in.size();
-  out = std::vector<double>(N);
-  fftw_plan p =
-      fftw_plan_dft_c2r_1d(N, reinterpret_cast<fftw_complex *>(in.data()),
-                           reinterpret_cast<double *>(out.data()), FFTW_ESTIMATE);
+  auto out = std::vector<double>(N);
+  fftw_plan p = fftw_plan_dft_c2r_1d(
+      N, reinterpret_cast<fftw_complex *>(in.data()),
+      reinterpret_cast<double *>(out.data()), FFTW_ESTIMATE);
   fftw_execute(p);
   fftw_destroy_plan(p);
   for (auto &x : out) x *= N;
+  return out;
 }
 
-inline void ifft(std::vector<std::complex<double>> in,
-                 std::vector<std::complex<double>> &out, int N = -1) {
+/**
+ * @brief Inverse fast Fourier Transform (IFFT)
+ *
+ * @tparam T Input type
+ * @param in Input data
+ * @return std::vector<T> Inverse FFT of input
+ */
+template <>
+std::vector<std::complex<double>> ifft<std::complex<double>>(
+    std::vector<std::complex<double>> in, int N) {
   if (N == -1) N = in.size();
-  out = std::vector<std::complex<double>>(N);
+  auto out = std::vector<std::complex<double>>(N);
   fftw_plan p = fftw_plan_dft_1d(N, reinterpret_cast<fftw_complex *>(in.data()),
                                  reinterpret_cast<fftw_complex *>(out.data()),
                                  FFTW_BACKWARD, FFTW_ESTIMATE);
   fftw_execute(p);
   fftw_destroy_plan(p);
   // for (auto &x : out) x *= N;
+  return out;
 }
 
 /**
@@ -185,8 +198,7 @@ inline std::vector<T> conv(std::vector<T> &in1, std::vector<T> &in2) {
   std::transform(fin1.begin(), fin1.end(), fin2.begin(),
                  std::back_inserter(product),
                  std::multiplies<std::complex<double>>());
-  std::vector<T> result;
-  ifft(product, result);
+  std::vector<T> result = ifft<T>(product, N);
   return result;
 }
 
