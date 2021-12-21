@@ -1,13 +1,10 @@
 #ifndef B5F351BB_C14A_43DF_A96F_0159BAC8AD27
 #define B5F351BB_C14A_43DF_A96F_0159BAC8AD27
 
-#include <fftw3.h>
-
 #include <Eigen/Dense>
 #include <complex>
 #include <unsupported/Eigen/FFT>
 #include <vector>
-
 namespace plasma {
 /**
  * @brief Convert a vector to an eigen matrix object
@@ -63,7 +60,7 @@ inline static std::vector<std::vector<Scalar>> fromEigen(const Matrix &M) {
  * @return std::vector<std::complex<double>> DFT of the input
  */
 template <typename T>
-std::vector<std::complex<double>> fft(const std::vector<T> &in) {
+inline std::vector<std::complex<double>> fft(const std::vector<T> &in) {
   Eigen::FFT<T> fft;
   std::vector<std::complex<double>> result;
   fft.fwd(result, in);
@@ -79,11 +76,27 @@ std::vector<std::complex<double>> fft(const std::vector<T> &in) {
  * @return std::vector<std::complex<double>>
  */
 template <typename T>
-std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
+inline std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
   Eigen::FFT<T> fft;
-  std::vector<std::complex<double>> result;
-  result.resize(N);
-  fft.fwd(result, in);
+  // Compute and return the forward FFT
+  std::vector<std::complex<double>> result(N);
+  fft.fwd(&result[0], &in[0], N);
+  return result;
+}
+
+/**
+ * @brief Inverse fast Fourier Transform (IFFT)
+ *
+ * @tparam T Input type
+ * @param in Input data
+ * @return std::vector<T> Inverse FFT of input
+ */
+template <typename T>
+inline std::vector<T> ifft(const std::vector<std::complex<T>> &in) {
+  std::vector<T> result;
+  Eigen::FFT<T> fft;
+  // Inverse FFT of the product
+  fft.inv(result, in);
   return result;
 }
 
@@ -95,7 +108,7 @@ std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
  * @return std::vector<T> Shifted output vector
  */
 template <typename T>
-static std::vector<T> fftshift(std::vector<T> in) {
+inline std::vector<T> fftshift(std::vector<T> in) {
   auto out = in;
   auto len = out.size();
   auto center = (int)floor(len / 2);
@@ -112,7 +125,7 @@ static std::vector<T> fftshift(std::vector<T> in) {
  * @return std::vector<T> Shifted output vector
  */
 template <typename T>
-static std::vector<T> ifftshift(std::vector<T> in) {
+inline std::vector<T> ifftshift(std::vector<T> in) {
   auto out = in;
   auto len = out.size();
   auto center = (int)floor(len / 2);
@@ -121,7 +134,7 @@ static std::vector<T> ifftshift(std::vector<T> in) {
 }
 
 /**
- * @brief Compute the 1D convolution of two input vectors
+ * @brief Compute the 1D convolution of two input vectors using the FFT
  *
  * @tparam T Input data type
  * @param in1 1st input vector
@@ -130,28 +143,18 @@ static std::vector<T> ifftshift(std::vector<T> in) {
  * length(in1)+length(in2)-1
  */
 template <typename T>
-std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
-  // TODO: Do this with the fft() function defined in this file
-  Eigen::FFT<T> fft;
+inline std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
   std::vector<std::complex<double>> fin1, fin2, product;
-  std::vector<T> result;
+  // std::vector<T> result;
   // Convolution length
   size_t N = in1.size() + in2.size() - 1;
-  // Zero pad signals to the appropriate length
-  std::vector<T> in1Pad = in1;
-  std::vector<T> in2Pad = in2;
-  in1Pad.resize(N, 0);
-  in2Pad.resize(N, 0);
-  // Forward FFT of the inputs
-  fft.fwd(fin1, in1Pad);
-  fft.fwd(fin2, in2Pad);
-  // Element-wise multiplication
+  // Multiply the inputs in the frequency domain
+  fin1 = fft(in1, N);
+  fin2 = fft(in2, N);
   std::transform(fin1.begin(), fin1.end(), fin2.begin(),
                  std::back_inserter(product),
                  std::multiplies<std::complex<double>>());
-
-  // Inverse FFT of the product
-  fft.inv(result, product);
+  auto result = ifft(product);
   return result;
 }
 
@@ -173,9 +176,9 @@ std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
  * @return std::vector<T> Filtered output vector
  */
 template <typename T>
-std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
-                    const std::vector<T> &x) {
-  // TODO: Make IIR filters work
+inline std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
+                      const std::vector<T> &x) {
+  // TODO: Currently only handles FIR filters
   // Compute the filter response as a difference equation
   auto y = std::vector<T>(x.size());
   for (int i = 0; i < x.size(); i++) {
@@ -197,7 +200,7 @@ std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
  * @return std::vector<T> Output data
  */
 template <typename T>
-static std::vector<T> db(std::vector<T> &in) {
+inline std::vector<T> db(std::vector<T> &in) {
   auto out = in;
   std::transform(out.begin(), out.end(), out.begin(),
                  [](T &x) { return 10 * log10(x); });
