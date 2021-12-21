@@ -16,7 +16,7 @@ PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
   // Phase difference vector
   auto diff = std::vector<double>(code.size());
   // Number of samples per chip
-  auto nSampsChip = d_filter.size();
+  auto nSampsChip = filter.size();
   // Oversampled phase code difference vector
   auto alpha = std::vector<double>(code.size() * nSampsChip);
   // Phase vector
@@ -37,5 +37,6 @@ PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
 }
 
 std::vector<std::complex<double>> PCFMWaveform::pulse() {
+  // TODO: Update the waveform whenever the code or filter changes
   return d_waveform;
 }

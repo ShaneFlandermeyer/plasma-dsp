@@ -29,5 +29,3 @@ LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
     : Waveform(sampRate), PulsedWaveform(pulsewidth, prf) {
   d_bandwidth = bandwidth;
 }
-
-LinearFMWaveform::~LinearFMWaveform() {}

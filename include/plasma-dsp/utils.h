@@ -54,20 +54,36 @@ inline static std::vector<std::vector<Scalar>> fromEigen(const Matrix &M) {
 }
 
 /**
- * @brief Matlab-like syntax for computing a complex forward FFT with FFTW3
+ * @brief Matlab-like syntax for computing a forward FFT with FFTW3
  *
- * @param in Input data
- * @return std::vector<std::complex<double>> Complex DFT of the input
+ * @tparam T Input type
+ * @param in Input data vector
+ * @return std::vector<std::complex<double>> DFT of the input
  */
-std::vector<std::complex<double>> fft(std::vector<std::complex<double>> &in);
+template <typename T>
+std::vector<std::complex<double>> fft(const std::vector<T> &in) {
+  Eigen::FFT<T> fft;
+  std::vector<std::complex<double>> result;
+  fft.fwd(result,in);
+  return result;
+}
 
 /**
- * @brief Matlab-like syntax for computing a real forward FFT with FFTW3
- *
- * @param in Input data
- * @return std::vector<std::complex<double>> Complex DFT of the input
+ * @brief Matlab-like syntax for computing a forward FFT with FFTW3
+ * 
+ * @tparam T Input type
+ * @param in Input data vector
+ * @param N FFT length
+ * @return std::vector<std::complex<double>> 
  */
-std::vector<std::complex<double>> fft(std::vector<double> &in);
+template <typename T>
+std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
+  Eigen::FFT<T> fft;
+  std::vector<std::complex<double>> result;
+  result.resize(N);
+  fft.fwd(result,in);
+  return result;
+}
 
 /**
  * @brief Shift the zero frequency component to the center of the spectrum

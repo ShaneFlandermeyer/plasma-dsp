@@ -62,7 +62,7 @@ class LinearFMWaveform : public PulsedWaveform {
    * @brief Destroy the Linear FM Waveform object
    *
    */
-  ~LinearFMWaveform();
+  ~LinearFMWaveform() = default;
 };
 
 #endif /* BD5E6A09_B96F_4379_84DF_C755B8C14BF8 */
