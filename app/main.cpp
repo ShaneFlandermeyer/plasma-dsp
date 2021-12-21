@@ -3,6 +3,7 @@
 #include <iostream>
 #include <set>
 
+
 #include "barkercode.h"
 #include "linearfmwaveform.h"
 #include "phasecode.h"
@@ -19,14 +20,15 @@ int main() {
   std::vector<double> prf = {1e3};
   auto sampRate = 20e6;
   auto code = PhaseCode::generate_code(PhaseCode::BARKER, 13);
+  // auto code = std::vector<double>(13,1);
   auto filter = window::rectangular(3);
-  auto pcfm = PCFMWaveform(code, filter);
-  // auto pulse = wave.pulse();
-  // auto real = std::vector<double>(pulse.size());
-  // std::transform(pulse.begin(), pulse.end(), real.begin(),
-  //                [](auto x) { return std::real(x); });
+  auto wave = PCFMWaveform(code, filter);
+  auto pulse = wave.pulse();
+  auto real = std::vector<double>(pulse.size());
+  std::transform(pulse.begin(), pulse.end(), real.begin(),
+                 [](auto x) { return std::real(x); });
 
-  // plot(real);
-  // show();
+  plot(real);
+  show();
   return 0;
 }
