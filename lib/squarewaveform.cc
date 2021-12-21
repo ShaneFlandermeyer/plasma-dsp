@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
+namespace plasma {
 std::vector<std::complex<double>> SquareWaveform::pulse() {
   // Number of samples per pulse
   int nSampsPulse = static_cast<int>(pulsewidth() * sampRate());
@@ -22,3 +23,4 @@ SquareWaveform::SquareWaveform(double pulsewidth, std::vector<double> prf,
     : Waveform(sampRate), PulsedWaveform(pulsewidth, prf) {}
 
 SquareWaveform::~SquareWaveform() {}
+}

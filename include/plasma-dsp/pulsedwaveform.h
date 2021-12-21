@@ -2,6 +2,8 @@
 #define D468419A_4F55_442A_997B_F6CD1989C7F6
 #include "waveform.h"
 
+namespace plasma {
+
 /**
  * @brief An abstract base class for pulsed waveforms.
  *
@@ -73,5 +75,5 @@ class PulsedWaveform : virtual public Waveform {
    */
   PulsedWaveform(double pulsewidth, std::vector<double> prf);
 };
-
+}  // namespace plasma
 #endif /* D468419A_4F55_442A_997B_F6CD1989C7F6 */

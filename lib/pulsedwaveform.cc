@@ -3,6 +3,7 @@
 #include <iostream>
 #include <numeric>
 
+namespace plasma {
 PulsedWaveform::PulsedWaveform() : Waveform() {
   d_prf = std::vector<double>();
   d_pulsewidth = 0;
@@ -52,3 +53,4 @@ std::vector<std::complex<double>> PulsedWaveform::pulseTrain() {
 
   return wave;
 }
+}  // namespace plasma

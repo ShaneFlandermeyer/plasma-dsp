@@ -1,4 +1,6 @@
 #include "phasecode.h"
+
+namespace plasma {
 /**
  * @brief Generate a barker code of length n
  *
@@ -47,3 +49,4 @@ std::vector<double> PhaseCode::generate_code(codeType type, int n) {
   }
   return code;
 }
+}  // namespace plasma

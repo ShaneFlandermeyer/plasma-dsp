@@ -4,6 +4,8 @@
 #include "phasecodedwaveform.h"
 #include "pulsedwaveform.h"
 
+namespace plasma {
+
 // TODO: It might be worth it to create a PhaseCodedPulsedWaveform class
 class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
  public:
@@ -24,5 +26,7 @@ class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
 
   BarkerCode(int n, double chipwidth, std::vector<double> prf, double sampRate);
 };
+
+}  // namespace plasma
 
 #endif /* D44B01D2_E99D_42FF_9E9A_BFDE907AE626 */

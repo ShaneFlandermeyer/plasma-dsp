@@ -5,6 +5,9 @@
 #include <vector>
 
 #include "pulsedwaveform.h"
+#include "utils.h"
+
+namespace plasma {
 
 /**
  * @brief Polyphase-coded frequency modulated waveform
@@ -74,4 +77,5 @@ class PCFMWaveform : public PulsedWaveform {
   auto filter(std::vector<double> filt) { d_filter = filt; }
 };
 
+}
 #endif /* F9D71799_6DD6_49D7_89EC_155A8D8D6228 */

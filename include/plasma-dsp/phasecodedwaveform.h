@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "waveform.h"
 
+namespace plasma {
 /**
  * @brief Phase coded waveform object.
  * 
@@ -84,5 +85,5 @@ class PhaseCodedWaveform : virtual public Waveform {
   PhaseCodedWaveform(int nChips, double chipwidth, std::vector<double> code);
 
 };
-
+}  // namespace plasma
 #endif /* F76EB5C6_3C7E_46B6_AC56_C303873CDA4A */

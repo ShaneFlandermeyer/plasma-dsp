@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-namespace window {
+namespace plasma {
 
 std::vector<double> rectangular(int n) { return std::vector<double>(n, 1.0); }
 
@@ -25,4 +25,4 @@ std::vector<double> hanning(int n) {
   return w;
 }
 
-}  // namespace window
+}  // namespace plasma
