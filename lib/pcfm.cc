@@ -11,23 +11,28 @@ PCFMWaveform::PCFMWaveform() {
 
 PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
                            const std::vector<double>& filter) {
+  // Normalize the shaping filter to integrate to unity
+  auto sum = std::accumulate(filter.begin(), filter.end(), 0.0);
+  d_filter = std::vector<double>(filter.size());
+  std::transform(filter.begin(),filter.end(),d_filter.begin(),
+                 [sum](const auto &x){return x/sum;});
   d_code = code;
-  d_filter = filter;
+  
   // Phase difference vector
-  auto diff = std::vector<double>(code.size());
+  auto diff = std::vector<double>(d_code.size());
   // Number of samples per chip
-  auto nSampsChip = filter.size();
+  auto nSampsChip = d_filter.size();
   // Oversampled phase code difference vector
-  auto alpha = std::vector<double>(code.size() * nSampsChip);
+  auto alpha = std::vector<double>(d_code.size() * nSampsChip);
   // Phase vector
   auto phase = std::vector<double>(alpha.size());
   // Waveform vector
   d_waveform = std::vector<std::complex<double>>(alpha.size());
   // FIXME: Assumes values are in range [-pi, pi]
-  std::adjacent_difference(code.begin(), code.end(), diff.begin());
+  std::adjacent_difference(d_code.begin(), d_code.end(), diff.begin());
   for (int i = 0; i < diff.size(); i++) alpha[i * nSampsChip] = diff[i];
   // Convolve phase difference code with shaping filter
-  auto alphaFilt = filt(filter,std::vector<double>(1,1),alpha);
+  auto alphaFilt = filt(d_filter,std::vector<double>(1,1),alpha);
   // Integrate frequency back to phase
   std::partial_sum(alphaFilt.begin(), alphaFilt.end(), phase.begin(),
                    std::plus<double>());
