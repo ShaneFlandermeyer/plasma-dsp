@@ -25,8 +25,13 @@ int main() {
   auto filter = rectangular(3);
   auto wave = PCFMWaveform(code, filter);
   auto pulse = wave.pulse();
+  auto fPulse = fft(pulse,1337);
   
-  auto y = PhaseCode::generate_code(PhaseCode::FRANK,16);
+  auto N = 10;
+  auto over = 3;
+  auto a_code = std::vector<double>(N,1);
+  auto g = std::vector<double>(over,1);
+  auto y = conv(a_code,g);
   std::for_each(y.begin(),y.end(),[](auto& x){std::cout << x << std::endl;});
   
   return 0;
