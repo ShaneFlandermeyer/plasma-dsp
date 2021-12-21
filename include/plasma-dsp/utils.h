@@ -178,7 +178,7 @@ inline std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2)
 template <typename T>
 inline std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
                       const std::vector<T> &x) {
-  // TODO: Make IIR filters work
+  // TODO: Currently only handles FIR filters
   // Compute the filter response as a difference equation
   auto y = std::vector<T>(x.size());
   for (int i = 0; i < x.size(); i++) {

@@ -9,6 +9,7 @@ and analyzing RF waveforms.
 
 - Barker Codes
 - Linear FM
+- Polyphase-coded FM (PCFM)
 - Square wave
 
 ### Windows
@@ -20,11 +21,13 @@ and analyzing RF waveforms.
 
 ### Signal Processing
 
-- FFT (including fftshift/ifftshift)
+- FFT/IFFT
+- fftshift/ifftshift
 - Spectrogram
 
 ## Dependencies
 
+- C++20
 - [Eigen](https://eigen.tuxfamily.org/)
 - [FFTW3](https://www.fftw.org/)
 - [Matplot++](https://alandefreitas.github.io/matplotplusplus/)
@@ -35,12 +38,28 @@ When the tool is more mature, I might make the Matplot++ dependency optional.
 
 The easiest way to use this tool is to obtain the source code from git
 
-  <https://github.com/ShaneFlandermeyer/plasma-dsp>
+```bash
+git clone https://github.com/ShaneFlandermeyer/plasma-dsp.git
+```
 
-There is currently no way to install the tool system-wide.
+To install the tool system-wide (currently only possible on Linux), run the
+following commands from the project's base directory
+
+```bash
+cmake -S . -B build
+make
+sudo make install
+sudo ldconfig
+```
+
+To uninstall, run the following from the build folder
+
+```bash
+sudo make uninstall
+```
 
 ## Wishlist
 
-- CMake system installation option
+- Unit tests
 - FMCW waveforms
-- PCFM
+- Pulse-doppler processing
