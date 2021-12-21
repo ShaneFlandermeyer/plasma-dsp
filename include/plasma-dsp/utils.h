@@ -80,10 +80,13 @@ std::vector<std::complex<double>> fft(const std::vector<T> &in) {
  */
 template <typename T>
 std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
+  // Resize the input vector
+  std::vector<T> inPad = in;
+  inPad.resize(N);
   Eigen::FFT<T> fft;
+  // Compute and return the forward FFT
   std::vector<std::complex<double>> result;
-  result.resize(N);
-  fft.fwd(result, in);
+  fft.fwd(result, inPad);
   return result;
 }
 
@@ -132,24 +135,18 @@ static std::vector<T> ifftshift(std::vector<T> in) {
 template <typename T>
 std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
   // TODO: Do this with the fft() function defined in this file
-  Eigen::FFT<T> fft;
+  
   std::vector<std::complex<double>> fin1, fin2, product;
   std::vector<T> result;
   // Convolution length
   size_t N = in1.size() + in2.size() - 1;
-  // Zero pad signals to the appropriate length
-  std::vector<T> in1Pad = in1;
-  std::vector<T> in2Pad = in2;
-  in1Pad.resize(N, 0);
-  in2Pad.resize(N, 0);
-  // Forward FFT of the inputs
-  fft.fwd(fin1, in1Pad);
-  fft.fwd(fin2, in2Pad);
-  // Element-wise multiplication
+  // Multiply the inputs in the frequency domain
+  fin1 = fft(in1,N);
+  fin2 = fft(in2,N);
   std::transform(fin1.begin(), fin1.end(), fin2.begin(),
                  std::back_inserter(product),
                  std::multiplies<std::complex<double>>());
-
+  Eigen::FFT<T> fft;
   // Inverse FFT of the product
   fft.inv(result, product);
   return result;

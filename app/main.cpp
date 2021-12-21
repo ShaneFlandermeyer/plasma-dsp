@@ -25,22 +25,13 @@ int main() {
   auto filter = rectangular(3);
   auto wave = PCFMWaveform(code, filter);
   auto pulse = wave.pulse();
-  // auto real = std::vector<double>(pulse.size());
-  // std::transform(pulse.begin(), pulse.end(), real.begin(),
-  //                [](auto x) { return std::real(x); });
-
-  // plot(real);
-  // auto x = fft(std::vector<double>(2,2));
-  // for (int i = 0; i < x.size(); i++) {
-  //   std::cout << x[i] << std::endl;
-  // }
-  // show();
-  // std::vector<double> x(10,1);
-  // std::vector<double> g(3,1);
-  // std::vector<double> train(3*10,0);
-  // for (int i = 0; i < x.size(); i++) train[i*3] = x[i];
-  // plot(filt(g,{1},train));
-  // show();
+  
+  auto N = 10;
+  auto over = 3;
+  auto a_code = std::vector<double>(N,1);
+  auto g = std::vector<double>(over,1);
+  auto y = conv(a_code,g);
+  std::for_each(y.begin(),y.end(),[](auto& x){std::cout << x << std::endl;});
   
   return 0;
 }
