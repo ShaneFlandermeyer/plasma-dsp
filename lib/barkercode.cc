@@ -1,5 +1,6 @@
-#include "plasma-dsp/barkercode.h"
+#include "barkercode.h"
 
+#include <iostream>
 BarkerCode::BarkerCode() {}
 
 BarkerCode::BarkerCode(int n)
@@ -17,12 +18,5 @@ BarkerCode::BarkerCode(int n, double chipwidth, std::vector<double> prf,
     : Waveform(sampRate),
       PhaseCodedWaveform(n, chipwidth,
                          PhaseCode::generate_code(PhaseCode::BARKER, n)),
-      PulsedWaveform(n * chipwidth, prf) {}
-
-std::vector<std::complex<double>> BarkerCode::pulse() {
-  return PhaseCodedWaveform::pulse();
-}
-
-std::vector<std::complex<double>> BarkerCode::pulseTrain() {
-  return PulsedWaveform::pulseTrain();
+      PulsedWaveform(n * chipwidth, prf) {
 }

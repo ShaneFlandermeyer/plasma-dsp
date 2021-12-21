@@ -3,48 +3,43 @@
 #include <iostream>
 #include <set>
 
-#include "plasma-dsp/barkercode.h"
-#include "plasma-dsp/linearfmwaveform.h"
-#include "plasma-dsp/phasecode.h"
-#include "plasma-dsp/spectrogram.h"
-#include "plasma-dsp/squarewaveform.h"
-#include "plasma-dsp/utils.h"
-#include "plasma-dsp/window.h"
+
+#include "barkercode.h"
+#include "linearfmwaveform.h"
+#include "phasecode.h"
+#include "spectrogram.h"
+#include "squarewaveform.h"
+#include "pcfm.h"
+#include "utils.h"
+#include "window.h"
 
 using namespace matplot;
 int main() {
   auto bandwidth = 10e6;
   auto pulsewidth = 100e-6;
-  std::vector<double> prf = {10e3};
+  std::vector<double> prf = {1e3};
   auto sampRate = 20e6;
-  auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
-  auto x = wave.pulseTrain();
-  auto barker = BarkerCode(13, pulsewidth / 13, prf, sampRate);
-  auto pulse = barker.pulse();
-  auto real = std::vector<double>(pulse.size());
-  std::transform(pulse.begin(), pulse.end(), real.begin(),
-                 [](auto x) { return std::real(x); });
-  // for (auto x : pulse) std::cout << x << std::endl;
+  auto code = PhaseCode::generate_code(PhaseCode::BARKER, 13);
+  // auto code = std::vector<double>(13,1);
+  auto filter = window::rectangular(3);
+  auto wave = PCFMWaveform(code, filter);
+  auto pulse = wave.pulse();
+  // auto real = std::vector<double>(pulse.size());
+  // std::transform(pulse.begin(), pulse.end(), real.begin(),
+  //                [](auto x) { return std::real(x); });
+
   // plot(real);
-  // show();
-
-  // auto dt = 0.001;
-  // auto f0 = 50;
-  // auto f1 = 250;
-  // auto t1 = 2;
-  // auto x = std::vector<double>();
-  // for (double t = 0; t < t1; t += dt) {
-  //   x.push_back(
-  //       cos(2 * M_PI * t * (f0 + (f1 - f0) * pow(t, 2) / (3 * pow(t1, 2)))));
+  // auto x = fft(std::vector<double>(2,2));
+  // for (int i = 0; i < x.size(); i++) {
+  //   std::cout << x[i] << std::endl;
   // }
-
-  // Short time fourier transform equation
-  auto noverlap = 120;
-  auto nfft = 128;
-  auto win = window::hamming(nfft);
-  auto spectro = spectrogram(x, win, nfft, noverlap);
-  image(spectro, true);
-  colorbar();
-  show();
+  // show();
+  // std::vector<double> x(10,1);
+  // std::vector<double> g(3,1);
+  // std::vector<double> train(3*10,0);
+  // for (int i = 0; i < x.size(); i++) train[i*3] = x[i];
+  // plot(filt(g,{1},train));
+  // show();
+  
   return 0;
 }

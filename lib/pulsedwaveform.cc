@@ -1,4 +1,4 @@
-#include "plasma-dsp/pulsedwaveform.h"
+#include "pulsedwaveform.h"
 
 #include <iostream>
 #include <numeric>
@@ -36,7 +36,6 @@ std::vector<std::complex<double>> PulsedWaveform::pulseTrain() {
   std::partial_sum(nSampsPri.begin(), nSampsPri.end(), startIndex.begin(),
                    std::plus<int>());
   // Assign values to the nonzero indices
-  // TODO: Investigate std::generate for this
   // Total time duration of the waveform
   auto duration = std::accumulate(pri.begin(), pri.end(), 0.0);
   // Total number of samples in the PRF schedule

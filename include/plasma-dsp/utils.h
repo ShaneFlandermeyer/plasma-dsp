@@ -5,8 +5,8 @@
 
 #include <Eigen/Dense>
 #include <complex>
+#include <unsupported/Eigen/FFT>
 #include <vector>
-
 /**
  * @brief Convert a vector to an eigen matrix object
  *
@@ -54,20 +54,36 @@ inline static std::vector<std::vector<Scalar>> fromEigen(const Matrix &M) {
 }
 
 /**
- * @brief Matlab-like syntax for computing a complex forward FFT with FFTW3
+ * @brief Matlab-like syntax for computing a forward FFT with FFTW3
  *
- * @param in Input data
- * @return std::vector<std::complex<double>> Complex DFT of the input
+ * @tparam T Input type
+ * @param in Input data vector
+ * @return std::vector<std::complex<double>> DFT of the input
  */
-std::vector<std::complex<double>> fft(std::vector<std::complex<double>> &in);
+template <typename T>
+std::vector<std::complex<double>> fft(const std::vector<T> &in) {
+  Eigen::FFT<T> fft;
+  std::vector<std::complex<double>> result;
+  fft.fwd(result, in);
+  return result;
+}
 
 /**
- * @brief Matlab-like syntax for computing a real forward FFT with FFTW3
+ * @brief Matlab-like syntax for computing a forward FFT with FFTW3
  *
- * @param in Input data
- * @return std::vector<std::complex<double>> Complex DFT of the input
+ * @tparam T Input type
+ * @param in Input data vector
+ * @param N FFT length
+ * @return std::vector<std::complex<double>>
  */
-std::vector<std::complex<double>> fft(std::vector<double> &in);
+template <typename T>
+std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
+  Eigen::FFT<T> fft;
+  std::vector<std::complex<double>> result;
+  result.resize(N);
+  fft.fwd(result, in);
+  return result;
+}
 
 /**
  * @brief Shift the zero frequency component to the center of the spectrum
@@ -100,6 +116,73 @@ static std::vector<T> ifftshift(std::vector<T> in) {
   auto center = (int)floor(len / 2);
   std::rotate(out.begin(), out.begin() + center, out.end());
   return out;
+}
+
+/**
+ * @brief Compute the 1D convolution of two input vectors
+ *
+ * @tparam T Input data type
+ * @param in1 1st input vector
+ * @param in2 2nd input vector
+ * @return std::vector<T> Convolution of the two input vectors with length
+ * length(in1)+length(in2)-1
+ */
+template <typename T>
+std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
+  Eigen::FFT<T> fft;
+  std::vector<std::complex<double>> fin1, fin2, product;
+  std::vector<T> result;
+  // Convolution length
+  size_t N = in1.size() + in2.size() - 1;
+  // Zero pad signals to the appropriate length
+  std::vector<T> in1Pad = in1;
+  std::vector<T> in2Pad = in2;
+  in1Pad.resize(N, 0);
+  in2Pad.resize(N, 0);
+  // Forward FFT of the inputs
+  fft.fwd(fin1, in1Pad);
+  fft.fwd(fin2, in2Pad);
+  // Element-wise multiplication
+  std::transform(fin1.begin(), fin1.end(), fin2.begin(),
+                 std::back_inserter(product),
+                 std::multiplies<std::complex<double>>());
+
+  // Inverse FFT of the product
+  fft.inv(result, product);
+  return result;
+}
+
+/**
+ * @brief Filter the data in vector x with the filter described by A and B
+ *
+ * The input-output description of the filter on a vector in the Z-transform
+ * domain is a rational transfer function:
+ *
+ * Y(z) = (b[1]+b[2]z^-1+...+b[nb+1]z^-nb)/(1+a[1]z^-1+...+a[na+1]z^-na)X(z)
+ *
+ * where na is the feedback (IIR) filter order, nb is the feedforward (FIR)
+ * filter order
+ *
+ * @tparam T Input type
+ * @param b Numerator filter coefficients
+ * @param a Denominator filter coefficients
+ * @param x Input vector
+ * @return std::vector<T> Filtered output vector
+ */
+// TODO: This name conflicts with stuff in PCFM. Change in namespace refactoring
+template <typename T>
+std::vector<T> filt(const std::vector<T> &b, const std::vector<T> &a,
+                    const std::vector<T> &x) {
+  // TODO: Make IIR filters work
+  // Compute the filter response as a difference equation
+  auto y = std::vector<T>(x.size());
+  for (int i = 0; i < x.size(); i++) {
+    y[i] = 0;
+    for (int j = 0; j < std::min((int)b.size(), i + 1); j++) {
+      y[i] += b[j] * x[i - j];
+    }
+  }
+  return y;
 }
 
 /**

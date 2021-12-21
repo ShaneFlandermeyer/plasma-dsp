@@ -1,4 +1,4 @@
-#include "plasma-dsp/linearfmwaveform.h"
+#include "linearfmwaveform.h"
 
 std::vector<std::complex<double>> LinearFMWaveform::pulse() {
   // Sample interval
@@ -11,7 +11,7 @@ std::vector<std::complex<double>> LinearFMWaveform::pulse() {
     t = n * ts;
     double phase = -bandwidth() / 2 * t +
                    bandwidth() / (2 * pulsewidth()) * std::pow(t, 2);
-    wave[n] = std::exp(Im * (double)(2 * M_PI) * phase);
+    wave[n] = std::exp(Im *(2 * M_PI) * phase);
   }
   return wave;
 }
@@ -29,5 +29,3 @@ LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
     : Waveform(sampRate), PulsedWaveform(pulsewidth, prf) {
   d_bandwidth = bandwidth;
 }
-
-LinearFMWaveform::~LinearFMWaveform() {}

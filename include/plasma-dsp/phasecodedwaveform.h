@@ -6,6 +6,10 @@
 #include "constants.h"
 #include "waveform.h"
 
+/**
+ * @brief Phase coded waveform object.
+ * 
+ */
 class PhaseCodedWaveform : virtual public Waveform {
  protected:
   int d_nChips;

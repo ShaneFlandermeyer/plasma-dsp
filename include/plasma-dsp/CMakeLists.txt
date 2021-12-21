@@ -4,6 +4,7 @@ list(APPEND
   barkercode.h
   constants.h
   linearfmwaveform.h
+  pcfm.h
   phasecode.h
   phasecodedwaveform.h
   pulsedwaveform.h

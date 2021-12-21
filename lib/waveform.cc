@@ -1,4 +1,4 @@
-#include "plasma-dsp/waveform.h"
+#include "waveform.h"
 
 Waveform::Waveform() {
   d_sampRate = 0;
