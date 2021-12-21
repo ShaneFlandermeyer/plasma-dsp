@@ -9,7 +9,7 @@
 namespace plasma {
 class PhaseCode {
  public:
-  enum codeType { BARKER, GENERIC = 999 };
+  enum codeType { BARKER, FRANK, GENERIC = 999 };
 
   /**
    * @brief Return the phase values of a phase code of length n
