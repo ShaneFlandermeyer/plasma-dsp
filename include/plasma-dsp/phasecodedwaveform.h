@@ -23,7 +23,7 @@ class PhaseCodedWaveform : virtual public Waveform {
    *
    * @return std::vector<std::complex<double>> The pulse data
    */
-  virtual std::vector<std::complex<double>> waveform() override;
+  virtual std::vector<std::complex<double>> sample() override;
   /**
    * @brief Get the phase code vector
    *

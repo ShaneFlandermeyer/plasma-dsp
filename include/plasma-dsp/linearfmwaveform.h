@@ -17,12 +17,6 @@ class LinearFMWaveform : public PulsedWaveform {
 
  public:
   /**
-   * @brief Generate a single pulse of the waveform.
-   *
-   * @return std::vector<std::complex<double>> The pulse data
-   */
-  std::vector<std::complex<double>> waveform() override;
-  /**
    * @brief Get the waveform bandwidth.
    *
    * @return auto bandwidth (Hz)
@@ -65,6 +59,14 @@ class LinearFMWaveform : public PulsedWaveform {
    *
    */
   ~LinearFMWaveform() = default;
+
+ protected:
+  /**
+   * @brief Generate a single pulse of the waveform.
+   *
+   * @return std::vector<std::complex<double>> The pulse data
+   */
+  std::vector<std::complex<double>> sample() override;
 };
-}
+}  // namespace plasma
 #endif /* BD5E6A09_B96F_4379_84DF_C755B8C14BF8 */

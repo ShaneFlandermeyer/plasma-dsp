@@ -40,13 +40,6 @@ class PCFMWaveform : public PulsedWaveform {
   ~PCFMWaveform() = default;
 
   /**
-   * @brief Generate the non-zero samples for a single pulse
-   *
-   * @return std::vector<std::complex<double>>
-   */
-  std::vector<std::complex<double>> waveform() override;
-
-  /**
    * @brief Get the phase code
    *
    * @return auto Phase code vector
@@ -75,7 +68,15 @@ class PCFMWaveform : public PulsedWaveform {
    * @return auto
    */
   auto filter(std::vector<double> filt) { d_filter = filt; }
+
+ protected:
+  /**
+   * @brief Generate the non-zero samples for a single pulse
+   *
+   * @return std::vector<std::complex<double>>
+   */
+  std::vector<std::complex<double>> sample() override;
 };
 
-}
+}  // namespace plasma
 #endif /* F9D71799_6DD6_49D7_89EC_155A8D8D6228 */

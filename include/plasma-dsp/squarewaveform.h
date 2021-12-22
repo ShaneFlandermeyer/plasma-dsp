@@ -9,12 +9,6 @@ namespace plasma {
 class SquareWaveform : public PulsedWaveform {
  public:
   /**
-   * @brief Generate a single pulse of the waveform.
-   *
-   * @return std::vector<std::complex<double>> The pulse data
-   */
-  std::vector<std::complex<double>> waveform() override;
-  /**
    * @brief Construct a new Square Waveform object
    *
    */
@@ -40,6 +34,14 @@ class SquareWaveform : public PulsedWaveform {
    *
    */
   ~SquareWaveform();
+
+ protected:
+  /**
+   * @brief Generate a single pulse of the waveform.
+   *
+   * @return std::vector<std::complex<double>> The pulse data
+   */
+  std::vector<std::complex<double>> sample() override;
 };
 }  // namespace plasma
 #endif /* B13D1A87_AACE_484D_9498_899C106CD35A */

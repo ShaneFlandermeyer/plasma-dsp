@@ -12,17 +12,18 @@ namespace plasma {
  */
 class Waveform {
  protected:
-  // Waveform sample rate
+  // Sample rate
   double d_sampRate;
+  // Frequency offset (Hz)
   double d_freqOffset;
 
  public:
-  /**
-   * @brief Generate a the non-zero portion of the waveform.
-   *
-   * @return std::vector<std::complex<double>>
-   */
-  virtual std::vector<std::complex<double>> waveform() = 0;
+ /**
+  * @brief Generate only the nonzero sample of the waveform.
+  * 
+  * @return std::vector<std::complex<double>> 
+  */
+  std::vector<std::complex<double>> waveform();
   /**
    * @brief Generate the full PRF schedule defined by the waveform object.
    *
@@ -37,8 +38,8 @@ class Waveform {
   auto sampRate() const { return d_sampRate; }
   /**
    * @brief Get the frequency offset (Hz)
-   * 
-   * @return auto 
+   *
+   * @return auto
    */
   auto freqOffset() const { return d_freqOffset; }
   /**
@@ -62,12 +63,21 @@ class Waveform {
   Waveform();
   /**
    * @brief Construct a new Waveform object
-   * 
+   *
    * TODO: Add frequency offset parameter
-   * 
+   *
    * @param sampRate Sample Rate
    */
   Waveform(double sampRate);
+
+ protected:
+  /**
+   * @brief Generate a the non-zero portion of the waveform, without accounting
+   * for a frequency shift
+   *
+   * @return std::vector<std::complex<double>>
+   */
+  virtual std::vector<std::complex<double>> sample() = 0;
 };
 }  // namespace plasma
 

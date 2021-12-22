@@ -41,7 +41,7 @@ PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
                  [](auto x) { return std::exp(Im * x); });
 }
 
-std::vector<std::complex<double>> PCFMWaveform::waveform() {
+std::vector<std::complex<double>> PCFMWaveform::sample() {
   // TODO: Update the waveform whenever the code or filter changes
   return d_waveform;
 }

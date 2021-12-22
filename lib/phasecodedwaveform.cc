@@ -5,7 +5,7 @@
 
 namespace plasma {
 
-std::vector<std::complex<double>> PhaseCodedWaveform::waveform() {
+std::vector<std::complex<double>> PhaseCodedWaveform::sample() {
   // Oversampling factor
   int nSampsChip = std::round(d_chipwidth * sampRate());
   std::vector<std::complex<double>> pulse(nSampsChip * d_nChips);
