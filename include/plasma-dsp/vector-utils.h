@@ -74,7 +74,7 @@ inline std::vector<T> abs(const std::vector<std::complex<T>> &in) {
  */
 template <typename T>
 inline std::vector<T> real(const std::vector<std::complex<T>> &in) {
-  auto out = std::vector<std::complex<T>>(in.size());
+  auto out = std::vector<T>(in.size());
   std::transform(in.begin(), in.end(), out.begin(),
                  [](const std::complex<T> &x) { return std::real(x); });
   return out;
@@ -89,7 +89,7 @@ inline std::vector<T> real(const std::vector<std::complex<T>> &in) {
  */
 template <typename T>
 inline std::vector<T> imag(const std::vector<std::complex<T>> &in) {
-  auto out = std::vector<std::complex<T>>(in.size());
+  auto out = std::vector<T>(in.size());
   std::transform(in.begin(), in.end(), out.begin(),
                  [](const std::complex<T> &x) { return std::imag(x); });
   return out;
