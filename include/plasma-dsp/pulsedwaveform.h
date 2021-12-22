@@ -10,9 +10,15 @@ namespace plasma {
  */
 class PulsedWaveform : virtual public Waveform {
  protected:
-  // Pulse repetition frequency (Hz)
+  /**
+   * @brief Pulse repetition frequency (Hz)
+   *
+   */
   std::vector<double> d_prf;
-  // Pulse width (s)
+  /**
+   * @brief Pulse width (seconds)
+   *
+   */
   double d_pulsewidth;
 
  public:
@@ -25,34 +31,31 @@ class PulsedWaveform : virtual public Waveform {
   /**
    * @brief Get the PRF schedule.
    *
-   * @return auto
+   * @return auto Vector of PRFs
    */
   auto prf() const { return d_prf; }
   /**
    * @brief Get the pulse width.
    *
-   * @return auto
+   * @return auto Pulse width (seconds)
    */
   auto pulsewidth() const { return d_pulsewidth; }
   /**
    * @brief Set the PRF as a double
    *
-   * @param prf
-   * @return auto
+   * @param prf Desired PRF
    */
   auto prf(double prf) { d_prf.push_back(prf); }
   /**
    * @brief Set the PRF as a vector
    *
-   * @param prf
-   * @return auto
+   * @param prf Desired PRF
    */
   auto prf(const std::vector<double> &prf) { d_prf = prf; }
   /**
    * @brief Set the pulse width
    *
-   * @param pulsewidth
-   * @return auto
+   * @param pulsewidth Desired pulse width
    */
   auto pulsewidth(double pulsewidth) { d_pulsewidth = pulsewidth; }
   /**

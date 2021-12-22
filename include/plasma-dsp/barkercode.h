@@ -6,7 +6,10 @@
 
 namespace plasma {
 
-// TODO: It might be worth it to create a PhaseCodedPulsedWaveform class
+/**
+ * @brief Barker-coded waveform
+ * 
+ */
 class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
  public:
   /**
@@ -22,8 +25,24 @@ class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
    */
   BarkerCode(int n);
 
+  /**
+   * @brief Construct a new Barker Code object
+   * 
+   * @param n Code length
+   * @param chipwidth Chip duration (seconds)
+   * @param prf Pulse repetition frequency (Hz)
+   * @param sampRate Sample Rate (Samples/second)
+   */
   BarkerCode(int n, double chipwidth, double prf, double sampRate);
 
+  /**
+   * @brief Construct a new Barker Code object
+   * 
+   * @param n Code length
+   * @param chipwidth Chip duration (seconds)
+   * @param prf Pulse repetition frequency (Hz)
+   * @param sampRate Sample Rate (Samples/second)
+   */
   BarkerCode(int n, double chipwidth, std::vector<double> prf, double sampRate);
 };
 

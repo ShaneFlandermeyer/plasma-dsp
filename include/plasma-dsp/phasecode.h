@@ -7,16 +7,40 @@
 #include <vector>
 
 namespace plasma {
+/**
+ * @brief Phase code generator object
+ *
+ */
 class PhaseCode {
  public:
-  enum codeType { BARKER, FRANK, GENERIC = 999 };
+  /**
+   * Enumeration of supported phase code types
+   *
+   */
+  enum codeType {
+    /**
+     * Barker code 
+     * 
+     */
+    BARKER,
+    /**
+     * Frank code
+     * 
+     */
+    FRANK,
+    /**
+     * Arbitrary (currently invalid) code type
+     * 
+     */
+    GENERIC = 999
+  };
 
   /**
    * @brief Return the phase values of a phase code of length n
    *
-   * @param type The phase code type
-   * @param n The code length
-   * @return std::vector<double> The phase code vector
+   * @param type Code type
+   * @param n Code length
+   * @return std::vector<double> Phase code vector
    */
   static std::vector<double> generate_code(codeType type, int n);
 };

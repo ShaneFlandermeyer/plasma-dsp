@@ -15,11 +15,20 @@ namespace plasma {
  */
 class PCFMWaveform : public PulsedWaveform {
  protected:
-  // Phase code vector
+  /**
+   * @brief Phase code vector
+   * 
+   */
   std::vector<double> d_code;
-  // Shaping filter taps
+  /**
+   * @brief Shaping filter vector
+   * 
+   */
   std::vector<double> d_filter;
-  // Waveform vector
+  /**
+   * @brief Waveform samples
+   * 
+   */
   std::vector<std::complex<double>> d_waveform;
 
  public:
@@ -31,12 +40,16 @@ class PCFMWaveform : public PulsedWaveform {
   /**
    * @brief Construct a new PCFMWaveform object
    *
-   * @param code Phase code
+   * @param code Vector of phase code values
    * @param filter Shaping filter taps
    */
   PCFMWaveform(const std::vector<double>& code,
                const std::vector<double>& filter);
 
+  /**
+   * @brief Destroy the PCFMWaveform object
+   * 
+   */
   ~PCFMWaveform() = default;
 
   /**
@@ -65,7 +78,7 @@ class PCFMWaveform : public PulsedWaveform {
    * @brief Set the shaping filter
    *
    * @param filt Desired shaping filter
-   * @return auto
+   * @return auto The vector of filter taps
    */
   auto filter(std::vector<double> filt) { d_filter = filt; }
 

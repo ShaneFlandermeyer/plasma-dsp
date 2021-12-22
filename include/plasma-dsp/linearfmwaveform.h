@@ -12,7 +12,10 @@ namespace plasma {
  */
 class LinearFMWaveform : public PulsedWaveform {
  protected:
-  // Sweep bandwidth (Hz)
+  /**
+   * @brief Sweep bandwidth (Hz)
+   *
+   */
   double d_bandwidth;
 
  public:
@@ -35,7 +38,7 @@ class LinearFMWaveform : public PulsedWaveform {
    */
   LinearFMWaveform();
   /**
-   * @brief Default constructor
+   * @brief Construct a new Linear FM waveform object.
    *
    * @param bandwidth Sweep bandwidth (Hz)
    * @param pulsewidth Pulse width (s)
