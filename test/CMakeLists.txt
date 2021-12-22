@@ -1,12 +1,15 @@
 add_executable(
-  hello_test
-  hello_test.cc
+  waveformTest
+  test_squarewaveform.cc
 )
 
 target_link_libraries(
-  hello_test 
+  waveformTest
   gtest_main
+  gmock
+  plasma-dsp
 )
 
 include(GoogleTest)
-gtest_discover_tests(hello_test)
+gtest_discover_tests(waveformTest)
+
