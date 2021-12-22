@@ -1,8 +1,12 @@
 #ifndef B5F351BB_C14A_43DF_A96F_0159BAC8AD27
 #define B5F351BB_C14A_43DF_A96F_0159BAC8AD27
 
+#include <fftw3.h>
+
 #include <Eigen/Dense>
 #include <complex>
+#include <iostream>
+#include <type_traits>
 #include <unsupported/Eigen/FFT>
 #include <vector>
 namespace plasma {
@@ -52,36 +56,48 @@ inline static std::vector<std::vector<Scalar>> fromEigen(const Matrix &M) {
   return m;
 }
 
+// TODO: Make the FFT and IFFT syntax match
 /**
- * @brief Matlab-like syntax for computing a forward FFT with FFTW3
+ * @brief Matlab-like syntax for computing a complex forward FFT with FFTW3
  *
  * @tparam T Input type
  * @param in Input data vector
  * @return std::vector<std::complex<double>> DFT of the input
  */
 template <typename T>
-inline std::vector<std::complex<double>> fft(const std::vector<T> &in) {
-  Eigen::FFT<T> fft;
-  std::vector<std::complex<double>> result;
-  fft.fwd(result, in);
-  return result;
+inline std::vector<std::complex<T>> fft(std::vector<std::complex<T>> &in,
+                                        int N = -1) {
+  if (N == -1) N = in.size();
+  in.resize(N);
+  auto out = std::vector<std::complex<T>>(N);
+  fftw_plan p = fftw_plan_dft_1d(N, reinterpret_cast<fftw_complex *>(in.data()),
+                                 reinterpret_cast<fftw_complex *>(out.data()),
+                                 FFTW_FORWARD, FFTW_ESTIMATE);
+  fftw_execute(p);
+  fftw_destroy_plan(p);
+  for (auto &x : out) x /= N;
+  return out;
 }
 
 /**
- * @brief Matlab-like syntax for computing a forward FFT with FFTW3
+ * @brief Matlab-like syntax for computing a real forward FFT with FFTW3
  *
  * @tparam T Input type
  * @param in Input data vector
- * @param N FFT length
- * @return std::vector<std::complex<double>>
+ * @return std::vector<std::complex<double>> DFT of the input
  */
 template <typename T>
-inline std::vector<std::complex<double>> fft(const std::vector<T> &in, const int N) {
-  Eigen::FFT<T> fft;
-  // Compute and return the forward FFT
-  std::vector<std::complex<double>> result(N);
-  fft.fwd(&result[0], &in[0], N);
-  return result;
+inline std::vector<std::complex<double>> fft(std::vector<T> &in, int N = -1) {
+  if (N == -1) N = in.size();
+  auto out = std::vector<std::complex<double>>(N);
+  in.resize(N);
+  fftw_plan p = fftw_plan_dft_r2c_1d(
+      N, reinterpret_cast<double *>(in.data()),
+      reinterpret_cast<fftw_complex *>(out.data()), FFTW_ESTIMATE);
+  fftw_execute(p);
+  fftw_destroy_plan(p);
+  for (auto &x : out) x /= N;
+  return out;
 }
 
 /**
@@ -92,12 +108,37 @@ inline std::vector<std::complex<double>> fft(const std::vector<T> &in, const int
  * @return std::vector<T> Inverse FFT of input
  */
 template <typename T>
-inline std::vector<T> ifft(const std::vector<std::complex<T>> &in) {
-  std::vector<T> result;
-  Eigen::FFT<T> fft;
-  // Inverse FFT of the product
-  fft.inv(result, in);
-  return result;
+std::vector<T> ifft(std::vector<std::complex<double>> in, int N = -1) {}
+
+template <>
+std::vector<double> ifft<double>(std::vector<std::complex<double>> in, int N) {
+  // Create output vector
+  if (N == -1) N = in.size();
+  in.resize(N);
+  auto out = std::vector<double>(N);
+  // Create plan and compute IFFT
+  fftw_plan p = fftw_plan_dft_c2r_1d(
+      N, reinterpret_cast<fftw_complex *>(in.data()),
+      reinterpret_cast<double *>(out.data()), FFTW_ESTIMATE);
+  fftw_execute(p);
+  fftw_destroy_plan(p);
+  for (auto &x : out) x *= N;
+  return out;
+}
+
+template <>
+std::vector<std::complex<double>> ifft<std::complex<double>>(
+    std::vector<std::complex<double>> in, int N) {
+  if (N == -1) N = in.size();
+  in.resize(N);
+  auto out = std::vector<std::complex<double>>(N);
+  fftw_plan p = fftw_plan_dft_1d(N, reinterpret_cast<fftw_complex *>(in.data()),
+                                 reinterpret_cast<fftw_complex *>(out.data()),
+                                 FFTW_BACKWARD, FFTW_ESTIMATE);
+  fftw_execute(p);
+  fftw_destroy_plan(p);
+  // for (auto &x : out) x *= N;
+  return out;
 }
 
 /**
@@ -143,18 +184,18 @@ inline std::vector<T> ifftshift(std::vector<T> in) {
  * length(in1)+length(in2)-1
  */
 template <typename T>
-inline std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2) {
-  std::vector<std::complex<double>> fin1, fin2, product;
+inline std::vector<T> conv(std::vector<T> &in1, std::vector<T> &in2) {
+  std::vector<std::complex<double>> product;
   // std::vector<T> result;
   // Convolution length
   size_t N = in1.size() + in2.size() - 1;
   // Multiply the inputs in the frequency domain
-  fin1 = fft(in1, N);
-  fin2 = fft(in2, N);
+  auto fin1 = fft(in1, N);
+  auto fin2 = fft(in2, N);
   std::transform(fin1.begin(), fin1.end(), fin2.begin(),
                  std::back_inserter(product),
                  std::multiplies<std::complex<double>>());
-  auto result = ifft(product);
+  std::vector<T> result = ifft<T>(product, N);
   return result;
 }
 
@@ -177,7 +218,7 @@ inline std::vector<T> conv(const std::vector<T> &in1, const std::vector<T> &in2)
  */
 template <typename T>
 inline std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
-                      const std::vector<T> &x) {
+                             const std::vector<T> &x) {
   // TODO: Currently only handles FIR filters
   // Compute the filter response as a difference equation
   auto y = std::vector<T>(x.size());

@@ -21,7 +21,7 @@ class PulsedWaveform : virtual public Waveform {
    *
    * @return std::vector<std::complex<double>>
    */
-  std::vector<std::complex<double>> pulseTrain();
+  std::vector<std::complex<double>> pulse() override;
   /**
    * @brief Get the PRF schedule.
    *

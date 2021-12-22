@@ -2,7 +2,7 @@
 
 namespace plasma {
 
-std::vector<std::complex<double>> LinearFMWaveform::pulse() {
+std::vector<std::complex<double>> LinearFMWaveform::sample() {
   // Sample interval
   double ts = 1 / sampRate();
   // Number of samples per pulse
