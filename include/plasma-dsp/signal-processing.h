@@ -1,5 +1,5 @@
-#ifndef B5F351BB_C14A_43DF_A96F_0159BAC8AD27
-#define B5F351BB_C14A_43DF_A96F_0159BAC8AD27
+#ifndef A5C31B48_9A55_4209_8ECA_2F954DCC8005
+#define A5C31B48_9A55_4209_8ECA_2F954DCC8005
 
 #include <fftw3.h>
 
@@ -10,8 +10,9 @@
 #include <type_traits>
 #include <unsupported/Eigen/FFT>
 #include <vector>
+
 namespace plasma {
-/**
+  /**
  * @brief Convert a vector to an eigen matrix object
  *
  * @tparam T the data type of the vector elements
@@ -231,83 +232,5 @@ inline std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
   }
   return y;
 }
-
-/**
- * @brief Compute the complex conjugate of each element in the input vector
- *
- *
- * @tparam T Input type
- * @param in Input data
- * @return std::vector<T> Conjugate of input
- */
-template <typename T>
-inline std::vector<T> conj(const std::vector<T> &in) {
-  return in;
-}
-
-/**
- * @brief Compute the complex conjugate of each element in the input vector
- *
- *
- * @tparam T Input type
- * @param in Input data
- * @return std::vector<std::complex<double>> Conjugate of input
- */
-template <>
-inline std::vector<std::complex<double>> conj<std::complex<double>>(
-    const std::vector<std::complex<double>> &in) {
-  auto out = std::vector<std::complex<double>>(in.size());
-  std::transform(in.begin(), in.end(), out.begin(),
-                 [](const std::complex<double> &c) { return std::conj(c); });
-  return out;
-}
-
-/**
- * @brief Element-wise absolute value of the input vector (real input)
- * 
- * @tparam T 
- * @param in 
- * @return std::vector<T> 
- */
-template <typename T>
-inline std::vector<T> abs(const std::vector<T> &in) {
-  auto out = std::vector<T>(in.size());
-  std::transform(in.begin(),in.end(),out.begin(),
-                 [](const T &x){return std::abs(x);});
-  return out;
-}
-
-/**
- * @brief Element-wise absolute value of the input vector (complex input)
- * 
- * @tparam T 
- * @param in 
- * @return std::vector<T> 
- */
-template <typename T>
-inline std::vector<T> abs(const std::vector<std::complex<T>> &in) {
-  auto out = std::vector<T>(in.size());
-  std::transform(in.begin(),in.end(),out.begin(),
-                 [](const std::complex<T> &x){return std::abs(x);});
-  return out;
-}
-
-/**
- * @brief Convert the input vector from linear scale to db
- *
- * TODO: Add a parameter for power vs voltage quantities
- *
- * @tparam T Element type of the input vector
- * @param in Input data
- * @return std::vector<T> Output data
- */
-template <typename T>
-inline std::vector<T> db(std::vector<T> &in) {
-  auto out = in;
-  std::transform(out.begin(), out.end(), out.begin(),
-                 [](T &x) { return 10 * log10(x); });
-  return out;
-}
-}  // namespace plasma
-
-#endif /* B5F351BB_C14A_43DF_A96F_0159BAC8AD27 */
+} // namespace plasma
+#endif /* A5C31B48_9A55_4209_8ECA_2F954DCC8005 */

@@ -9,7 +9,8 @@
 #include "phasecode.h"
 #include "spectrogram.h"
 #include "squarewaveform.h"
-#include "utils.h"
+#include "vector-utils.h"
+#include "signal-processing.h"
 #include "window.h"
 
 using namespace matplot;

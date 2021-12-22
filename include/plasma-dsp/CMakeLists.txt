@@ -8,11 +8,12 @@ list(APPEND
   phasecode.h
   phasecodedwaveform.h
   pulsedwaveform.h
+  signal-processing.h
   spectrogram.h
   squarewaveform.h
-  utils.h
   waveform.h
   window.h
+  vector-utils.h
 )
 
 # System-wide installation
