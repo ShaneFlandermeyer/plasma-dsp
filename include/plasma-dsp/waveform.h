@@ -18,17 +18,17 @@ class Waveform {
 
  public:
   /**
-   * @brief Generate a single pulse of the waveform.
+   * @brief Generate a the non-zero portion of the waveform.
    *
    * @return std::vector<std::complex<double>>
    */
-  virtual std::vector<std::complex<double>> pulse() = 0;
+  virtual std::vector<std::complex<double>> waveform() = 0;
   /**
    * @brief Generate the full PRF schedule defined by the waveform object.
    *
    * @return std::vector<std::complex<double>>
    */
-  virtual std::vector<std::complex<double>> pulseTrain() = 0;
+  virtual std::vector<std::complex<double>> pulse() = 0;
   /**
    * @brief Get the sample rate
    *

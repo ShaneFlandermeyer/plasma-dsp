@@ -25,29 +25,15 @@ int main() {
   // auto wave = PCFMWaveform(code, filter);
   auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
   auto pulse = wave.pulse();
-  auto fPulse = fftshift(fft(pulse));
-  // std::vector<std::complex<double>> pulse2;
-  auto pulse2 = ifft<std::complex<double>>(fft(pulse));
-  std::vector<double> r1, r2;
-  for (int i = 0; i < pulse.size(); i++) {
-    r1.push_back(pulse[i].real());
-    r2.push_back(pulse2[i].real());
-  }
-
-  plot(r1);
-  plot(r2);
+  pulse = fftshift(fft(pulse));
+  std::vector<double> mag;
+  for (auto x : pulse) mag.push_back(std::abs(x));
+  
+  plot(db(mag));
+  // plot(mag);
   show();
-
-  auto N = 10;
-  auto over = 3;
-  auto a_code = std::vector<double>(N, 1);
-  auto g = std::vector<double>(over, 1);
-  auto y = conv(a_code, g);
-  std::vector<double> y2;
-  std::for_each(y.begin(), y.end(),
-                [](auto& x) { std::cout << x << std::endl; });
-  // auto fy = fft(y);
-  // ifft(fy, fy);
+  // std::vector<std::complex<double>> pulse2;
+  
 
   return 0;
 }

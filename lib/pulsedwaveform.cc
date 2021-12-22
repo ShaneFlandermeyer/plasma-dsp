@@ -19,7 +19,7 @@ PulsedWaveform::PulsedWaveform(double pulsewidth, std::vector<double> prf) {
   d_prf = prf;
 }
 
-std::vector<std::complex<double>> PulsedWaveform::pulseTrain() {
+std::vector<std::complex<double>> PulsedWaveform::pulse() {
   // Compute a vector of PRIs
   std::vector<double> pri;
   std::transform(d_prf.begin(), d_prf.end(), std::back_inserter(pri),
@@ -44,7 +44,7 @@ std::vector<std::complex<double>> PulsedWaveform::pulseTrain() {
   std::vector<std::complex<double>> wave(nSampsTotal);
   // Generate the waveform
   for (int index : startIndex) {
-    auto data = pulse();
+    auto data = waveform();
     auto nSampsPulse = data.size();
     for (int ii = 0; ii < nSampsPulse; ii++) {
       wave[index + ii] = data[ii];

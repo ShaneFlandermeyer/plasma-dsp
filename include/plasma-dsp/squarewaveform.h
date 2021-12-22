@@ -13,7 +13,7 @@ class SquareWaveform : public PulsedWaveform {
    *
    * @return std::vector<std::complex<double>> The pulse data
    */
-  std::vector<std::complex<double>> pulse() override;
+  std::vector<std::complex<double>> waveform() override;
   /**
    * @brief Construct a new Square Waveform object
    *
