@@ -1,13 +1,8 @@
 #ifndef AC67322C_687F_4BDC_8C4E_DD736C14C511
 #define AC67322C_687F_4BDC_8C4E_DD736C14C511
-#include <fftw3.h>
 
-#include <Eigen/Dense>
 #include <algorithm>
 #include <complex>
-#include <iostream>
-#include <type_traits>
-#include <unsupported/Eigen/FFT>
 #include <vector>
 namespace plasma {
 /**

@@ -6,9 +6,6 @@
 #include <Eigen/Dense>
 #include <algorithm>
 #include <complex>
-#include <iostream>
-#include <type_traits>
-#include <unsupported/Eigen/FFT>
 #include <vector>
 
 namespace plasma {
