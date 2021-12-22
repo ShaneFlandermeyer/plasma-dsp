@@ -44,7 +44,7 @@ class PCFMWaveform : public PulsedWaveform {
    *
    * @return std::vector<std::complex<double>>
    */
-  std::vector<std::complex<double>> pulse();
+  std::vector<std::complex<double>> pulse() override;
 
   /**
    * @brief Get the phase code

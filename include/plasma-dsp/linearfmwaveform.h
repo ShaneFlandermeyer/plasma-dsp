@@ -21,7 +21,7 @@ class LinearFMWaveform : public PulsedWaveform {
    *
    * @return std::vector<std::complex<double>> The pulse data
    */
-  std::vector<std::complex<double>> pulse();
+  std::vector<std::complex<double>> pulse() override;
   /**
    * @brief Get the waveform bandwidth.
    *

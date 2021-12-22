@@ -14,6 +14,7 @@ class Waveform {
  protected:
   // Waveform sample rate
   double d_sampRate;
+  double d_freqOffset;
 
  public:
   /**
@@ -35,6 +36,12 @@ class Waveform {
    */
   auto sampRate() const { return d_sampRate; }
   /**
+   * @brief Get the frequency offset (Hz)
+   * 
+   * @return auto 
+   */
+  auto freqOffset() const { return d_freqOffset; }
+  /**
    * @brief Set the sample rate
    *
    * @param sampRate
@@ -42,13 +49,22 @@ class Waveform {
    */
   auto sampRate(double sampRate) { d_sampRate = sampRate; }
   /**
+   * @brief Set the frequency offset (Hz)
+   *
+   * @param freqOffset
+   * @return auto
+   */
+  auto freqOffset(double freqOffset) { d_freqOffset = freqOffset; }
+  /**
    * @brief Construct a new Waveform object
    *
    */
   Waveform();
   /**
    * @brief Construct a new Waveform object
-   *
+   * 
+   * TODO: Add frequency offset parameter
+   * 
    * @param sampRate Sample Rate
    */
   Waveform(double sampRate);
