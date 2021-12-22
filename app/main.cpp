@@ -18,16 +18,16 @@ int main() {
   auto bandwidth = 10e6;
   auto pulsewidth = 100e-6;
   auto sampRate = 20e6;
-  std::vector<double> prf = {1e3};
+  std::vector<double> prf = {10e3};
   auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
-  wave.freqOffset(5e6);
+  // wave.freqOffset(5e6);
   auto pulse = wave.pulse();
-  pulse = fftshift(fft(pulse));
+  // pulse = fftshift(fft(pulse));
   std::vector<double> mag;
-  for (auto x : pulse) mag.push_back(std::abs(x));
+  for (auto x : pulse) mag.push_back(x.real());
   
-  plot(db(mag));
-  // plot(mag);
+  plot(mag);
+  // plot(db(mag));
   show();
   // std::vector<std::complex<double>> pulse2;
   
