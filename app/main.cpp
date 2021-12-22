@@ -20,17 +20,14 @@ int main() {
   auto sampRate = 20e6;
   std::vector<double> prf = {10e3};
   auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
-  // wave.freqOffset(5e6);
-  auto pulse = wave.pulse();
-  // pulse = fftshift(fft(pulse));
-  std::vector<double> mag;
-  for (auto x : pulse) mag.push_back(x.real());
-  
-  plot(mag);
-  // plot(db(mag));
-  show();
+  auto code = PhaseCode::generate_code(PhaseCode::FRANK, 16);
+  auto pcw = std::vector<std::complex<double>>(code.size());
+  std::transform(code.begin(), code.end(), pcw.begin(),
+                 [](auto x) { return exp(Im * x); });
+  auto autocorr = abs(conv(pcw, conj(pcw)));
   // std::vector<std::complex<double>> pulse2;
-  
+  plot(autocorr);
+  show();
 
   return 0;
 }

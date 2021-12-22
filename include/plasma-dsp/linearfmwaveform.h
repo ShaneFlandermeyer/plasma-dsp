@@ -4,12 +4,12 @@
 #include "pulsedwaveform.h"
 #include "waveform.h"
 
+namespace plasma {
+
 /**
  * @brief A linear frequency-modulated waveform.
  *
  */
-
-namespace plasma {
 class LinearFMWaveform : public PulsedWaveform {
  protected:
   // Sweep bandwidth (Hz)

@@ -4,6 +4,7 @@
 #include <fftw3.h>
 
 #include <Eigen/Dense>
+#include <algorithm>
 #include <complex>
 #include <iostream>
 #include <type_traits>
@@ -184,7 +185,7 @@ inline std::vector<T> ifftshift(std::vector<T> in) {
  * length(in1)+length(in2)-1
  */
 template <typename T>
-inline std::vector<T> conv(std::vector<T> &in1, std::vector<T> &in2) {
+inline std::vector<T> conv(std::vector<T> in1, std::vector<T> in2) {
   std::vector<std::complex<double>> product;
   // std::vector<T> result;
   // Convolution length
@@ -229,6 +230,66 @@ inline std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
     }
   }
   return y;
+}
+
+/**
+ * @brief Compute the complex conjugate of each element in the input vector
+ *
+ *
+ * @tparam T Input type
+ * @param in Input data
+ * @return std::vector<T> Conjugate of input
+ */
+template <typename T>
+inline std::vector<T> conj(const std::vector<T> &in) {
+  return in;
+}
+
+/**
+ * @brief Compute the complex conjugate of each element in the input vector
+ *
+ *
+ * @tparam T Input type
+ * @param in Input data
+ * @return std::vector<std::complex<double>> Conjugate of input
+ */
+template <>
+inline std::vector<std::complex<double>> conj<std::complex<double>>(
+    const std::vector<std::complex<double>> &in) {
+  auto out = std::vector<std::complex<double>>(in.size());
+  std::transform(in.begin(), in.end(), out.begin(),
+                 [](const std::complex<double> &c) { return std::conj(c); });
+  return out;
+}
+
+/**
+ * @brief Element-wise absolute value of the input vector (real input)
+ * 
+ * @tparam T 
+ * @param in 
+ * @return std::vector<T> 
+ */
+template <typename T>
+inline std::vector<T> abs(const std::vector<T> &in) {
+  auto out = std::vector<T>(in.size());
+  std::transform(in.begin(),in.end(),out.begin(),
+                 [](const T &x){return std::abs(x);});
+  return out;
+}
+
+/**
+ * @brief Element-wise absolute value of the input vector (complex input)
+ * 
+ * @tparam T 
+ * @param in 
+ * @return std::vector<T> 
+ */
+template <typename T>
+inline std::vector<T> abs(const std::vector<std::complex<T>> &in) {
+  auto out = std::vector<T>(in.size());
+  std::transform(in.begin(),in.end(),out.begin(),
+                 [](const std::complex<T> &x){return std::abs(x);});
+  return out;
 }
 
 /**
