@@ -34,19 +34,19 @@ std::vector<std::complex<double>> PulsedWaveform::pulse() {
   // Compute a cumulative sum of the number of samples per pulse to get the
   // start indices for each pulse
   std::vector<int> start_index(pri.size());
-  std::partial_sum(num_samps_pri.begin(), num_samps_pri.end(), start_index.begin(),
-                   std::plus<int>());
+  std::partial_sum(num_samps_pri.begin(), num_samps_pri.end(),
+                   start_index.begin(), std::plus<int>());
   // Assign values to the nonzero indices
   // Total time duration of the waveform
   auto duration = std::accumulate(pri.begin(), pri.end(), 0.0);
   // Total number of samples in the PRF schedule
-  auto nSampsTotal = static_cast<int>(duration * d_samp_rate);
-  std::vector<std::complex<double>> wave(nSampsTotal);
+  auto num_samps_total = static_cast<int>(duration * d_samp_rate);
+  std::vector<std::complex<double>> wave(num_samps_total);
   // Generate the waveform
   for (int index : start_index) {
     auto data = waveform();
-    auto nSampsPulse = data.size();
-    for (int ii = 0; ii < nSampsPulse; ii++) {
+    auto num_samps_pulse = data.size();
+    for (int ii = 0; ii < num_samps_pulse; ii++) {
       wave[index + ii] = data[ii];
     }
   }

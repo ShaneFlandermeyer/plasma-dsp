@@ -13,29 +13,27 @@ namespace plasma {
 class Waveform {
  protected:
   /**
-   * @brief Sample rate (samples/second)
-   * 
+   * @brief Sample rate (waveform/second)
+   *
    */
   double d_samp_rate;
   /**
    * @brief Frequency offset (Hz)
-   * 
+   *
    */
   double d_freq_offset;
 
  public:
- /**
-  * @brief Generate only the nonzero sample of the waveform.
-  * 
-  * @return std::vector<std::complex<double>> 
-  */
-  std::vector<std::complex<double>> waveform();
   /**
-   * @brief Generate the full PRF schedule defined by the waveform object.
+   * @brief Generate the nonzero samples of the waveform.
+   * 
+   * If the frequency shift parameter is zero, this is the complex baseband
+   * representation of the waveform. Otherwise, this returns a waveform centered
+   * at the frequency offset.
    *
    * @return std::vector<std::complex<double>>
    */
-  virtual std::vector<std::complex<double>> pulse() = 0;
+  std::vector<std::complex<double>> waveform();
   /**
    * @brief Get the sample rate
    *
@@ -78,12 +76,19 @@ class Waveform {
 
  protected:
   /**
-   * @brief Generate a the non-zero portion of the waveform, without accounting
-   * for a frequency shift
+   * @brief Generate a the non-zero portion of the waveform at complex baseband
    *
    * @return std::vector<std::complex<double>>
    */
   virtual std::vector<std::complex<double>> sample() = 0;
+  /**
+   * @brief Apply a frequency shift to the input waveform
+   * 
+   * @param waveform Complex baseband waveform samples
+   * @param offset Frequency offset (Hz)
+   */
+  void FrequencyShift(std::vector<std::complex<double>> &waveform,
+                      double offset);
 };
 }  // namespace plasma
 

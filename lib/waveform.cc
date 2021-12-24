@@ -2,15 +2,18 @@
 
 namespace plasma {
 
-std::vector<std::complex<double>>
-Waveform::waveform() {
-  auto samples = sample();
-  // Apply frequency shift to each sample of the waveform
-  for (auto i = 0; i < samples.size(); i++) {
-    samples[i] *= exp(Im*2.0*M_PI*d_freq_offset*(double)i/d_samp_rate);
+void Waveform::FrequencyShift(std::vector<std::complex<double>> &waveform,
+                              double offset) {
+  for (auto i = 0; i < waveform.size(); i++) {
+    waveform[i] *= exp(Im * 2.0 * M_PI * offset * (double)i / d_samp_rate);
   }
-  return samples;
 
+}  // namespace plasma
+
+std::vector<std::complex<double>> Waveform::waveform() {
+  auto samples = sample();
+  FrequencyShift(samples, d_freq_offset);
+  return samples;
 }
 
 Waveform::Waveform() {

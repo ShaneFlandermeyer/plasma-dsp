@@ -6,10 +6,10 @@ std::vector<std::complex<double>> LinearFMWaveform::sample() {
   // Sample interval
   double ts = 1 / samp_rate();
   // Number of samples per pulse
-  int nSampsPulse = static_cast<int>(samp_rate() * pulse_width());
+  int num_samps_pulse = static_cast<int>(samp_rate() * pulse_width());
   double t;
-  std::vector<std::complex<double>> wave(nSampsPulse, 0);
-  for (int n = 0; n < nSampsPulse; n++) {
+  std::vector<std::complex<double>> wave(num_samps_pulse, 0);
+  for (int n = 0; n < num_samps_pulse; n++) {
     t = n * ts;
     double phase = -bandwidth() / 2 * t +
                    bandwidth() / (2 * pulse_width()) * std::pow(t, 2);
