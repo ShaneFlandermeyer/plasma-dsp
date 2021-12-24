@@ -29,21 +29,21 @@ class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
    * @brief Construct a new Barker Code object
    *
    * @param n Code length
-   * @param chipwidth Chip duration (seconds)
+   * @param chip_width Chip duration (seconds)
    * @param prf Pulse repetition frequency (Hz)
    * @param samp_rate Sample Rate (Samples/second)
    */
-  BarkerCode(int n, double chipwidth, double prf, double samp_rate);
+  BarkerCode(int n, double chip_width, double prf, double samp_rate);
 
   /**
    * @brief Construct a new Barker Code object
    *
    * @param n Code length
-   * @param chipwidth Chip duration (seconds)
+   * @param chip_width Chip duration (seconds)
    * @param prf Pulse repetition frequency (Hz)
    * @param samp_rate Sample Rate (Samples/second)
    */
-  BarkerCode(int n, double chipwidth, std::vector<double> prf,
+  BarkerCode(int n, double chip_width, std::vector<double> prf,
              double samp_rate);
 };
 

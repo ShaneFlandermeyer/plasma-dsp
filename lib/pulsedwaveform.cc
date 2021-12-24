@@ -6,16 +6,16 @@
 namespace plasma {
 PulsedWaveform::PulsedWaveform() : Waveform() {
   d_prf = std::vector<double>();
-  d_pulsewidth = 0;
+  d_pulse_width = 0;
 }
 
-PulsedWaveform::PulsedWaveform(double pulsewidth, double prf) {
-  d_pulsewidth = pulsewidth;
+PulsedWaveform::PulsedWaveform(double pulse_width, double prf) {
+  d_pulse_width = pulse_width;
   d_prf = {prf};
 }
 
-PulsedWaveform::PulsedWaveform(double pulsewidth, std::vector<double> prf) {
-  d_pulsewidth = pulsewidth;
+PulsedWaveform::PulsedWaveform(double pulse_width, std::vector<double> prf) {
+  d_pulse_width = pulse_width;
   d_prf = prf;
 }
 
