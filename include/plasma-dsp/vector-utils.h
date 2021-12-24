@@ -31,7 +31,7 @@ inline std::vector<std::complex<T>> conj(
     const std::vector<std::complex<T>> &in) {
   auto out = std::vector<std::complex<T>>(in.size());
   std::transform(in.begin(), in.end(), out.begin(),
-                 [](const std::complex<T> &c) { return std::conj(c); });
+                 [](const auto &c) { return std::conj(c); });
   return out;
 }
 
@@ -46,7 +46,7 @@ template <typename T>
 inline std::vector<T> abs(const std::vector<T> &in) {
   auto out = std::vector<T>(in.size());
   std::transform(in.begin(), in.end(), out.begin(),
-                 [](const T &x) { return std::abs(x); });
+                 [](const auto &x) { return std::abs(x); });
   return out;
 }
 
@@ -61,7 +61,7 @@ template <typename T>
 inline std::vector<T> abs(const std::vector<std::complex<T>> &in) {
   auto out = std::vector<T>(in.size());
   std::transform(in.begin(), in.end(), out.begin(),
-                 [](const std::complex<T> &x) { return std::abs(x); });
+                 [](const auto &x) { return std::abs(x); });
   return out;
 }
 
@@ -76,7 +76,7 @@ template <typename T>
 inline std::vector<T> real(const std::vector<std::complex<T>> &in) {
   auto out = std::vector<T>(in.size());
   std::transform(in.begin(), in.end(), out.begin(),
-                 [](const std::complex<T> &x) { return std::real(x); });
+                 [](const auto &x) { return std::real(x); });
   return out;
 }
 
@@ -91,7 +91,7 @@ template <typename T>
 inline std::vector<T> imag(const std::vector<std::complex<T>> &in) {
   auto out = std::vector<T>(in.size());
   std::transform(in.begin(), in.end(), out.begin(),
-                 [](const std::complex<T> &x) { return std::imag(x); });
+                 [](const auto &x) { return std::imag(x); });
   return out;
 }
 
@@ -108,7 +108,7 @@ template <typename T>
 inline std::vector<T> db(std::vector<T> &in) {
   auto out = in;
   std::transform(out.begin(), out.end(), out.begin(),
-                 [](T &x) { return 10 * log10(x); });
+                 [](const auto &x) { return 10 * log10(x); });
   return out;
 }
 }  // namespace plasma

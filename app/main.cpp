@@ -24,8 +24,8 @@ int main() {
   auto x = wave.pulse();
   auto win = rectangular(128);
   auto spec = spectrogram(x,win,128,120);
-
-  image(spec,true);
+  image(transpose(spec),true);
+  xlabel("Time (s)");
   show();
 
   return 0;
