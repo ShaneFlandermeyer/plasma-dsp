@@ -41,17 +41,19 @@ std::vector<std::vector<std::complex<double>>> stft(
   auto nCol = (int)floor((signal.size() - nOverlap) / hopSize);
   // STFT matrix
   Matrix<std::complex<double>, Dynamic, Dynamic> stft(nFFT, nCol);
+  // Segment vector
   Matrix<T1, Dynamic, 1> xi;
-  Matrix<std::complex<double>, Dynamic, 1> tmpOut;
+  // Segment DFT
+  Matrix<std::complex<double>, Dynamic, 1> xif;
   // FFT object setup
   FFT<T2> fft;
   for (auto iCol = 0; iCol < nCol; iCol++) {
     // Windowed time segment
     xi = x.segment(iCol * hopSize, window.size()).array() * win.array();
     // Compute the FFT of the windowed segment
-    fft.fwd(tmpOut, xi);
+    fft.fwd(xif, xi);
     // Store the result in the columns of the STFT matrix
-    stft.col(iCol) = tmpOut;
+    stft.col(iCol) = xif;
   }
 
   return fromEigen<std::complex<double>>(stft);

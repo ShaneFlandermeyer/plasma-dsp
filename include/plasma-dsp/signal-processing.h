@@ -1,3 +1,5 @@
+// TODO: Rename this file
+
 #ifndef A5C31B48_9A55_4209_8ECA_2F954DCC8005
 #define A5C31B48_9A55_4209_8ECA_2F954DCC8005
 
@@ -185,7 +187,6 @@ inline std::vector<T> ifftshift(std::vector<T> in) {
 template <typename T>
 inline std::vector<T> conv(std::vector<T> in1, std::vector<T> in2) {
   std::vector<std::complex<double>> product;
-  // std::vector<T> result;
   // Convolution length
   size_t N = in1.size() + in2.size() - 1;
   // Multiply the inputs in the frequency domain
