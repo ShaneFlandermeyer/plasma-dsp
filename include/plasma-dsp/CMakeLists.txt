@@ -3,6 +3,7 @@ list(APPEND
   PLASMA_HEADERS
   barkercode.h
   constants.h
+  fmcwwaveform.h
   linearfmwaveform.h
   pcfm.h
   phasecode.h
