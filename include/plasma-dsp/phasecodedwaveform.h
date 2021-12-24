@@ -9,12 +9,24 @@
 namespace plasma {
 /**
  * @brief Phase coded waveform object.
- * 
+ *
  */
 class PhaseCodedWaveform : virtual public Waveform {
  protected:
+  /**
+   * @brief Number of phase chips in the waveform
+   *
+   */
   int d_nChips;
+  /**
+   * @brief Chip duration (seconds)
+   *
+   */
   double d_chipwidth;
+  /**
+   * @brief Vector of phase code values
+   *
+   */
   std::vector<double> d_code;
 
  public:
@@ -27,21 +39,21 @@ class PhaseCodedWaveform : virtual public Waveform {
   /**
    * @brief Get the phase code vector
    *
-   * @return auto
+   * @return auto Code values
    */
   auto code() const { return d_code; }
 
   /**
    * @brief Get the number of chips
    *
-   * @return int
+   * @return int Number of chips
    */
   auto nChips() const { return d_nChips; }
 
   /**
    * @brief Get the chip width
    *
-   * @return int
+   * @return int Chip width (seconds)
    */
   auto chipwidth() const { return d_chipwidth; }
 
@@ -49,7 +61,6 @@ class PhaseCodedWaveform : virtual public Waveform {
    * @brief Set the phase code vector
    *
    * @param code New code values
-   * @return auto
    */
   auto code(const std::vector<double>& code) { d_code = code; }
 
@@ -57,7 +68,6 @@ class PhaseCodedWaveform : virtual public Waveform {
    * @brief Set the number of chips
    *
    * @param nChips
-   * @return auto
    */
   auto nChips(int nChips) { d_nChips = nChips; };
 
@@ -65,7 +75,6 @@ class PhaseCodedWaveform : virtual public Waveform {
    * @brief Set the chip width
    *
    * @param chipWidth New chip width
-   * @return auto
    */
   auto chipwidth(int chipwidth) { d_chipwidth = chipwidth; };
 
@@ -83,7 +92,6 @@ class PhaseCodedWaveform : virtual public Waveform {
    * @param code Vector of code values
    */
   PhaseCodedWaveform(int nChips, double chipwidth, std::vector<double> code);
-
 };
 }  // namespace plasma
 #endif /* F76EB5C6_3C7E_46B6_AC56_C303873CDA4A */

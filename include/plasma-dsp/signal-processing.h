@@ -1,16 +1,17 @@
-#ifndef B5F351BB_C14A_43DF_A96F_0159BAC8AD27
-#define B5F351BB_C14A_43DF_A96F_0159BAC8AD27
+// TODO: Rename this file
+
+#ifndef A5C31B48_9A55_4209_8ECA_2F954DCC8005
+#define A5C31B48_9A55_4209_8ECA_2F954DCC8005
 
 #include <fftw3.h>
 
 #include <Eigen/Dense>
+#include <algorithm>
 #include <complex>
-#include <iostream>
-#include <type_traits>
-#include <unsupported/Eigen/FFT>
 #include <vector>
+
 namespace plasma {
-/**
+  /**
  * @brief Convert a vector to an eigen matrix object
  *
  * @tparam T the data type of the vector elements
@@ -184,9 +185,8 @@ inline std::vector<T> ifftshift(std::vector<T> in) {
  * length(in1)+length(in2)-1
  */
 template <typename T>
-inline std::vector<T> conv(std::vector<T> &in1, std::vector<T> &in2) {
+inline std::vector<T> conv(std::vector<T> in1, std::vector<T> in2) {
   std::vector<std::complex<double>> product;
-  // std::vector<T> result;
   // Convolution length
   size_t N = in1.size() + in2.size() - 1;
   // Multiply the inputs in the frequency domain
@@ -230,23 +230,5 @@ inline std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
   }
   return y;
 }
-
-/**
- * @brief Convert the input vector from linear scale to db
- *
- * TODO: Add a parameter for power vs voltage quantities
- *
- * @tparam T Element type of the input vector
- * @param in Input data
- * @return std::vector<T> Output data
- */
-template <typename T>
-inline std::vector<T> db(std::vector<T> &in) {
-  auto out = in;
-  std::transform(out.begin(), out.end(), out.begin(),
-                 [](T &x) { return 10 * log10(x); });
-  return out;
-}
-}  // namespace plasma
-
-#endif /* B5F351BB_C14A_43DF_A96F_0159BAC8AD27 */
+} // namespace plasma
+#endif /* A5C31B48_9A55_4209_8ECA_2F954DCC8005 */

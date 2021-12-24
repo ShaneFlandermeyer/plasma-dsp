@@ -9,7 +9,8 @@
 #include "phasecode.h"
 #include "spectrogram.h"
 #include "squarewaveform.h"
-#include "utils.h"
+#include "vector-utils.h"
+#include "signal-processing.h"
 #include "window.h"
 
 using namespace matplot;
@@ -20,17 +21,12 @@ int main() {
   auto sampRate = 20e6;
   std::vector<double> prf = {10e3};
   auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
-  // wave.freqOffset(5e6);
-  auto pulse = wave.pulse();
-  // pulse = fftshift(fft(pulse));
-  std::vector<double> mag;
-  for (auto x : pulse) mag.push_back(x.real());
-  
-  plot(mag);
-  // plot(db(mag));
+  auto x = wave.pulse();
+  auto win = rectangular(128);
+  auto spec = spectrogram(x,win,128,120);
+
+  image(spec,true);
   show();
-  // std::vector<std::complex<double>> pulse2;
-  
 
   return 0;
 }

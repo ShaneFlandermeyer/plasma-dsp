@@ -12,9 +12,15 @@ namespace plasma {
  */
 class Waveform {
  protected:
-  // Sample rate
+  /**
+   * @brief Sample rate (samples/second)
+   * 
+   */
   double d_sampRate;
-  // Frequency offset (Hz)
+  /**
+   * @brief Frequency offset (Hz)
+   * 
+   */
   double d_freqOffset;
 
  public:
