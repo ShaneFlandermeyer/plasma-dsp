@@ -8,7 +8,7 @@ namespace plasma {
 
 /**
  * @brief Barker-coded waveform
- * 
+ *
  */
 class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
  public:
@@ -27,23 +27,24 @@ class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
 
   /**
    * @brief Construct a new Barker Code object
-   * 
+   *
    * @param n Code length
    * @param chipwidth Chip duration (seconds)
    * @param prf Pulse repetition frequency (Hz)
-   * @param sampRate Sample Rate (Samples/second)
+   * @param samp_rate Sample Rate (Samples/second)
    */
-  BarkerCode(int n, double chipwidth, double prf, double sampRate);
+  BarkerCode(int n, double chipwidth, double prf, double samp_rate);
 
   /**
    * @brief Construct a new Barker Code object
-   * 
+   *
    * @param n Code length
    * @param chipwidth Chip duration (seconds)
    * @param prf Pulse repetition frequency (Hz)
-   * @param sampRate Sample Rate (Samples/second)
+   * @param samp_rate Sample Rate (Samples/second)
    */
-  BarkerCode(int n, double chipwidth, std::vector<double> prf, double sampRate);
+  BarkerCode(int n, double chipwidth, std::vector<double> prf,
+             double samp_rate);
 };
 
 }  // namespace plasma

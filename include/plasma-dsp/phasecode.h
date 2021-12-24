@@ -17,20 +17,20 @@ class PhaseCode {
    * Enumeration of supported phase code types
    *
    */
-  enum codeType {
+  enum CodeType {
     /**
-     * Barker code 
-     * 
+     * Barker code
+     *
      */
     BARKER,
     /**
      * Frank code
-     * 
+     *
      */
     FRANK,
     /**
      * Arbitrary (currently invalid) code type
-     * 
+     *
      */
     GENERIC = 999
   };
@@ -42,7 +42,7 @@ class PhaseCode {
    * @param n Code length
    * @return std::vector<double> Phase code vector
    */
-  static std::vector<double> generate_code(codeType type, int n);
+  static std::vector<double> generate_code(CodeType type, int n);
 };
 }  // namespace plasma
 #endif /* C8DA77F0_9C11_4535_8359_C56C62F68E47 */

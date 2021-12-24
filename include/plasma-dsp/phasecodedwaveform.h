@@ -17,7 +17,7 @@ class PhaseCodedWaveform : virtual public Waveform {
    * @brief Number of phase chips in the waveform
    *
    */
-  int d_nChips;
+  int d_num_chips;
   /**
    * @brief Chip duration (seconds)
    *
@@ -48,7 +48,7 @@ class PhaseCodedWaveform : virtual public Waveform {
    *
    * @return int Number of chips
    */
-  auto nChips() const { return d_nChips; }
+  auto num_chips() const { return d_num_chips; }
 
   /**
    * @brief Get the chip width
@@ -67,9 +67,9 @@ class PhaseCodedWaveform : virtual public Waveform {
   /**
    * @brief Set the number of chips
    *
-   * @param nChips
+   * @param num_chips
    */
-  auto nChips(int nChips) { d_nChips = nChips; };
+  auto num_chips(int num_chips) { d_num_chips = num_chips; };
 
   /**
    * @brief Set the chip width
@@ -87,11 +87,11 @@ class PhaseCodedWaveform : virtual public Waveform {
   /**
    * @brief Construct a new Phase Coded Waveform object
    *
-   * @param nChips Number of phase code values
+   * @param num_chips Number of phase code values
    * @param chipwidth Duration of each code value (seconds)
    * @param code Vector of code values
    */
-  PhaseCodedWaveform(int nChips, double chipwidth, std::vector<double> code);
+  PhaseCodedWaveform(int num_chips, double chipwidth, std::vector<double> code);
 };
 }  // namespace plasma
 #endif /* F76EB5C6_3C7E_46B6_AC56_C303873CDA4A */

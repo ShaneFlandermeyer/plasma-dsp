@@ -4,9 +4,9 @@ namespace plasma {
 
 std::vector<std::complex<double>> LinearFMWaveform::sample() {
   // Sample interval
-  double ts = 1 / sampRate();
+  double ts = 1 / samp_rate();
   // Number of samples per pulse
-  int nSampsPulse = static_cast<int>(sampRate() * pulsewidth());
+  int nSampsPulse = static_cast<int>(samp_rate() * pulsewidth());
   double t;
   std::vector<std::complex<double>> wave(nSampsPulse, 0);
   for (int n = 0; n < nSampsPulse; n++) {
@@ -21,14 +21,14 @@ std::vector<std::complex<double>> LinearFMWaveform::sample() {
 LinearFMWaveform::LinearFMWaveform() : PulsedWaveform() { d_bandwidth = 0; }
 
 LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
-                                   double prf, double sampRate)
-    : Waveform(sampRate), PulsedWaveform(pulsewidth, prf) {
+                                   double prf, double samp_rate)
+    : Waveform(samp_rate), PulsedWaveform(pulsewidth, prf) {
   d_bandwidth = bandwidth;
 }
 
 LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
-                                   std::vector<double> prf, double sampRate)
-    : Waveform(sampRate), PulsedWaveform(pulsewidth, prf) {
+                                   std::vector<double> prf, double samp_rate)
+    : Waveform(samp_rate), PulsedWaveform(pulsewidth, prf) {
   d_bandwidth = bandwidth;
 }
 

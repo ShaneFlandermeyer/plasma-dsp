@@ -9,15 +9,15 @@ BarkerCode::BarkerCode(int n)
     : PhaseCodedWaveform(n, 0, PhaseCode::generate_code(PhaseCode::BARKER, n)),
       PulsedWaveform() {}
 
-BarkerCode::BarkerCode(int n, double chipwidth, double prf, double sampRate)
-    : Waveform(sampRate),
+BarkerCode::BarkerCode(int n, double chipwidth, double prf, double samp_rate)
+    : Waveform(samp_rate),
       PhaseCodedWaveform(n, chipwidth,
                          PhaseCode::generate_code(PhaseCode::BARKER, n)),
       PulsedWaveform(n * chipwidth, prf) {}
 
 BarkerCode::BarkerCode(int n, double chipwidth, std::vector<double> prf,
-                       double sampRate)
-    : Waveform(sampRate),
+                       double samp_rate)
+    : Waveform(samp_rate),
       PhaseCodedWaveform(n, chipwidth,
                          PhaseCode::generate_code(PhaseCode::BARKER, n)),
       PulsedWaveform(n * chipwidth, prf) {

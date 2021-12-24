@@ -18,17 +18,17 @@ class SquareWaveform : public PulsedWaveform {
    *
    * @param pulsewidth Pulse width (seconds)
    * @param prf PRF (Hz)
-   * @param sampRate Sample Rate (samples/second)
+   * @param samp_rate Sample Rate (samples/second)
    */
-  SquareWaveform(double pulsewidth, double prf, double sampRate);
+  SquareWaveform(double pulsewidth, double prf, double samp_rate);
   /**
    * @brief Construct a new Square Waveform object
    *
    * @param pulsewidth Pulse width (seconds)
    * @param prf PRF (Hz)
-   * @param sampRate Sample Rate (samples/second)
+   * @param samp_rate Sample Rate (samples/second)
    */
-  SquareWaveform(double pulsewidth, std::vector<double> prf, double sampRate);
+  SquareWaveform(double pulsewidth, std::vector<double> prf, double samp_rate);
   /**
    * @brief Destroy the Square Waveform object
    *
