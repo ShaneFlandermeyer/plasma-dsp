@@ -18,7 +18,7 @@ namespace plasma {
  * @param data Data to be converted
  */
 template <typename T>
-inline static Eigen::Matrix<T, Eigen::Dynamic, 1> toEigen(
+inline static Eigen::Matrix<T, Eigen::Dynamic, 1> ToEigen(
     const std::vector<T> &data) {
   Eigen::Matrix<T, Eigen::Dynamic, 1> M(data.size(), 1);
   for (size_t i = 0; i < data.size(); i++) M(i) = data[i];
@@ -32,7 +32,7 @@ inline static Eigen::Matrix<T, Eigen::Dynamic, 1> toEigen(
  * @param data Data to be converted
  */
 template <typename T>
-inline static Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> toEigen(
+inline static Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> ToEigen(
     const std::vector<std::vector<T>> &data) {
   Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> M(data.size(),
                                                      data.front().size());
@@ -50,7 +50,7 @@ inline static Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> toEigen(
  * @return std::vector< std::vector<Scalar>> Output vector
  */
 template <typename Scalar, typename Matrix>
-inline static std::vector<std::vector<Scalar>> fromEigen(const Matrix &M) {
+inline static std::vector<std::vector<Scalar>> FromEigen(const Matrix &M) {
   std::vector<std::vector<Scalar>> m(M.rows(), std::vector<Scalar>(M.cols()));
   for (size_t i = 0; i < m.size(); i++)
     for (size_t j = 0; j < m.front().size(); j++) m[i][j] = M(i, j);

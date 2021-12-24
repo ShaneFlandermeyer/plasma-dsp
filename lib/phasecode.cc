@@ -61,7 +61,7 @@ std::vector<double> frank(int M) {
   return code;
 }
 
-std::vector<double> PhaseCode::generate_code(codeType type, int n) {
+std::vector<double> PhaseCode::generate_code(CodeType type, int n) {
   if (n < 0)
     throw std::invalid_argument("Code length must be positive");
   std::vector<double> code;

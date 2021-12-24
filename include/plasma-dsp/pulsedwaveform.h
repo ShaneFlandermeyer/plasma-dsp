@@ -19,7 +19,7 @@ class PulsedWaveform : virtual public Waveform {
    * @brief Pulse width (seconds)
    *
    */
-  double d_pulsewidth;
+  double d_pulse_width;
 
  public:
   /**
@@ -39,7 +39,7 @@ class PulsedWaveform : virtual public Waveform {
    *
    * @return auto Pulse width (seconds)
    */
-  auto pulsewidth() const { return d_pulsewidth; }
+  auto pulse_width() const { return d_pulse_width; }
   /**
    * @brief Set the PRF as a double
    *
@@ -55,9 +55,9 @@ class PulsedWaveform : virtual public Waveform {
   /**
    * @brief Set the pulse width
    *
-   * @param pulsewidth Desired pulse width
+   * @param pulse_width Desired pulse width
    */
-  auto pulsewidth(double pulsewidth) { d_pulsewidth = pulsewidth; }
+  auto pulse_width(double pulse_width) { d_pulse_width = pulse_width; }
   /**
    * @brief Construct a new Pulsed Waveform object
    *
@@ -66,17 +66,17 @@ class PulsedWaveform : virtual public Waveform {
   /**
    * @brief Construct a new Pulsed Waveform object
    *
-   * @param pulsewidth Pulse width (s)
+   * @param pulse_width Pulse width (s)
    * @param prf Pulse repetition frequency (Hz)
    */
-  PulsedWaveform(double pulsewidth, double prf);
+  PulsedWaveform(double pulse_width, double prf);
   /**
    * @brief Construct a new Pulsed Waveform object
    *
-   * @param pulsewidth Pulse width (s)
+   * @param pulse_width Pulse width (s)
    * @param prf Pulse repetition frequency (Hz)
    */
-  PulsedWaveform(double pulsewidth, std::vector<double> prf);
+  PulsedWaveform(double pulse_width, std::vector<double> prf);
 };
 }  // namespace plasma
 #endif /* D468419A_4F55_442A_997B_F6CD1989C7F6 */

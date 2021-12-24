@@ -41,22 +41,22 @@ class LinearFMWaveform : public PulsedWaveform {
    * @brief Construct a new Linear FM waveform object.
    *
    * @param bandwidth Sweep bandwidth (Hz)
-   * @param pulsewidth Pulse width (s)
+   * @param pulse_width Pulse width (s)
    * @param prf Pulse repetition frequency (Hz)
-   * @param sampRate Sample rate (samples/s)
+   * @param samp_rate Sample rate (samples/s)
    */
-  LinearFMWaveform(double bandwidth, double pulsewidth, double prf,
-                   double sampRate);
+  LinearFMWaveform(double bandwidth, double pulse_width, double prf,
+                   double samp_rate);
   /**
    * @brief Construct a new Linear FM Waveform object
    *
    * @param bandwidth Sweep bandwidth (Hz)
-   * @param pulsewidth Pulse width (s)
+   * @param pulse_width Pulse width (s)
    * @param prf Vector of pulse repetition frequency values (Hz)
-   * @param sampRate Sample rate (samples/s)
+   * @param samp_rate Sample rate (samples/s)
    */
-  LinearFMWaveform(double bandwidth, double pulsewidth, std::vector<double> prf,
-                   double sampRate);
+  LinearFMWaveform(double bandwidth, double pulse_width, std::vector<double> prf,
+                   double samp_rate);
   /**
    * @brief Destroy the Linear FM Waveform object
    *
