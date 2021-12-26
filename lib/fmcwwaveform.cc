@@ -3,13 +3,20 @@
 namespace plasma {
 
 std::vector<std::complex<double>> FMCWWaveform::sample() {
-  // TODO: Incorporate the sweep interval and direction parameters into this
   int num_samps_sweep = d_sweep_time * d_samp_rate;
   std::vector<std::complex<double>> out(num_samps_sweep);
   auto ts = 1 / samp_rate();
   for (int i = 0; i < num_samps_sweep; i++) {
+    // If the sweep direction is UP (1), the frequency increases over the
+    // interval. If the sweep direction is DOWN (-1), the frequency decreases
+    // over the interval
     out[i] = std::exp((double)d_sweep_direction * Im * M_PI *
                       d_sweep_bandwidth * pow(i * ts, 2) / d_sweep_time);
+    // By default, the waveform sweeps over the POSITIVE (0) interval
+    // [0,bandwidth]. If a SYMMETRIC (1) sweep is chosen, apply a frequency
+    // shift to move the spectrum in the interval [-bandwidth,bandwidth]
+    out[i] *= std::exp((double)d_sweep_interval * Im * 2.0 * M_PI *
+                       -d_sweep_bandwidth / 2.0 * (double)i / samp_rate());
   }
 
   return out;

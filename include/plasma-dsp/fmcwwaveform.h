@@ -16,12 +16,12 @@ class FMCWWaveform : public Waveform {
      * @brief Waveform sweeps the interval 0 to sweep_bandwidth
      *
      */
-    POSITIVE,
+    POSITIVE = 0,
     /**
      * @brief Waveform sweeps the interval -sweep_bandwidth to sweep_bandwidth
      *
      */
-    SYMMETRIC
+    SYMMETRIC = 1
   };
   /**
    * @brief FM sweep direction
