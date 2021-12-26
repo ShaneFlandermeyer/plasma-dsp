@@ -46,19 +46,13 @@ int main() {
   auto fb_max = fr_max + fd_max;
   auto fs = std::max(2 * fb_max, bw);
   // Use the parameters above to create the FMCW waveform
-  // TODO: Implement this object for the given constructor
-  // auto waveform = FMCWWaveform();
   auto waveform = FMCWWaveform(tm, bw, fs);
   auto sig = waveform.waveform();
-
-  auto x = linspace(0, tm, sig.size());
-  plot(x, real(sig));
-  // image(0,tm*1e6,0,fs/1e6,spectrogram(sig, hamming(32), 32, 16),true);
-  // xlabel("Time (s)");
-  // ylabel("Frequency (MHz)");
-  // gca()->y_axis().reverse(false);
-  // // plot(db(abs(fftshift(fft(sig)))));
-  show();
+  image(0,tm*1e6,0,fs/1e6,spectrogram(sig, hamming(32), 32, 16),true);
+  xlabel("Time (s)");
+  ylabel("Frequency (MHz)");
+  gca()->y_axis().reverse(false);
+  // show();
 
   return 0;
 }

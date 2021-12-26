@@ -8,6 +8,38 @@ namespace plasma {
 class FMCWWaveform : public Waveform {
  protected:
   /**
+   * @brief Location of FM Sweep interval
+   *
+   */
+  enum SweepInterval {
+    /**
+     * @brief Waveform sweeps the interval 0 to sweep_bandwidth
+     *
+     */
+    POSITIVE,
+    /**
+     * @brief Waveform sweeps the interval -sweep_bandwidth to sweep_bandwidth
+     *
+     */
+    SYMMETRIC
+  };
+  /**
+   * @brief FM sweep direction
+   *
+   */
+  enum SweepDirection {
+    /**
+     * @brief Sweep from low to high frequency
+     *
+     */
+    UP,
+    /**
+     * @brief Sweep from high to low frequency
+     *
+     */
+    DOWN
+  };
+  /**
    * @brief Sweep duration (s)
    *
    */
@@ -17,6 +49,21 @@ class FMCWWaveform : public Waveform {
    *
    */
   double d_sweep_bandwidth;
+  /**
+   * @brief Sweep direction
+   *
+   */
+  SweepDirection d_sweep_direction;
+  /**
+   * @brief
+   *
+   */
+  SweepInterval d_sweep_interval;
+  /**
+   * @brief Number of sweeps
+   *
+   */
+  double d_num_sweeps;
   /**
    * @brief Generate the non-zero portion of the waveform at complex baseband
    *
@@ -37,7 +84,9 @@ class FMCWWaveform : public Waveform {
    * @param sweep_bandwidth Sweep bandwidth (Hz)
    * @param samp_rate Sample rate (samples/s)
    */
-  FMCWWaveform(double sweep_time, double sweep_bandwidth, double samp_rate);
+  FMCWWaveform(double sweep_time, double sweep_bandwidth, double samp_rate,
+               SweepInterval interval = SYMMETRIC,
+               SweepDirection direction = UP);
 
   /**
    * @brief Get the sweep time (s)

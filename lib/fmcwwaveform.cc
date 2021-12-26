@@ -3,6 +3,7 @@
 namespace plasma {
 
 std::vector<std::complex<double>> FMCWWaveform::sample() {
+  // TODO: Incorporate the sweep interval and direction parameters into this
   int num_samps_sweep = d_sweep_time * d_samp_rate;
   std::vector<std::complex<double>> out(num_samps_sweep);
   auto ts = 1 / samp_rate();
@@ -15,9 +16,12 @@ std::vector<std::complex<double>> FMCWWaveform::sample() {
 }
 
 FMCWWaveform::FMCWWaveform(double sweep_time, double sweep_bandwidth,
-                           double samp_rate)
+                           double samp_rate, SweepInterval interval,
+                           SweepDirection direction)
     : Waveform(samp_rate) {
   d_sweep_time = sweep_time;
   d_sweep_bandwidth = sweep_bandwidth;
+  d_sweep_interval = interval;
+  d_sweep_direction = direction;
 }
 }  // namespace plasma
