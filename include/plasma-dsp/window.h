@@ -18,7 +18,7 @@ namespace plasma {
 /**
  * @brief Rectangular window of length n
  *
- * @param n
+ * @param n Window length
  * @return std::vector<float>
  */
 std::vector<double> rectangular(int n);
@@ -26,7 +26,7 @@ std::vector<double> rectangular(int n);
 /**
  * @brief blackman window of length n
  *
- * @param n
+ * @param n Window length
  * @return std::vector<double>
  */
 std::vector<double> blackman(int n);
@@ -34,7 +34,7 @@ std::vector<double> blackman(int n);
 /**
  * @brief hamming window of length n
  *
- * @param n
+ * @param n Window length
  * @return std::vector<double>
  */
 std::vector<double> hamming(int n);
@@ -42,7 +42,7 @@ std::vector<double> hamming(int n);
 /**
  * @brief hanning window of length n
  *
- * @param n
+ * @param n Window length
  * @return std::vector<double>
  */
 std::vector<double> hanning(int n);

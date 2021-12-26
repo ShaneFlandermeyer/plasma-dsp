@@ -4,15 +4,12 @@
 #include <fftw3.h>
 #include <matplot/matplot.h>
 
-#include <Eigen/Dense>
 #include <complex>
 #include <iostream>
-#include <unsupported/Eigen/FFT>
 #include <vector>
 
+#include "signal-processing.h"
 #include "vector-utils.h"
-
-// #include "utils.h"
 
 namespace plasma {
 using namespace Eigen;
@@ -32,16 +29,16 @@ using namespace Eigen;
  * @param num_overlap Number of overlapped samples
  */
 template <typename T1, typename T2>
-std::vector<std::vector<std::complex<double>>> stft(
-    const std::vector<T1> &signal, const std::vector<T2> &window,
-    const int num_fft, const int num_overlap) {
+Matrix<std::complex<double>> stft(const std::vector<T1> &signal,
+                                  const std::vector<T2> &window,
+                                  const int num_fft, const int num_overlap) {
   // Hop size between successive DFTs
   auto hop_size = window.size() - num_overlap;
   // Number of columns in the DFT matrix
   auto num_col = (int)floor((signal.size() - num_overlap) / hop_size);
   // STFT matrix
-  std::vector<std::vector<std::complex<double>>> stft(
-      num_col, std::vector<std::complex<double>>(num_fft));
+  Matrix<std::complex<double>> stft(num_col,
+                                    std::vector<std::complex<double>>(num_fft));
   // Vector of windowed segment samples
   std::vector<T1> xi(num_fft);
   for (auto i_col = 0; i_col < num_col; i_col++) {
@@ -50,7 +47,7 @@ std::vector<std::vector<std::complex<double>>> stft(
     std::transform(signal.begin() + i_col * hop_size,
                    signal.begin() + i_col * hop_size + window.size(),
                    window.begin(), xi.begin(), std::multiplies<T1>());
-    stft[i_col] = fftshift(fft(xi));
+    stft[i_col] = fft(xi);
   }
   return stft;
 }
@@ -65,21 +62,19 @@ std::vector<std::vector<std::complex<double>>> stft(
  * @param num_overlap Number of overlapped samples
  */
 template <typename T1, typename T2>
-std::vector<std::vector<double>> spectrogram(const std::vector<T1> &x,
-                                             const std::vector<T2> &window,
-                                             const int num_fft,
-                                             const int num_overlap) {
-  std::vector<std::vector<std::complex<double>>> stft_mat =
-      stft(x, window, num_fft, num_overlap);
+Matrix<double> spectrogram(const std::vector<T1> &x,
+                           const std::vector<T2> &window, const int num_fft,
+                           const int num_overlap) {
+  Matrix<std::complex<double>> stft_mat = stft(x, window, num_fft, num_overlap);
   // The spectrogram is the magnitude squared of the STFT matrix
-  auto spectro = std::vector<std::vector<double>>(
-      stft_mat.size(), std::vector<double>(stft_mat.front().size()));
+  auto spectro = Matrix<double>(stft_mat.size(),
+                                std::vector<double>(stft_mat.front().size()));
   for (int i_row = 0; i_row < stft_mat.size(); i_row++) {
     std::transform(stft_mat[i_row].begin(), stft_mat[i_row].end(),
                    spectro[i_row].begin(),
                    [](const auto &x) { return pow(abs(x), 2); });
   }
-  return spectro;
+  return matplot::transpose(spectro);
 }
 
 }  // namespace plasma

@@ -5,6 +5,22 @@
 #include <complex>
 #include <vector>
 namespace plasma {
+
+template <typename T>
+using Matrix = std::vector<std::vector<T>>;
+
+template <typename T>
+Matrix<T> transpose(const Matrix<T>& in) {
+  Matrix<T> out(in[0].size(), std::vector<T>(in.size()));
+  for (size_t i = 0; i < in.size(); i++) {
+    for (size_t j = 0; j < in[0].size(); j++) {
+      out[j][i] = in[i][j];
+    }
+  }
+  return out;
+}
+
+
 /**
  * @brief Compute the complex conjugate of each element in the input vector
  *
@@ -105,7 +121,7 @@ inline std::vector<T> imag(const std::vector<std::complex<T>> &in) {
  * @return std::vector<T> Output data
  */
 template <typename T>
-inline std::vector<T> db(std::vector<T> &in) {
+inline std::vector<T> db(std::vector<T> in) {
   auto out = in;
   std::transform(out.begin(), out.end(), out.begin(),
                  [](const auto &x) { return 10 * log10(x); });
@@ -122,7 +138,7 @@ inline std::vector<T> db(std::vector<T> &in) {
  * @return std::vector<T> Output data
  */
 template <typename T>
-inline std::vector<std::vector<T>> db(std::vector<std::vector<T>> &in) {
+inline Matrix<T> db(Matrix<T> in) {
   auto out = in;
   for (auto i_row = 0; i_row < in.size(); ++i_row) {
     std::transform(out[i_row].begin(), out[i_row].end(), out[i_row].begin(),

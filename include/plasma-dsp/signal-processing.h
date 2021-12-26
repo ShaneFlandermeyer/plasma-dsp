@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <complex>
 #include <vector>
+#include "vector-utils.h"
 
 namespace plasma {
   /**
@@ -33,7 +34,7 @@ inline static Eigen::Matrix<T, Eigen::Dynamic, 1> ToEigen(
  */
 template <typename T>
 inline static Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> ToEigen(
-    const std::vector<std::vector<T>> &data) {
+    const plasma::Matrix<T> &data) {
   Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> M(data.size(),
                                                      data.front().size());
   for (size_t i = 0; i < data.size(); i++)
@@ -50,8 +51,8 @@ inline static Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> ToEigen(
  * @return std::vector< std::vector<Scalar>> Output vector
  */
 template <typename Scalar, typename Matrix>
-inline static std::vector<std::vector<Scalar>> FromEigen(const Matrix &M) {
-  std::vector<std::vector<Scalar>> m(M.rows(), std::vector<Scalar>(M.cols()));
+inline static plasma::Matrix<Scalar> FromEigen(const Matrix &M) {
+  plasma::Matrix<Scalar> m(M.rows(), std::vector<Scalar>(M.cols()));
   for (size_t i = 0; i < m.size(); i++)
     for (size_t j = 0; j < m.front().size(); j++) m[i][j] = M(i, j);
   return m;
