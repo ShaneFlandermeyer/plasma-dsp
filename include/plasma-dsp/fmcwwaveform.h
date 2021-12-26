@@ -6,7 +6,7 @@
 namespace plasma {
 
 class FMCWWaveform : public Waveform {
- protected:
+ public:
   /**
    * @brief Location of FM Sweep interval
    *
@@ -32,46 +32,13 @@ class FMCWWaveform : public Waveform {
      * @brief Sweep from low to high frequency
      *
      */
-    UP,
+    UP = 1,
     /**
      * @brief Sweep from high to low frequency
      *
      */
-    DOWN
+    DOWN = -1
   };
-  /**
-   * @brief Sweep duration (s)
-   *
-   */
-  double d_sweep_time;
-  /**
-   * @brief Sweep bandwidth (Hz)
-   *
-   */
-  double d_sweep_bandwidth;
-  /**
-   * @brief Sweep direction
-   *
-   */
-  SweepDirection d_sweep_direction;
-  /**
-   * @brief
-   *
-   */
-  SweepInterval d_sweep_interval;
-  /**
-   * @brief Number of sweeps
-   *
-   */
-  double d_num_sweeps;
-  /**
-   * @brief Generate the non-zero portion of the waveform at complex baseband
-   *
-   * @return std::vector<std::complex<double>>
-   */
-  std::vector<std::complex<double>> sample() override;
-
- public:
   /**
    * @brief Construct a new FMCWWaveform object
    *
@@ -114,6 +81,39 @@ class FMCWWaveform : public Waveform {
   void sweep_bandwidth(double sweep_bandwidth) {
     d_sweep_bandwidth = sweep_bandwidth;
   }
+
+ protected:
+  /**
+   * @brief Sweep duration (s)
+   *
+   */
+  double d_sweep_time;
+  /**
+   * @brief Sweep bandwidth (Hz)
+   *
+   */
+  double d_sweep_bandwidth;
+  /**
+   * @brief Sweep direction
+   *
+   */
+  SweepDirection d_sweep_direction;
+  /**
+   * @brief
+   *
+   */
+  SweepInterval d_sweep_interval;
+  /**
+   * @brief Number of sweeps
+   *
+   */
+  double d_num_sweeps;
+  /**
+   * @brief Generate the non-zero portion of the waveform at complex baseband
+   *
+   * @return std::vector<std::complex<double>>
+   */
+  std::vector<std::complex<double>> sample() override;
 };
 }  // namespace plasma
 #endif /* B50A8067_E867_4FD6_AE82_CDA1990F0971 */

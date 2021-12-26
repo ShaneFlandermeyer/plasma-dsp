@@ -8,8 +8,8 @@ std::vector<std::complex<double>> FMCWWaveform::sample() {
   std::vector<std::complex<double>> out(num_samps_sweep);
   auto ts = 1 / samp_rate();
   for (int i = 0; i < num_samps_sweep; i++) {
-    out[i] =
-        std::exp(Im * M_PI * d_sweep_bandwidth * pow(i * ts, 2) / d_sweep_time);
+    out[i] = std::exp((double)d_sweep_direction * Im * M_PI *
+                      d_sweep_bandwidth * pow(i * ts, 2) / d_sweep_time);
   }
 
   return out;

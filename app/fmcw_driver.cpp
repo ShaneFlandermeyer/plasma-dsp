@@ -46,13 +46,15 @@ int main() {
   auto fb_max = fr_max + fd_max;
   auto fs = std::max(2 * fb_max, bw);
   // Use the parameters above to create the FMCW waveform
-  auto waveform = FMCWWaveform(tm, bw, fs);
+  auto waveform =
+      FMCWWaveform(tm, bw, fs, FMCWWaveform::SweepInterval::SYMMETRIC,
+                   FMCWWaveform::SweepDirection::DOWN);
   auto sig = waveform.waveform();
-  image(0,tm*1e6,0,fs/1e6,spectrogram(sig, hamming(32), 32, 16),true);
+  image(0, tm * 1e6, 0, fs / 1e6, spectrogram(sig, hamming(32), 32, 16), true);
   xlabel("Time (s)");
   ylabel("Frequency (MHz)");
   gca()->y_axis().reverse(false);
-  // show();
+  show();
 
   return 0;
 }
