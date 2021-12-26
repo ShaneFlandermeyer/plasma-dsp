@@ -19,6 +19,8 @@ class Waveform {
   double d_samp_rate;
   /**
    * @brief Frequency offset (Hz)
+   * 
+   * TODO: This parameter currently cannot be set in any constructors.
    *
    */
   double d_freq_offset;
@@ -68,7 +70,6 @@ class Waveform {
   /**
    * @brief Construct a new Waveform object
    *
-   * TODO: Add frequency offset parameter
    *
    * @param samp_rate Sample Rate
    */

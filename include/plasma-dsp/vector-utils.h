@@ -111,6 +111,27 @@ inline std::vector<T> db(std::vector<T> &in) {
                  [](const auto &x) { return 10 * log10(x); });
   return out;
 }
+
+/**
+ * @brief Convert the input vector from linear scale to db
+ *
+ * TODO: Add a parameter for power vs voltage quantities
+ *
+ * @tparam T Element type of the input vector
+ * @param in Input data
+ * @return std::vector<T> Output data
+ */
+template <typename T>
+inline std::vector<std::vector<T>> db(std::vector<std::vector<T>> &in) {
+  auto out = in;
+  for (auto i_row = 0; i_row < in.size(); ++i_row) {
+    std::transform(out[i_row].begin(), out[i_row].end(), out[i_row].begin(),
+                   [](const auto &x) { return 10 * log10(x); });
+  }
+  // std::transform(out.begin(), out.end(), out.begin(),
+  //                [](const auto &x) { return 10 * log10(x); });
+  return out;
+}
 }  // namespace plasma
 
 #endif /* AC67322C_687F_4BDC_8C4E_DD736C14C511 */
