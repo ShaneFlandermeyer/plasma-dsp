@@ -5,6 +5,7 @@ list(APPEND
   constants.h
   fmcwwaveform.h
   linearfmwaveform.h
+  matrix2d.h
   pcfm.h
   phasecode.h
   phasecodedwaveform.h
