@@ -3,39 +3,34 @@
 #include <iostream>
 #include <set>
 
+#include "barkercode.h"
 #include "linearfmwaveform.h"
+#include "pcfm.h"
+#include "phasecode.h"
 #include "spectrogram.h"
 #include "squarewaveform.h"
-#include "utils.h"
+#include "vector-utils.h"
+#include "signal-processing.h"
 #include "window.h"
 
 using namespace matplot;
+using namespace plasma;
 int main() {
-  auto bandwidth = 10e6;
-  auto pulsewidth = 100e-6;
-  auto prf = {10e3};
-  auto sampRate = 20e6;
-  auto wave = LinearFMWaveform(bandwidth, pulsewidth, prf, sampRate);
-  auto x = wave.step();
-  // auto dt = 0.001;
-  // auto f0 = 50;
-  // auto f1 = 250;
-  // auto t1 = 2;
-  // auto x = std::vector<double>();
-  // for (double t = 0; t < t1; t += dt) {
-  //   x.push_back(
-  //       cos(2 * M_PI * t * (f0 + (f1 - f0) * pow(t, 2) / (3 * pow(t1, 2)))));
-  // }
-  // plot(x);
-  // show();
-
-  // Short time fourier transform equation
-  auto noverlap = 64;
-  auto nfft = 256;
-  auto win = window::hamming(nfft);
-  auto spectro = spectrogram(x, win, nfft, noverlap);
-  image(spectro);
-  colorbar();
+  auto bandwidth = 300;
+  auto pulse_width = 2;
+  auto samp_rate = 1/0.001;
+  std::vector<double> prf = {10e3};
+  auto wave = LinearFMWaveform(bandwidth, pulse_width, prf, samp_rate);
+  wave.freq_offset(150);
+  auto x = wave.waveform();
+  // auto win = hamming(256);
+  auto spec = transpose(spectrogram(x,hamming(256),256,250));
+  spec = db(spec);
+  image(0,pulse_width,-samp_rate/2,samp_rate/2,spec,true);
+  gca()->y_axis().reverse(false);
   show();
+  // colorbar();
+  // xlabel("Time (s)");
+
   return 0;
 }

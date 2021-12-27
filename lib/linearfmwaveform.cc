@@ -1,42 +1,35 @@
 #include "linearfmwaveform.h"
 
+namespace plasma {
+
 std::vector<std::complex<double>> LinearFMWaveform::sample() {
   // Sample interval
-  double ts = 1 / sampRate();
+  double ts = 1 / samp_rate();
   // Number of samples per pulse
-  int nSampsPulse = static_cast<int>(sampRate() * pulsewidth());
+  int num_samps_pulse = static_cast<int>(samp_rate() * pulse_width());
   double t;
-  std::vector<std::complex<double>> wave(nSampsPulse, 0);
-  for (int n = 0; n < nSampsPulse; n++) {
+  std::vector<std::complex<double>> wave(num_samps_pulse, 0);
+  for (int n = 0; n < num_samps_pulse; n++) {
     t = n * ts;
-    double phase =
-        -bandwidth() / 2 * t + bandwidth() / (2 * pulsewidth()) * std::pow(t, 2);
-    wave[n] = std::exp(Im * (double)(2 * M_PI) * phase);
+    double phase = -bandwidth() / 2 * t +
+                   bandwidth() / (2 * pulse_width()) * std::pow(t, 2);
+    wave[n] = std::exp(Im * (2 * M_PI) * phase);
   }
   return wave;
 }
 
-LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
-                                   double prf, double sampRate) {
-  this->bandwidth(bandwidth);
-  this->pulsewidth(pulsewidth);
-  this->prf(prf);
-  this->sampRate(sampRate);
+LinearFMWaveform::LinearFMWaveform() : PulsedWaveform() { d_bandwidth = 0; }
+
+LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulse_width,
+                                   double prf, double samp_rate)
+    : Waveform(samp_rate), PulsedWaveform(pulse_width, prf) {
+  d_bandwidth = bandwidth;
 }
 
-LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulsewidth,
-                                   std::vector<double> prf, double sampRate) {
-  this->bandwidth(bandwidth);
-  this->pulsewidth(pulsewidth);
-  this->prf(prf);
-  this->sampRate(sampRate);
+LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulse_width,
+                                   std::vector<double> prf, double samp_rate)
+    : Waveform(samp_rate), PulsedWaveform(pulse_width, prf) {
+  d_bandwidth = bandwidth;
 }
 
-LinearFMWaveform::LinearFMWaveform(){
-  bandwidth(0);
-  pulsewidth(0);
-  sampRate(0);
-  prf(0);
-}
-
-LinearFMWaveform::~LinearFMWaveform() {}
+}  // namespace plasma
