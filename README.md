@@ -7,11 +7,14 @@ and analyzing RF waveforms.
 
 ### Waveforms
 
+- Frequency modulated continuous wave (LFM)
+  - Linear upsweep
+  - Linear downsweep
+- Linear frequency modulated (LFM)
 - Phase codes
   - Barker
   - Frank
-- Linear FM
-- Polyphase-coded FM (PCFM)
+- Polyphase-coded frequency modulated (PCFM)
 - Square wave
 
 ### Windows
@@ -23,6 +26,8 @@ and analyzing RF waveforms.
 
 ### Signal Processing
 
+- Convolution
+- Finite impulse response (FIR) filters
 - FFT/IFFT
 - fftshift/ifftshift
 - Spectrogram
@@ -62,6 +67,6 @@ sudo make uninstall
 
 ## Wishlist
 
-- Unit tests
-- FMCW waveforms
 - Pulse-doppler processing
+  - Range-doppler maps
+  - CFAR

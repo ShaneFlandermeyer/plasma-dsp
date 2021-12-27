@@ -4,13 +4,12 @@
 #include <fftw3.h>
 #include <matplot/matplot.h>
 
-#include <Eigen/Dense>
 #include <complex>
 #include <iostream>
-#include <unsupported/Eigen/FFT>
 #include <vector>
 
-// #include "utils.h"
+#include "signal-processing.h"
+#include "vector-utils.h"
 
 namespace plasma {
 using namespace Eigen;
@@ -30,33 +29,27 @@ using namespace Eigen;
  * @param num_overlap Number of overlapped samples
  */
 template <typename T1, typename T2>
-std::vector<std::vector<std::complex<double>>> stft(
-    const std::vector<T1> &signal, const std::vector<T2> &window,
-    const int num_fft, const int num_overlap) {
-  Matrix<T1, Dynamic, 1> x = ToEigen<T1>(signal);
-  Matrix<T2, Dynamic, 1> win = ToEigen<T2>(window);
+Matrix<std::complex<double>> stft(const std::vector<T1> &signal,
+                                  const std::vector<T2> &window,
+                                  const int num_fft, const int num_overlap) {
   // Hop size between successive DFTs
-  auto hopSize = window.size() - num_overlap;
+  auto hop_size = window.size() - num_overlap;
   // Number of columns in the DFT matrix
-  auto nCol = (int)floor((signal.size() - num_overlap) / hopSize);
+  auto num_col = (int)floor((signal.size() - num_overlap) / hop_size);
   // STFT matrix
-  Matrix<std::complex<double>, Dynamic, Dynamic> stft(num_fft, nCol);
-  // Segment vector
-  Matrix<T1, Dynamic, 1> xi;
-  // Segment DFT
-  Matrix<std::complex<double>, Dynamic, 1> xif;
-  // FFT object setup
-  FFT<T2> fft;
-  for (auto iCol = 0; iCol < nCol; iCol++) {
-    // Windowed time segment
-    xi = x.segment(iCol * hopSize, window.size()).array() * win.array();
-    // Compute the FFT of the windowed segment
-    fft.fwd(xif, xi);
-    // Store the result in the columns of the STFT matrix
-    stft.col(iCol) = xif;
+  Matrix<std::complex<double>> stft(num_col,
+                                    std::vector<std::complex<double>>(num_fft));
+  // Vector of windowed segment samples
+  std::vector<T1> xi(num_fft);
+  for (auto i_col = 0; i_col < num_col; i_col++) {
+    // Compute the windowed time segment and store its frequency spectrum in the
+    // stft matrix
+    std::transform(signal.begin() + i_col * hop_size,
+                   signal.begin() + i_col * hop_size + window.size(),
+                   window.begin(), xi.begin(), std::multiplies<T1>());
+    stft[i_col] = fft(xi);
   }
-
-  return FromEigen<std::complex<double>>(stft);
+  return stft;
 }
 
 /**
@@ -68,19 +61,22 @@ std::vector<std::vector<std::complex<double>>> stft(
  * @param num_fft Number of DFT points
  * @param num_overlap Number of overlapped samples
  */
-template <typename T>
-std::vector<std::vector<double>> spectrogram(const std::vector<T> &x,
-                                             const std::vector<double> &window,
-                                             const int num_fft,
-                                             const int num_overlap) {
-  // Compute the short-time fourier transform
-  auto X = ToEigen(stft(x, window, num_fft, num_overlap));
-  // Magnitude squared
-  MatrixXd mag2 = X.array().abs2();
-  auto spectro = FromEigen<double, MatrixXd>(mag2);
-  return spectro;
+template <typename T1, typename T2>
+Matrix<double> spectrogram(const std::vector<T1> &x,
+                           const std::vector<T2> &window, const int num_fft,
+                           const int num_overlap) {
+  Matrix<std::complex<double>> stft_mat = stft(x, window, num_fft, num_overlap);
+  // The spectrogram is the magnitude squared of the STFT matrix
+  auto spectro = Matrix<double>(stft_mat.size(),
+                                std::vector<double>(stft_mat.front().size()));
+  for (int i_row = 0; i_row < stft_mat.size(); i_row++) {
+    std::transform(stft_mat[i_row].begin(), stft_mat[i_row].end(),
+                   spectro[i_row].begin(),
+                   [](const auto &x) { return pow(abs(x), 2); });
+  }
+  return matplot::transpose(spectro);
 }
 
-} // namespace plasma
+}  // namespace plasma
 
 #endif /* F49FC95E_8968_41E0_96E1_16209F637F93 */
