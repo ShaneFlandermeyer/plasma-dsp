@@ -12,7 +12,7 @@
 #include "vector-utils.h"
 
 namespace plasma {
-using namespace Eigen;
+
 /**
  * @brief Short-time Fourier transform (STFT)
  *
