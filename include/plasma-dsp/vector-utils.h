@@ -5,6 +5,7 @@
 #include <complex>
 #include <fstream>
 #include <vector>
+#include <Eigen/Dense>
 
 #include "constants.h"
 namespace plasma {
