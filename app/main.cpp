@@ -13,6 +13,7 @@
 #include "signal-processing.h"
 #include "window.h"
 #include "matrix2d.h"
+#include "rangedoppler.h"
 
 using namespace matplot;
 using namespace plasma;
@@ -23,8 +24,10 @@ int main() {
   std::vector<double> prf = {1e3};
   auto lfm = LinearFMWaveform(bandwidth, pulse_width, prf, samp_rate);
   auto wave = lfm.waveform();
+  
 
-  // auto mat = 
+  auto mat = Matrix2D<std::complex<double>>(5,5);
+  MatchedFilter(mat,wave);
 
 
   return 0;
