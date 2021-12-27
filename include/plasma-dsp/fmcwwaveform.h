@@ -54,6 +54,20 @@ class FMCWWaveform : public Waveform {
   FMCWWaveform(double sweep_time, double sweep_bandwidth, double samp_rate,
                SweepInterval interval = SYMMETRIC,
                SweepDirection direction = UP);
+  /**
+   * @brief "Dechirp" the FMCW signal
+   *
+   * @details This function demodulates the input FMCW signal by mixing it with
+   * the transmitted reference signal. For a discrete-time signal, this mixing
+   * operation is defined as y[n] = ref[n] * conj(x[n]), and produces a
+   * narrowband beat signal
+   *
+   * @param in Input signal
+   * @param ref Reference signal
+   * @return std::vector<std::complex<double>> dechirped beat signal
+   */
+  std::vector<std::complex<double>> demod(
+      std::vector<std::complex<double>> &in);
 
   /**
    * @brief Get the sweep time (s)

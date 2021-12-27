@@ -2,6 +2,16 @@
 
 namespace plasma {
 
+FMCWWaveform::FMCWWaveform(double sweep_time, double sweep_bandwidth,
+                           double samp_rate, SweepInterval interval,
+                           SweepDirection direction)
+    : Waveform(samp_rate) {
+  d_sweep_time = sweep_time;
+  d_sweep_bandwidth = sweep_bandwidth;
+  d_sweep_interval = interval;
+  d_sweep_direction = direction;
+}
+
 std::vector<std::complex<double>> FMCWWaveform::sample() {
   int num_samps_sweep = d_sweep_time * d_samp_rate;
   std::vector<std::complex<double>> out(num_samps_sweep);
@@ -22,13 +32,15 @@ std::vector<std::complex<double>> FMCWWaveform::sample() {
   return out;
 }
 
-FMCWWaveform::FMCWWaveform(double sweep_time, double sweep_bandwidth,
-                           double samp_rate, SweepInterval interval,
-                           SweepDirection direction)
-    : Waveform(samp_rate) {
-  d_sweep_time = sweep_time;
-  d_sweep_bandwidth = sweep_bandwidth;
-  d_sweep_interval = interval;
-  d_sweep_direction = direction;
+std::vector<std::complex<double>> FMCWWaveform::demod(
+    std::vector<std::complex<double>> &in) {
+  auto ref = sample();
+  std::vector<std::complex<double>> out(in.size());
+  std::transform(in.begin(), in.end(), ref.begin(), out.begin(),
+                 [](std::complex<double> a, std::complex<double> b) {
+                   return conj(a) * b;
+                 });
+  return out;
 }
+
 }  // namespace plasma
