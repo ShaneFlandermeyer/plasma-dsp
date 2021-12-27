@@ -5,7 +5,14 @@
 
 namespace plasma {
 
+/**
+ * @brief Class representing an FMCW waveform
+ *
+ * TODO: Implement triangular sweep
+ * TODO: Implement nonlinear FMCW
+ */
 class FMCWWaveform : public Waveform {
+
  public:
   /**
    * @brief Location of FM Sweep interval

@@ -47,13 +47,23 @@ int main() {
   auto fs = std::max(2 * fb_max, bw);
   // Use the parameters above to create the FMCW waveform
   auto waveform =
-      FMCWWaveform(tm, bw, fs, FMCWWaveform::SweepInterval::SYMMETRIC,
+      FMCWWaveform(tm, bw, fs, FMCWWaveform::SweepInterval::POSITIVE,
                    FMCWWaveform::SweepDirection::UP);
   auto sig = waveform.waveform();
-  image(spectrogram(sig, hamming(32), 32, 16), true);
-  xlabel("Time (s)");
-  ylabel("Frequency (MHz)");
-  gca()->y_axis().reverse(false);
+  std::string path = "/home/shane/sig.dat"; 
+  auto dechirped = waveform.demod(sig);
+  figure();
+  auto freq_axis = linspace(-fs / 2, fs / 2, dechirped.size());
+  plot(freq_axis,db(abs(fftshift(fft(dechirped)))));
+  // auto sigf = std::vector<std::complex<float>>(sig.size());
+  // std::transform(sig.begin(),sig.end(),sigf.begin(),[](auto x){return (std::complex<float>)x;});
+  // write_binary(path,sigf);
+
+  // figure();
+  // image(spectrogram(sig, hamming(32), 32, 16), true);
+  // xlabel("Time (s)");
+  // ylabel("Frequency (MHz)");
+  // gca()->y_axis().reverse(false);
   show();
 
   return 0;
