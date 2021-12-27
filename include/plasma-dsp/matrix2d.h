@@ -59,7 +59,7 @@ class Matrix2D {
    *
    * @return auto Number of elements
    */
-  auto numel() const { return &d_data.size(); };
+  auto numel() const { return d_data.size(); };
 
   /**
    * @brief Return the number of rows in the matrix
