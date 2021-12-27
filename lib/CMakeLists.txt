@@ -9,6 +9,7 @@ list(
   phasecode.cc
   phasecodedwaveform.cc
   pulsedwaveform.cc
+  rangedoppler.cc
   squarewaveform.cc
   waveform.cc
   window.cc)

@@ -9,6 +9,7 @@ list(APPEND
   phasecode.h
   phasecodedwaveform.h
   pulsedwaveform.h
+  rangedoppler.h
   signal-processing.h
   spectrogram.h
   squarewaveform.h
