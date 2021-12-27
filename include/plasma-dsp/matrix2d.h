@@ -52,7 +52,7 @@ class Matrix2D {
    *
    * @return auto Pointer to the matrix data vector
    */
-  auto data() const { return &d_data[0]; };
+  auto data() { return d_data.data(); };
 
   /**
    * @brief Return the number of elements in the matrix

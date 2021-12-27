@@ -1,15 +1,19 @@
 #ifndef EB650315_AD21_460C_9B80_13EA6DC8F155
 #define EB650315_AD21_460C_9B80_13EA6DC8F155
 
+#include <algorithm>
 #include <complex>
 #include <vector>
 
 #include "constants.h"
+#include "vector-utils.h"
 namespace plasma {
+
 /**
  * @brief Abstract base class for waveform objects.
  *
  */
+
 class Waveform {
  public:
   /**
@@ -17,6 +21,7 @@ class Waveform {
    *
    */
   Waveform();
+
   /**
    * @brief Construct a new Waveform object
    *
@@ -24,6 +29,7 @@ class Waveform {
    * @param samp_rate Sample Rate
    */
   Waveform(double samp_rate);
+
   /**
    * @brief Generate the nonzero samples of the waveform.
    *
@@ -34,25 +40,38 @@ class Waveform {
    * @return std::vector<std::complex<double>>
    */
   std::vector<std::complex<double>> waveform();
-  
+
+  /**
+   * @brief Generate the matched filter for the waveform.
+   *
+   * The matched filter is the time-reversed complex conjugate of the nonzero
+   * samples of the waveform.
+   *
+   * @return std::vector<std::complex<double>> Matched filter vector
+   */
+  std::vector<std::complex<double>> MatchedFilter();
+
   /**
    * @brief Get the sample rate
    *
    * @return auto sample rate
    */
   auto samp_rate() const { return d_samp_rate; }
+
   /**
    * @brief Get the frequency offset (Hz)
    *
    * @return auto
    */
   auto freq_offset() const { return d_freq_offset; }
+
   /**
    * @brief Set the sample rate
    *
    * @param samp_rate
    */
   void samp_rate(double samp_rate) { d_samp_rate = samp_rate; }
+
   /**
    * @brief Set the frequency offset (Hz)
    *
@@ -67,6 +86,7 @@ class Waveform {
    * @return std::vector<std::complex<double>>
    */
   virtual std::vector<std::complex<double>> sample() = 0;
+
   /**
    * @brief Apply a frequency shift to the input waveform
    *
@@ -75,11 +95,13 @@ class Waveform {
    */
   void FrequencyShift(std::vector<std::complex<double>>& waveform,
                       double offset);
+
   /**
    * @brief Sample rate (waveform/second)
    *
    */
   double d_samp_rate;
+
   /**
    * @brief Frequency offset (Hz)
    *
