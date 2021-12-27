@@ -4,13 +4,16 @@
 #include <algorithm>
 #include <complex>
 #include <vector>
+#include <fstream>
+
+#include "constants.h"
 namespace plasma {
 
 template <typename T>
 using Matrix = std::vector<std::vector<T>>;
 
 template <typename T>
-Matrix<T> transpose(const Matrix<T>& in) {
+Matrix<T> transpose(const Matrix<T> &in) {
   Matrix<T> out(in[0].size(), std::vector<T>(in.size()));
   for (size_t i = 0; i < in.size(); i++) {
     for (size_t j = 0; j < in[0].size(); j++) {
@@ -19,7 +22,6 @@ Matrix<T> transpose(const Matrix<T>& in) {
   }
   return out;
 }
-
 
 /**
  * @brief Compute the complex conjugate of each element in the input vector
@@ -121,10 +123,15 @@ inline std::vector<T> imag(const std::vector<std::complex<T>> &in) {
  * @return std::vector<T> Output data
  */
 template <typename T>
-inline std::vector<T> db(std::vector<T> in) {
+inline std::vector<T> db(std::vector<T> in, DbUnit unit = DbUnit::VOLTAGE) {
   auto out = in;
+  double factor;
+  if (unit == DbUnit::VOLTAGE)
+    factor = 20.0;
+  else
+    factor = 10.0;
   std::transform(out.begin(), out.end(), out.begin(),
-                 [](const auto &x) { return 10 * log10(x); });
+                 [factor](const auto &x) { return factor * log10(x); });
   return out;
 }
 
@@ -147,6 +154,14 @@ inline Matrix<T> db(Matrix<T> in) {
   // std::transform(out.begin(), out.end(), out.begin(),
   //                [](const auto &x) { return 10 * log10(x); });
   return out;
+}
+
+template <typename T>
+inline void write_binary(const std::string &path, const std::vector<T> &data) {
+  std::ofstream file(path, std::ios::out | std::ios::binary);
+  file.write(reinterpret_cast<const char *>(data.data()),
+             data.size() * sizeof(T));
+  file.close();
 }
 }  // namespace plasma
 

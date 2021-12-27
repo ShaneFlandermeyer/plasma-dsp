@@ -8,6 +8,25 @@ namespace plasma {
 // Imaginary number J
 const std::complex<double> Im(0, 1);
 
+/**
+ * @brief Scale factor for db function
+ * 
+ */
+enum DbUnit {
+  /**
+   * @brief db function uses voltage reference
+   * 
+   * @details db(x) = 20 * log10(x)
+   */
+  VOLTAGE,
+  /**
+   * @brief db function uses power reference
+   * 
+   * @details db(x) = 10 * log10(x)
+   */
+  POWER
+};
+
 } // namespace plasma
 
 #endif /* CB168327_F6DD_4F1E_839B_3A90B7B9993C */

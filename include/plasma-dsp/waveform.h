@@ -11,35 +11,19 @@ namespace plasma {
  *
  */
 class Waveform {
- protected:
-  /**
-   * @brief Sample rate (waveform/second)
-   *
-   */
-  double d_samp_rate;
-  /**
-   * @brief Frequency offset (Hz)
-   *
-   * TODO: This parameter currently cannot be set in any constructors.
-   *
-   */
-  double d_freq_offset;
-  /**
-   * @brief Generate the non-zero portion of the waveform at complex baseband
-   *
-   * @return std::vector<std::complex<double>>
-   */
-  virtual std::vector<std::complex<double>> sample() = 0;
-  /**
-   * @brief Apply a frequency shift to the input waveform
-   *
-   * @param waveform Complex baseband waveform samples
-   * @param offset Frequency offset (Hz)
-   */
-  void FrequencyShift(std::vector<std::complex<double>> &waveform,
-                      double offset);
-
  public:
+  /**
+   * @brief Construct a new Waveform object
+   *
+   */
+  Waveform();
+  /**
+   * @brief Construct a new Waveform object
+   *
+   *
+   * @param samp_rate Sample Rate
+   */
+  Waveform(double samp_rate);
   /**
    * @brief Generate the nonzero samples of the waveform.
    *
@@ -50,6 +34,7 @@ class Waveform {
    * @return std::vector<std::complex<double>>
    */
   std::vector<std::complex<double>> waveform();
+  
   /**
    * @brief Get the sample rate
    *
@@ -74,19 +59,36 @@ class Waveform {
    * @param freq_offset
    */
   void freq_offset(double freq_offset) { d_freq_offset = freq_offset; }
+
+ protected:
   /**
-   * @brief Construct a new Waveform object
+   * @brief Generate the non-zero portion of the waveform at complex baseband
+   *
+   * @return std::vector<std::complex<double>>
+   */
+  virtual std::vector<std::complex<double>> sample() = 0;
+  /**
+   * @brief Apply a frequency shift to the input waveform
+   *
+   * @param waveform Complex baseband waveform samples
+   * @param offset Frequency offset (Hz)
+   */
+  void FrequencyShift(std::vector<std::complex<double>>& waveform,
+                      double offset);
+  /**
+   * @brief Sample rate (waveform/second)
    *
    */
-  Waveform();
+  double d_samp_rate;
   /**
-   * @brief Construct a new Waveform object
+   * @brief Frequency offset (Hz)
    *
+   * TODO: This parameter currently cannot be set in any constructors.
    *
-   * @param samp_rate Sample Rate
    */
-  Waveform(double samp_rate);
+  double d_freq_offset;
 };
+
 }  // namespace plasma
 
 #endif /* EB650315_AD21_460C_9B80_13EA6DC8F155 */
