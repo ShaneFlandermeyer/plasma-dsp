@@ -8,9 +8,9 @@ and analyzing RF waveforms.
 ### Waveforms
 
 - Frequency modulated continuous wave (LFM)
-- Linear frequency modulated (LFM)
   - Linear upsweep
   - Linear downsweep
+- Linear frequency modulated (LFM)
 - Phase codes
   - Barker
   - Frank
@@ -26,6 +26,8 @@ and analyzing RF waveforms.
 
 ### Signal Processing
 
+- Convolution
+- Finite impulse response (FIR) filters
 - FFT/IFFT
 - fftshift/ifftshift
 - Spectrogram
