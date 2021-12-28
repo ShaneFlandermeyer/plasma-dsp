@@ -30,6 +30,8 @@ and analyzing RF waveforms.
 - Finite impulse response (FIR) filters
 - FFT/IFFT
 - fftshift/ifftshift
+- Matched filtering
+- Range-doppler maps
 - Spectrogram
 
 ## Dependencies
