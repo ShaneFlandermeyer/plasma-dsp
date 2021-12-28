@@ -6,8 +6,10 @@
 /**
  * @brief Class representing a 2-dimensional matrix
  *
- * This class is primarly intended to provide an interface between STL vectors
- * and Eigen matrices. The data is stored in row-major order.
+ * This class is primarly intended to provide a convenient interface between STL
+ * vectors and Eigen matrices. Eigen should be used where speed is critical.
+ * 
+ * The data is stored in column-major order.
  *
  */
 template <typename T>
@@ -46,6 +48,22 @@ class Matrix2D {
 
   template <typename Y>
   friend std::ostream& operator<<(std::ostream& os, const Matrix2D<Y>& mat);
+
+  /**
+   * @brief Return a copy of the matrix data in the given column
+   *
+   * @param row The column index
+   * @return std::vector<T>
+   */
+  const std::vector<T> col(unsigned int col);
+
+  /**
+   * @brief Return a copy of the matrix data in the given row
+   *
+   * @param row The row index
+   * @return std::vector<T>
+   */
+  const std::vector<T> row(unsigned int row);
 
   /**
    * @brief Return a pointer to the matrix data
@@ -112,7 +130,28 @@ Matrix2D<T>::Matrix2D(unsigned int num_rows, unsigned int num_cols,
                       const std::vector<T>& values) {
   d_num_rows = num_rows;
   d_num_cols = num_cols;
-  d_data = values;
+  d_data = std::vector<T>(d_num_rows * d_num_cols, 0);
+  for (int i = 0; i < values.size(); i++) {
+    d_data[i] = values[i];
+  }
+}
+
+template <typename T>
+const std::vector<T> Matrix2D<T>::col(unsigned int col) {
+  std::vector<T> out(d_num_rows);
+  for (int i_row = 0; i_row < d_num_rows; i_row++) {
+    out[i_row] = (*this)(i_row, col);
+  }
+  return out;
+}
+
+template <typename T>
+const std::vector<T> Matrix2D<T>::row(unsigned int row) {
+  std::vector<T> out(d_num_cols);
+  for (int i_col = 0; i_col < d_num_cols; i_col++) {
+    out[i_col] = (*this)(row, i_col);
+  }
+  return out;
 }
 
 template <typename T>
@@ -120,7 +159,7 @@ T& Matrix2D<T>::operator()(unsigned int row, unsigned int col) {
   if (row >= d_num_rows || col >= d_num_cols) {
     throw std::out_of_range("Matrix2D: index out of range");
   }
-  return d_data[row * d_num_cols + col];
+  return d_data[col * d_num_rows + row];
 }
 
 template <typename T>
