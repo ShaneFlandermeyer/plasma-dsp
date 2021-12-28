@@ -5,8 +5,6 @@
 #include "matrix2d.h"
 #include "vector-utils.h"
 namespace plasma {
-// TODO: Move this somewhere else
-
 /**
  * @brief Compute the matched filter response for a the input matrix
  *
@@ -86,9 +84,9 @@ Matrix2D<std::complex<T>> MatchedFilter(Matrix2D<std::complex<T>> &in,
 
 /**
  * @brief Generate a range-doppler map from real-valued data
- * 
+ *
  * This map is a matrix where the rows are the range bins and the columns are
- * the doppler bins. 
+ * the doppler bins.
  *
  * @tparam T Input type (real-valued)
  * @param pulses Fast-time slow-time matrix of input pulses
@@ -117,9 +115,9 @@ Matrix2D<T> RangeDopplerMap(Matrix2D<T> pulses, std::vector<T> ref) {
 
 /**
  * @brief Generate a range-doppler map from complex-valued data
- * 
+ *
  * This map is a matrix where the rows are the range bins and the columns are
- * the doppler bins. 
+ * the doppler bins.
  *
  * @tparam T Input type (real-valued)
  * @param pulses Fast-time slow-time matrix of input pulses
