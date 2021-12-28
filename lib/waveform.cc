@@ -2,13 +2,21 @@
 
 namespace plasma {
 
+Waveform::Waveform() {
+  d_samp_rate = 0;
+  d_freq_offset = 0;
+}
+
+Waveform::Waveform(double samp_rate) {
+  d_samp_rate = samp_rate;
+  d_freq_offset = 0;
+}
+
 void Waveform::FrequencyShift(std::vector<std::complex<double>> &waveform,
                               double offset) {
-  for (auto i = 0; i < waveform.size(); i++) {
+  for (auto i = 0; i < waveform.size(); i++)
     waveform[i] *= exp(Im * 2.0 * M_PI * offset * (double)i / d_samp_rate);
-  }
-
-}  // namespace plasma
+}
 
 std::vector<std::complex<double>> Waveform::waveform() {
   auto samples = sample();
@@ -16,10 +24,12 @@ std::vector<std::complex<double>> Waveform::waveform() {
   return samples;
 }
 
-Waveform::Waveform() {
-  d_samp_rate = 0;
-  d_freq_offset = 0;
+std::vector<std::complex<double>> Waveform::MatchedFilter() {
+  auto mf = waveform();
+  std::reverse(mf.begin(),mf.end());
+  mf = conj(mf);
+  return mf;
+
 }
 
-Waveform::Waveform(double samp_rate) { d_samp_rate = samp_rate; }
 }  // namespace plasma

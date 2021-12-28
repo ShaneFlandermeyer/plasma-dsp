@@ -9,54 +9,10 @@
 #include <algorithm>
 #include <complex>
 #include <vector>
+
 #include "vector-utils.h"
 
 namespace plasma {
-  /**
- * @brief Convert a vector to an eigen matrix object
- *
- * @tparam T the data type of the vector elements
- * @param data Data to be converted
- */
-template <typename T>
-inline static Eigen::Matrix<T, Eigen::Dynamic, 1> ToEigen(
-    const std::vector<T> &data) {
-  Eigen::Matrix<T, Eigen::Dynamic, 1> M(data.size(), 1);
-  for (size_t i = 0; i < data.size(); i++) M(i) = data[i];
-  return M;
-}
-
-/**
- * @brief Convert a vector of vectors to an eigen matrix object
- *
- * @tparam T the data type of the vector elements
- * @param data Data to be converted
- */
-template <typename T>
-inline static Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> ToEigen(
-    const plasma::Matrix<T> &data) {
-  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> M(data.size(),
-                                                     data.front().size());
-  for (size_t i = 0; i < data.size(); i++)
-    for (size_t j = 0; j < data.front().size(); j++) M(i, j) = data[i][j];
-  return M;
-}
-
-/**
- * @brief Convert an eigen matrix object to a vector (or vector of vectors)
- *
- * @tparam Scalar Data type of the matrix elements
- * @tparam Matrix Matrix type to convert
- * @param M Input eigen matrix
- * @return std::vector< std::vector<Scalar>> Output vector
- */
-template <typename Scalar, typename Matrix>
-inline static plasma::Matrix<Scalar> FromEigen(const Matrix &M) {
-  plasma::Matrix<Scalar> m(M.rows(), std::vector<Scalar>(M.cols()));
-  for (size_t i = 0; i < m.size(); i++)
-    for (size_t j = 0; j < m.front().size(); j++) m[i][j] = M(i, j);
-  return m;
-}
 
 // TODO: Make the FFT and IFFT syntax match
 /**
@@ -231,5 +187,5 @@ inline std::vector<T> filter(const std::vector<T> &b, const std::vector<T> &a,
   }
   return y;
 }
-} // namespace plasma
+}  // namespace plasma
 #endif /* A5C31B48_9A55_4209_8ECA_2F954DCC8005 */

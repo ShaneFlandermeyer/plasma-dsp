@@ -7,7 +7,7 @@ and analyzing RF waveforms.
 
 ### Waveforms
 
-- Frequency modulated continuous wave (LFM)
+- Frequency modulated continuous wave (FMCW)
   - Linear upsweep
   - Linear downsweep
 - Linear frequency modulated (LFM)
@@ -68,5 +68,5 @@ sudo make uninstall
 ## Wishlist
 
 - Pulse-doppler processing
-  - Range-doppler maps
   - CFAR
+- Possibly separate testing repo?

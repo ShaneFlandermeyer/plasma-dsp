@@ -2,13 +2,16 @@
 list(APPEND
   PLASMA_HEADERS
   barkercode.h
+  circ_shift.h
   constants.h
   fmcwwaveform.h
   linearfmwaveform.h
+  matrix2d.h
   pcfm.h
   phasecode.h
   phasecodedwaveform.h
   pulsedwaveform.h
+  rangedoppler.h
   signal-processing.h
   spectrogram.h
   squarewaveform.h
