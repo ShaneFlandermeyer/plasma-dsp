@@ -3,13 +3,13 @@ list(
   APPEND
   PLASMA_SOURCES
   barkercode.cc
+  cfar.cc
   fmcwwaveform.cc
   linearfmwaveform.cc
   pcfm.cc
   phasecode.cc
   phasecodedwaveform.cc
   pulsedwaveform.cc
-  rangedoppler.cc
   squarewaveform.cc
   waveform.cc
   window.cc)

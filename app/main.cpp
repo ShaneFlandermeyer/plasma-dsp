@@ -41,6 +41,12 @@ int main() {
     for (auto i_col = 0; i_col < rd_map.cols(); i_col++)
       rd_map_vec[i_row][i_col] = 10*log10(abs(rd_map(i_row, i_col)));
   image(rd_map_vec, true);
+
+  figure();
+  auto autocorr = MatchedFilterResponse(wave,mf);
+  plot(db(abs(autocorr)));
   show();
+
+  
   return 0;
 }

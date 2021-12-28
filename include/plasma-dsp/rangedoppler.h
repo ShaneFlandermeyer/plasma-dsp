@@ -7,6 +7,22 @@
 namespace plasma {
 
 /**
+ * @brief Compute the matched filter response for a the input vector
+ *
+ * This is just a convolution, but it's included to have a consistent interface
+ *
+ * @tparam T The (real-valued) input precision
+ * @param in Input data vector
+ * @param ref Matched filter reference waveform
+ * @return std::vector<std::complex<T>> Matched filter response
+ */
+template <typename T>
+std::vector<std::complex<T>> MatchedFilterResponse(std::vector<std::complex<T>> &in,
+                                           std::vector<std::complex<T>> &ref) {
+  return conv(in, ref);
+}
+
+/**
  * @brief Compute the matched filter response for a the input matrix
  *
  * @tparam T The (real-valued) input precision
@@ -15,7 +31,7 @@ namespace plasma {
  * @return Matrix2D<T> Matrix where each column is a matched filter response
  */
 template <typename T>
-Matrix2D<std::complex<T>> MatchedFilter(Matrix2D<std::complex<T>> &in,
+Matrix2D<std::complex<T>> MatchedFilterResponse(Matrix2D<std::complex<T>> &in,
                                         std::vector<std::complex<T>> &ref) {
   using namespace Eigen;
   auto conv_length = in.rows() + ref.size() - 1;
@@ -64,7 +80,7 @@ Matrix2D<std::complex<T>> RangeDopplerMap(Matrix2D<std::complex<T>> pulses,
   auto conv_length = pulses.rows() + ref.size() - 1;
   Matrix<std::complex<T>, Dynamic, Dynamic> mf_resp =
       Map<Matrix<std::complex<T>, Dynamic, Dynamic>>(
-          MatchedFilter(pulses, ref).data(), conv_length, num_pulses);
+          MatchedFilterResponse(pulses, ref).data(), conv_length, num_pulses);
   // Compute the FFT across each row
   FFT<T> fft;
   auto out = Matrix<std::complex<T>, Dynamic, Dynamic>(conv_length, num_pulses);
