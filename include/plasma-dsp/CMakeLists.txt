@@ -2,6 +2,7 @@
 list(APPEND
   PLASMA_HEADERS
   barkercode.h
+  circ_shift.h
   constants.h
   fmcwwaveform.h
   linearfmwaveform.h

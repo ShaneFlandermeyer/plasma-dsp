@@ -1,15 +1,15 @@
 #include <Eigen/Dense>
 #include <unsupported/Eigen/FFT>
 
+#include "circ_shift.h"
 #include "matrix2d.h"
 #include "vector-utils.h"
 namespace plasma {
 // TODO: Move this somewhere else
 
-
 /**
  * @brief Compute the matched filter response for a the input matrix
- * 
+ *
  * @tparam T The (real-valued) input data type
  * @param in Fast-time slow-time matrix of input data
  * @param ref Matched filter reference waveform
@@ -47,7 +47,7 @@ Matrix2D<T> MatchedFilter(Matrix2D<T> &in, std::vector<T> &ref) {
 
 /**
  * @brief Compute the matched filter response for a the input matrix
- * 
+ *
  * @tparam T The (complex-valued) input data type
  * @param in Fast-time slow-time matrix of input data
  * @param ref Matched filter reference waveform
@@ -79,6 +79,69 @@ Matrix2D<std::complex<T>> MatchedFilter(Matrix2D<std::complex<T>> &in,
         ref_fft.array() * fft.fwd(in_mat.col(i_col), conv_length).array();
     out.col(i_col) = fft.inv(out.col(i_col));
   }
+  return Matrix2D<std::complex<T>>(
+      out.rows(), out.cols(),
+      std::vector<std::complex<T>>(out.data(), out.data() + out.size()));
+}
+
+/**
+ * @brief Generate a range-doppler map from real-valued data
+ * 
+ * This map is a matrix where the rows are the range bins and the columns are
+ * the doppler bins. 
+ *
+ * @tparam T Input type (real-valued)
+ * @param pulses Fast-time slow-time matrix of input pulses
+ * @param ref Time-reversed complex conjugate of the transmitted waveform
+ * @return Matrix2D<T> Range-Doppler map
+ */
+template <typename T>
+Matrix2D<T> RangeDopplerMap(Matrix2D<T> pulses, std::vector<T> ref) {
+  using namespace Eigen;
+  auto num_pulses = pulses.cols();
+  auto conv_length = pulses.rows() + ref.size() - 1;
+  // Do matched filtering for every pulse (column)
+  // TODO: MF isn't the only way to generate a range range response
+  Matrix<T, Dynamic, Dynamic> mf_resp = Map<Matrix<T, Dynamic, Dynamic>>(
+      MatchedFilter(pulses, ref).data(), conv_length, num_pulses);
+  // Compute the FFT across each row
+  FFT<T> fft;
+  auto out = Matrix<T, Dynamic, Dynamic>(conv_length, num_pulses);
+  for (int i_row = 0; i_row < conv_length; i_row++)
+    out.row(i_row) = fft.fwd(mf_resp.row(i_row));
+  // Shift 0 doppler to the center of the map and return
+  out = Matrix<T, Dynamic, Dynamic>(Eigen::fftshift(out));
+  return Matrix2D<T>(out.rows(), out.cols(),
+                     std::vector<T>(out.data(), out.data() + out.size()));
+}
+
+/**
+ * @brief Generate a range-doppler map from complex-valued data
+ * 
+ * This map is a matrix where the rows are the range bins and the columns are
+ * the doppler bins. 
+ *
+ * @tparam T Input type (real-valued)
+ * @param pulses Fast-time slow-time matrix of input pulses
+ * @param ref Time-reversed complex conjugate of the transmitted waveform
+ * @return Matrix2D<T> Range-Doppler map
+ */
+template <typename T>
+Matrix2D<std::complex<T>> RangeDopplerMap(Matrix2D<std::complex<T>> pulses,
+                                          std::vector<std::complex<T>> ref) {
+  using namespace Eigen;
+  auto num_pulses = pulses.cols();
+  auto conv_length = pulses.rows() + ref.size() - 1;
+  Matrix<std::complex<T>, Dynamic, Dynamic> mf_resp =
+      Map<Matrix<std::complex<T>, Dynamic, Dynamic>>(
+          MatchedFilter(pulses, ref).data(), conv_length, num_pulses);
+  // Compute the FFT across each row
+  FFT<T> fft;
+  auto out = Matrix<std::complex<T>, Dynamic, Dynamic>(conv_length, num_pulses);
+  for (int i_row = 0; i_row < conv_length; i_row++)
+    out.row(i_row) = fft.fwd(mf_resp.row(i_row));
+  // Shift 0 doppler to the center of the map and return
+  out = Matrix<std::complex<T>, Dynamic, Dynamic>(Eigen::fftshift(out));
   return Matrix2D<std::complex<T>>(
       out.rows(), out.cols(),
       std::vector<std::complex<T>>(out.data(), out.data() + out.size()));
