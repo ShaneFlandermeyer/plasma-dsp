@@ -44,7 +44,10 @@ int main() {
   image(rd_map_vec, true);
 
 
-  CACFAR(rd_map);
+  figure();
+  auto autocorr = MatchedFilterResponse(wave,mf);
+  plot(db(abs(autocorr)));
+  CACFAR(autocorr);
   show();
   return 0;
 }
