@@ -14,6 +14,7 @@
 #include "squarewaveform.h"
 #include "vector-utils.h"
 #include "window.h"
+#include "cfar.h"
 
 using namespace matplot;
 using namespace plasma;
@@ -42,11 +43,8 @@ int main() {
       rd_map_vec[i_row][i_col] = 10*log10(abs(rd_map(i_row, i_col)));
   image(rd_map_vec, true);
 
-  figure();
-  auto autocorr = MatchedFilterResponse(wave,mf);
-  plot(db(abs(autocorr)));
-  show();
 
-  
+  CACFAR(rd_map);
+  show();
   return 0;
 }
