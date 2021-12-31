@@ -68,6 +68,13 @@ class Matrix2D {
    * @return auto Pointer to the matrix data vector
    */
   auto data() { return d_data.data(); };
+  
+  /**
+   * @brief Return a std vector copy of the matrix data
+   * 
+   * @return auto 
+   */
+  auto vector() { return d_data; };
 
   /**
    * @brief Return the number of elements in the matrix
