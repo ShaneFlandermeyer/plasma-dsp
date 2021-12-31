@@ -8,7 +8,7 @@
  *
  * This class is primarly intended to provide a convenient interface between STL
  * vectors and Eigen matrices. Eigen should be used where speed is critical.
- * 
+ *
  * The data is stored in column-major order.
  *
  */
@@ -45,9 +45,6 @@ class Matrix2D {
    * @return T& Element
    */
   T& operator()(unsigned int row, unsigned int col);
-
-  template <typename Y>
-  friend std::ostream& operator<<(std::ostream& os, const Matrix2D<Y>& mat);
 
   /**
    * @brief Return a copy of the matrix data in the given column
@@ -92,6 +89,26 @@ class Matrix2D {
    * @return auto
    */
   auto cols() const { return d_num_cols; };
+
+  /**
+   * @brief Type cast operator
+   * 
+   * Converts a Matrix2D object to a vector of vectors of the same type.
+   * 
+   * @return std::vector<std::vector<T>> 
+   */
+  operator std::vector<std::vector<T>>();
+
+  /**
+   * @brief Prints the matrix data to stdout
+   * 
+   * @tparam U Matrix element data type
+   * @param os ostream object
+   * @param mat Matrix2D object
+   * @return std::ostream& 
+   */
+  template <typename U>
+  friend std::ostream& operator<<(std::ostream& os, const Matrix2D<U>& mat);
 
  protected:
   /**
@@ -160,6 +177,15 @@ T& Matrix2D<T>::operator()(unsigned int row, unsigned int col) {
     throw std::out_of_range("Matrix2D: index out of range");
   }
   return d_data[col * d_num_rows + row];
+}
+
+template <typename T>
+Matrix2D<T>::operator std::vector<std::vector<T>>() {
+  std::vector<std::vector<T>> out(d_num_rows);
+  for (int i_row = 0; i_row < d_num_rows; i_row++) {
+    out[i_row] = row(i_row);
+  }
+  return out;
 }
 
 template <typename T>

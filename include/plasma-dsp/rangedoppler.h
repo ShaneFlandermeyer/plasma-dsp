@@ -4,6 +4,7 @@
 #include "circ_shift.h"
 #include "matrix2d.h"
 #include "vector-utils.h"
+#include "signal-processing.h"
 namespace plasma {
 
 /**
