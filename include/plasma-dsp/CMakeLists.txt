@@ -6,7 +6,6 @@ list(APPEND
   constants.h
   fmcwwaveform.h
   linearfmwaveform.h
-  matrix2d.h
   pcfm.h
   phasecode.h
   phasecodedwaveform.h
@@ -20,6 +19,7 @@ list(APPEND
   vector-utils.h
 )
 
+# FIXME: This may not work properly for the system-wide installation
 configure_file(
   "${PROJECT_SOURCE_DIR}/include/plasma-dsp/config.h.in"
   "${PROJECT_BINARY_DIR}/include/plasma-dsp/config.h"
