@@ -20,6 +20,11 @@ list(APPEND
   vector-utils.h
 )
 
+configure_file(
+  "${PROJECT_SOURCE_DIR}/include/plasma-dsp/config.h.in"
+  "${PROJECT_BINARY_DIR}/include/plasma-dsp/config.h"
+)
+
 # System-wide installation
 install(FILES
   ${PLASMA_HEADERS}
