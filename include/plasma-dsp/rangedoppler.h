@@ -19,14 +19,15 @@ MatrixXcd MatchedFilterResponse(const MatrixXcd& in, const VectorXcd& ref) {
   auto conv_length = in.rows() + ref.size() - 1;
   auto num_pulses = in.cols();
   auto in_zeros = MatrixXcd::Zero(conv_length - in.rows(), num_pulses);
-  // TODO: Define a concatenation function in MatrixBaseAddons.h
   // Zero-pad the inputs
+  // TODO: Define a concatenation function in MatrixBaseAddons.h
   MatrixXcd in_mat(conv_length, num_pulses);
   in_mat << in, in_zeros;
   auto ref_zeros = VectorXcd::Zero(conv_length - ref.size());
   VectorXcd ref_vec(conv_length);
   ref_vec << ref, ref_zeros;
-
+  // Use FFT convolution to compute the filter response
+  // TODO: Break this out into a more general convolution function
   auto out = MatrixXcd(conv_length, num_pulses);
   Eigen::FFT<double> fft;
   auto ref_fft = fft.fwd(ref_vec);
@@ -42,21 +43,24 @@ MatrixXcd MatchedFilterResponse(const MatrixXcd& in, const VectorXcd& ref) {
  *
  * This map is a matrix where the rows are the range bins and the columns are
  * the doppler bins.
+ * 
+ * TODO: Make this work for complex floats as well
  *
- * @tparam T Input type (real-valued)
  * @param pulses Fast-time slow-time matrix of input pulses
  * @param ref Time-reversed complex conjugate of the transmitted waveform
- * @return Matrix2D<T> Range-Doppler map
+ * @return MatrixXcd Range-Doppler map
  */
 MatrixXcd RangeDopplerMap(const MatrixXcd& pulses, const VectorXcd& ref) {
   auto num_pulses = pulses.cols();
   auto conv_length = pulses.rows() + ref.size() - 1;
+  MatrixXcd out = MatrixXcd(conv_length, num_pulses);
+  // The matched filter output gives the range response
   MatrixXcd mf_resp = MatchedFilterResponse(pulses, ref);
-  MatrixXcd out = MatrixXcd::Zero(conv_length, num_pulses);
+  // The doppler response is the FFT across pulses
+  // TODO: Enable oversampling in doppler
   Eigen::FFT<double> fft;
-  for (size_t i_row = 0; i_row < out.rows(); i_row++) {
+  for (size_t i_row = 0; i_row < out.rows(); i_row++) 
     out.row(i_row) << fft.fwd(mf_resp.row(i_row),num_pulses);
-  }
   out = MatrixXcd(Eigen::fftshift(out));
   return out;
 }
