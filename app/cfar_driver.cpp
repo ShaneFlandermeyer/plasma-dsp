@@ -1,40 +1,58 @@
+#include "cfar.h"
 #include "config.h"
+#include "linearfmwaveform.h"
+#include "matrix-utils.h"
+#include "rangedoppler.h"
+
+#include <random>
+#include <Eigen/Dense>
 #include <matplot/matplot.h>
 
-#include <Eigen/Dense>
-
-#include "cfar.h"
-
-#include "linearfmwaveform.h"
-#include "rangedoppler.h"
 using namespace plasma;
 using namespace matplot;
 using namespace Eigen;
 int main() {
-  // Generate the waveform and matched filter
-  auto lfm = LinearFMWaveform(10e6, 10e-6, 10e3, 20e6);
-  MatrixXcd wave =
-      Map<MatrixXcd>(lfm.waveform().data(), lfm.waveform().size(), 1);
-  VectorXcd mf =
-      Map<VectorXcd>(lfm.MatchedFilter().data(), lfm.MatchedFilter().size());
-  // Generate a fast-time slow-time matrix
-  // TODO: Simulate this for targets with nonzero range and doppler
-  auto num_pulses_cpi = 64;
-  auto cpi_matrix = MatrixXcd(num_pulses_cpi, num_pulses_cpi);
-  cpi_matrix.colwise() = Map<VectorXcd>(wave.data(), wave.size());
 
-  MatrixXcd rd_map = RangeDopplerMap(cpi_matrix,mf);
-  MatrixXd rd_map_db = 10*log10(abs(rd_map.array())).matrix();
-  figure();
-  auto x_min = -rd_map.cols()/2;
-  auto x_max = rd_map.cols()/2;
-  auto y_min = 0;
-  auto y_max = rd_map.rows();
-  gca()->imagesc(x_min,x_max,y_min,y_max,rd_map_db.vector2d());
-  gca()->xlabel("(Centered) Pulse Index");
-  gca()->ylabel("Range Bin Index");
+  //! CFAR parameters
+  auto method = "CA";
+  auto num_guard_cells = 2;
+  auto num_train_cells = 20;
+  auto pfa = 1e-3;
 
-  colorbar();
-  show();
+  //! Generate data
+  // The data sequence is 23 samples long, and the CUT is at index 12. This
+  // leaves 10 training cells and 1 guard cell on each side of the CUT.
+  // The false alarm rate is calculated using 100k Monte carlo trials
+  // TODO: Create seed
+  auto noise_power = pow(10, -10 / 10);
+  size_t num_trials = 100e3;
+  size_t num_cells = 23;
+  size_t cut_index = 12;
+  // Compute the input samples
+  // std::default_random_engine gen;
+  std::mt19937 gen{1000};
+  std::normal_distribution<> normal{0, 1};
+  MatrixX<std::complex<double>> rsamp(num_cells, num_trials);
+  MatrixX<double> x(num_cells, num_trials);
+  // num_cells x num_trials matrix of AWGN samples
+  for (size_t i = 0; i < num_cells; ++i)
+    for (size_t j = 0; j < num_trials; ++j)
+      rsamp(i, j) = std::complex<double>(normal(gen), normal(gen));
+  // Noise samples after the square law detector
+  x = abs2(sqrt(noise_power / 2) * rsamp.array());
+
+  //! Do CFAR
+  // TODO: The numbers look reasonable, but the detection don't >:(
+  std::vector<bool> x_detected = cfar(x, cut_index);
+  for (size_t i = 0; i < x_detected.size(); ++i) {
+    if (x_detected[i] > 0) {
+      std::cout << "detection" << std::endl;
+    }
+  }
+  //! Figures
+  // figure();
+  // std::vector<double> x2 = x.vector1d();
+  // plot(x2);
+  // show();
   return 0;
 }
