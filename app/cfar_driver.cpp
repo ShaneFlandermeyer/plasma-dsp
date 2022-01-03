@@ -3,6 +3,7 @@
 #include "linearfmwaveform.h"
 #include "matrix-utils.h"
 #include "rangedoppler.h"
+#include "vector-utils.h"
 
 #include <random>
 #include <Eigen/Dense>
@@ -41,14 +42,12 @@ int main() {
   // Noise samples after the square law detector
   x = abs2(sqrt(noise_power / 2) * rsamp.array());
 
+  // TODO: Delete this
+  std::vector<double> outvec(x.data(),x.data() + x.size());
+  write_binary<double>("/home/shane/bin.dat",outvec);
+
   //! Do CFAR
-  // TODO: The numbers look reasonable, but the detection don't >:(
   std::vector<bool> x_detected = cfar(x, cut_index);
-  for (size_t i = 0; i < x_detected.size(); ++i) {
-    if (x_detected[i] > 0) {
-      std::cout << "detection" << std::endl;
-    }
-  }
   //! Figures
   // figure();
   // std::vector<double> x2 = x.vector1d();
