@@ -2,8 +2,7 @@
 #include <unsupported/Eigen/FFT>
 
 #include "circ_shift.h"
-#include "signal-processing.h"
-#include "vector-utils.h"
+#include "matrix-utils.h"
 namespace plasma {
 using namespace Eigen;
 
@@ -15,17 +14,12 @@ using namespace Eigen;
  * @param ref Matched filter reference waveform
  * @return Matrix2D<T> Matrix where each column is a matched filter response
  */
-MatrixXcd MatchedFilterResponse(const MatrixXcd& in, const VectorXcd& ref) {
+MatrixXcd MatchedFilterResponse(const MatrixXcd &in, const VectorXcd &ref) {
   auto conv_length = in.rows() + ref.size() - 1;
   auto num_pulses = in.cols();
-  auto in_zeros = MatrixXcd::Zero(conv_length - in.rows(), num_pulses);
   // Zero-pad the inputs
-  // TODO: Define a concatenation function in MatrixBaseAddons.h
-  MatrixXcd in_mat(conv_length, num_pulses);
-  in_mat << in, in_zeros;
-  auto ref_zeros = VectorXcd::Zero(conv_length - ref.size());
-  VectorXcd ref_vec(conv_length);
-  ref_vec << ref, ref_zeros;
+  MatrixXcd in_mat = vcat(in, MatrixXcd(conv_length - in.rows(), num_pulses));
+  VectorXcd ref_vec = vcat(ref, VectorXcd(conv_length - ref.size()));
   // Use FFT convolution to compute the filter response
   // TODO: Break this out into a more general convolution function
   auto out = MatrixXcd(conv_length, num_pulses);
@@ -43,14 +37,14 @@ MatrixXcd MatchedFilterResponse(const MatrixXcd& in, const VectorXcd& ref) {
  *
  * This map is a matrix where the rows are the range bins and the columns are
  * the doppler bins.
- * 
+ *
  * TODO: Make this work for complex floats as well
  *
  * @param pulses Fast-time slow-time matrix of input pulses
  * @param ref Time-reversed complex conjugate of the transmitted waveform
  * @return MatrixXcd Range-Doppler map
  */
-MatrixXcd RangeDopplerMap(const MatrixXcd& pulses, const VectorXcd& ref) {
+MatrixXcd RangeDopplerMap(const MatrixXcd &pulses, const VectorXcd &ref) {
   auto num_pulses = pulses.cols();
   auto conv_length = pulses.rows() + ref.size() - 1;
   MatrixXcd out = MatrixXcd(conv_length, num_pulses);
@@ -59,10 +53,10 @@ MatrixXcd RangeDopplerMap(const MatrixXcd& pulses, const VectorXcd& ref) {
   // The doppler response is the FFT across pulses
   // TODO: Enable oversampling in doppler
   Eigen::FFT<double> fft;
-  for (size_t i_row = 0; i_row < out.rows(); i_row++) 
-    out.row(i_row) << fft.fwd(mf_resp.row(i_row),num_pulses);
+  for (size_t i_row = 0; i_row < out.rows(); i_row++)
+    out.row(i_row) << fft.fwd(mf_resp.row(i_row), num_pulses);
   out = MatrixXcd(Eigen::fftshift(out));
   return out;
 }
 
-}  // namespace plasma
+} // namespace plasma

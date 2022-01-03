@@ -1,38 +1,42 @@
+#include "config.h"
 #include <matplot/matplot.h>
 
+#include <Eigen/Dense>
+
 #include "cfar.h"
+
 #include "linearfmwaveform.h"
 #include "rangedoppler.h"
-
 using namespace plasma;
 using namespace matplot;
+using namespace Eigen;
 int main() {
   // Generate the waveform and matched filter
-  auto lfm = LinearFMWaveform(10e6, 10e-6, 1e3, 20e6);
-  auto wave = lfm.waveform();
-  auto mf = lfm.MatchedFilter();
+  auto lfm = LinearFMWaveform(10e6, 10e-6, 10e3, 20e6);
+  MatrixXcd wave =
+      Map<MatrixXcd>(lfm.waveform().data(), lfm.waveform().size(), 1);
+  VectorXcd mf =
+      Map<VectorXcd>(lfm.MatchedFilter().data(), lfm.MatchedFilter().size());
   // Generate a fast-time slow-time matrix
   // TODO: Simulate this for targets with nonzero range and doppler
   auto num_pulses_cpi = 64;
-  auto cpi_matrix = Matrix2D<std::complex<double>>(wave.size(), num_pulses_cpi);
-  for (int i_pulse = 0; i_pulse < num_pulses_cpi; i_pulse++) {
-    for (int i_samp = 0; i_samp < wave.size(); i_samp++) {
-      cpi_matrix(i_samp, i_pulse) = wave[i_samp];
-    }
-  }
+  auto cpi_matrix = MatrixXcd(num_pulses_cpi, num_pulses_cpi);
+  cpi_matrix.colwise() = Map<VectorXcd>(wave.data(), wave.size());
 
   // Compute and plot the matched filter response
-  auto autocorr = MatchedFilterResponse(wave, mf);
+  MatrixXcd autocorr = MatchedFilterResponse(cpi_matrix, mf);
+  MatrixXd autocorr_db = 10*log10(abs(autocorr.array())).matrix();
   figure();
-  plot(db(abs(autocorr)));
+  plot(transpose(autocorr_db.vector2d())[1]);
 
-  // Compute the range-doppler map and do CFAR
-  auto rd_map = RangeDopplerMap(cpi_matrix, mf);
-  Matrix2D<double> rd_map_db(rd_map.rows(), rd_map.cols(),
-                             db(abs(rd_map.vector())));
+
+  MatrixXcd rd_map = RangeDopplerMap(cpi_matrix,mf);
+  MatrixXd rd_map_db = 10*log10(abs(rd_map.array())).matrix();
   figure();
-  image(rd_map_db, true);
-  // rd_map_db = rd_map;
-
+  image(rd_map_db.vector2d(),true);
+  // plot(transpose(rd_map_db.vector2d()));
+  // legend(on);
+  colorbar();
   show();
+  return 0;
 }
