@@ -23,19 +23,17 @@ int main() {
   auto cpi_matrix = MatrixXcd(num_pulses_cpi, num_pulses_cpi);
   cpi_matrix.colwise() = Map<VectorXcd>(wave.data(), wave.size());
 
-  // Compute and plot the matched filter response
-  MatrixXcd autocorr = MatchedFilterResponse(cpi_matrix, mf);
-  MatrixXd autocorr_db = 10*log10(abs(autocorr.array())).matrix();
-  figure();
-  plot(transpose(autocorr_db.vector2d())[1]);
-
-
   MatrixXcd rd_map = RangeDopplerMap(cpi_matrix,mf);
   MatrixXd rd_map_db = 10*log10(abs(rd_map.array())).matrix();
   figure();
-  image(rd_map_db.vector2d(),true);
-  // plot(transpose(rd_map_db.vector2d()));
-  // legend(on);
+  auto x_min = -rd_map.cols()/2;
+  auto x_max = rd_map.cols()/2;
+  auto y_min = 0;
+  auto y_max = rd_map.rows();
+  gca()->imagesc(x_min,x_max,y_min,y_max,rd_map_db.vector2d());
+  gca()->xlabel("(Centered) Pulse Index");
+  gca()->ylabel("Range Bin Index");
+
   colorbar();
   show();
   return 0;
