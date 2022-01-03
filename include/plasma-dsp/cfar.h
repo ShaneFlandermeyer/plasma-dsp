@@ -6,16 +6,64 @@
 
 namespace plasma {
 // TODO: Make a CFAR object?
+
 /**
- * @brief Perform 1D CA-CFAR detection on a single cell under test (CUT).
+ * @brief Constant False Alarm Rate (CFAR) detector object
  *
+ * TODO: Currently only implements cell-averaging CFAR.
+ * TODO: Currently only supports 1D CFAR.
+ * TODO: Does not handle edge cases.
  *
- * @param x Matrix of input samples with size # of cells x # of trials
- * @param cut_index Vector index of cell under test (i.e., a row of x)
- * @return std::vector<bool> Vector with length = # of trials, where at each
- * element the result is true if there is a detection in the CUT and false
- * otherwise.
  */
-std::vector<bool> cfar(Eigen::MatrixXd &x, size_t cut_index);
+class CFARDetector {
+public:
+  /**
+   * @brief Construct a new CFARDetector object
+   *
+   */
+  CFARDetector() = default;
+  /**
+   * @brief Construct a new CFARDetector object
+   *
+   */
+  CFARDetector(const CFARDetector &) = default;
+  /**
+   * @brief Construct a new CFARDetector object
+   *
+   * @param num_train Number of training cells
+   * @param num_guard Number of guard cells
+   * @param pfa Probability of false alarm
+   */
+  CFARDetector(size_t num_train, size_t num_guard, double pfa);
+  /**
+   * @brief Perform CFAR detection on the specified elements of the input data
+   *
+   * @param x M x N matrix of real-valued input data, where M is the number of
+   * cells in the CFAR window and N is the number of samples.
+   * @param cut_index Index of the current cell under test (CUT)
+   * @return std::vector<bool> D x N matrix containing logical detection
+   * results, where D is the length of cut_index and N is the number of rows in
+   * x.
+   */
+  std::vector<bool> detect(const Eigen::MatrixXd &x, size_t cut_index);
+
+protected:
+  /**
+   * @brief Number of guard cells on either side of the cell under test
+   *
+   */
+  size_t d_num_guard_cells;
+  /**
+   * @brief Number of training cells on either side of the cell under test
+   *
+   */
+  size_t d_num_train_cells;
+  /**
+   * @brief Probability of false alarm
+   *
+   */
+  double d_pfa;
+};
+
 } // namespace plasma
 #endif /* D4D7CDC7_8DAA_42DF_A71A_3840A89194E5 */

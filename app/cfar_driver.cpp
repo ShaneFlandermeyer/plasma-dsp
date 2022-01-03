@@ -1,5 +1,5 @@
 #include "cfar.h"
-#include "config.h"
+#include "eigen-config.h"
 #include "linearfmwaveform.h"
 #include "matrix-utils.h"
 #include "rangedoppler.h"
@@ -19,6 +19,7 @@ int main() {
   auto num_guard_cells = 2;
   auto num_train_cells = 20;
   auto pfa = 1e-3;
+  CFARDetector ca_cfar(num_train_cells,num_guard_cells,pfa);
 
   //! Generate data
   // The data sequence is 23 samples long, and the CUT is at index 12. This
@@ -43,15 +44,15 @@ int main() {
   x = abs2(sqrt(noise_power / 2) * rsamp.array());
 
   // TODO: Delete this
-  std::vector<double> outvec(x.data(),x.data() + x.size());
-  write_binary<double>("/home/shane/bin.dat",outvec);
+  std::vector<double> outvec(x.data(), x.data() + x.size());
+  write_binary<double>("/home/shane/bin.dat", outvec);
 
   //! Do CFAR
-  std::vector<bool> x_detected = cfar(x, cut_index);
+  std::vector<bool> x_detected = ca_cfar.detect(x, cut_index);
+  // Print the total # of detections (for debugging)
+  std::cout << std::accumulate(x_detected.begin(), x_detected.end(), 0)
+            << std::endl;
+
   //! Figures
-  // figure();
-  // std::vector<double> x2 = x.vector1d();
-  // plot(x2);
-  // show();
   return 0;
 }
