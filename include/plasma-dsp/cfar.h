@@ -147,16 +147,15 @@ public:
 
   /**
    * @brief Perform CFAR detection on the specified elements of the input data
-   *
-   * TODO: Currently only supports vector inputs
-   *
+   *   
    * @param x M x N matrix of real-valued input data, where M is the number of
    * range bins and N is the number of time instances in the input signal.
-   * @param cut_index Zero-indexed index of the current cell under test (CUT)
+   * @param cut_row Zero-indexed row of the current cell under test (CUT)
+   * @param cut_row Zero-indexed column of the current cell under test (CUT)
    * @return std::vector<bool> N-vector containing logical detection
    * results for each time instance, where N is the number of rows in x
    */
-  void detect(const Eigen::MatrixXd &x, size_t cut_index,
+  void detect(const Eigen::MatrixXd &x, size_t cut_row, size_t cut_col, 
               DetectionReport &result);
 
 protected:

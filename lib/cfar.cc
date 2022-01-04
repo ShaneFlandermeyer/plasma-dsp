@@ -106,5 +106,25 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
 // *****************************************************************************
 // * CFARDetector2D
 // *****************************************************************************
+CFARDetector2D::CFARDetector2D(size_t size_train, size_t size_guard,
+                               double pfa) {
+  d_size_guard_win = size_guard;
+  d_size_train_win = size_train;
+  d_pfa = pfa;
+}
+
+DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
+  std::vector<bool> detections(x.rows(), false);
+  DetectionReport result;
+  for (size_t i = 0; i < x.rows(); ++i) {
+    for (size_t j = 0; j < x.cols(); ++j) {
+      detect(x, i, j, result);
+    }
+  }
+  return result;
+}
+
+void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
+                            size_t cut_col, DetectionReport &result) {}
 
 } // namespace plasma
