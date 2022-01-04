@@ -1,9 +1,5 @@
 #include "cfar.h"
-#include "eigen-config.h"
-#include "linearfmwaveform.h"
 #include "matrix-utils.h"
-#include "rangedoppler.h"
-#include "vector-utils.h"
 
 #include <random>
 #include <Eigen/Dense>
@@ -44,10 +40,6 @@ int main() {
 
   //! Do CFAR
   DetectionReport detections = ca_cfar.detect(x);
-  // std::cout << detections.indices.size() << std::endl;
-  // for(auto &index : detections.indices)
-  //   std::cout << index << std::endl;
-  
 
   //! Figures
   // Input data
@@ -63,11 +55,11 @@ int main() {
   std::vector<double> detvec(detections.indices.size());
   for (size_t i = 0; i < detections.indices.size(); ++i)
     detvec[i] = x(detections.indices(i));
-  
+
   plot(xvec);
   hold(true);
   plot(threshvec);
-  plot(indices,detvec,"o");
+  plot(indices, detvec, "o");
   hold(false);
   show();
   return 0;

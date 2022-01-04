@@ -6,6 +6,6 @@ add_executable(fmcw fmcw_driver.cpp)
 target_link_libraries(fmcw PUBLIC Matplot++::matplot plasma-dsp)
 target_include_directories(fmcw PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
-add_executable(cfar cfar_driver.cpp)
+add_executable(cfar cfar_1d.cpp)
 target_link_libraries(cfar PUBLIC Matplot++::matplot plasma-dsp)
 target_include_directories(cfar PUBLIC ${CMAKE_SOURCE_DIR}/include)
