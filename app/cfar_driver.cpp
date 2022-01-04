@@ -50,10 +50,14 @@ int main() {
 
   //! Figures
   std::vector<double> xvec(x.data(), x.data() + x.size());
-
+  std::vector<double> detvec(detections.indices.size());
+  for (size_t i = 0; i < detections.indices.size(); ++i)
+    detvec[i] = x(detections.indices[i]);
   plot(xvec);
   hold(true);
   plot(detections.threshold);
+  plot(detections.indices,detvec,"o");
+  hold(false);
   show();
   return 0;
 }
