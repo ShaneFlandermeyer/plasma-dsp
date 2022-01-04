@@ -22,10 +22,10 @@ int main() {
 
   //! CFAR parameters
   auto method = "CA";
-  auto num_guard_cells = 2;
-  auto num_train_cells = 200;
+  size_t num_guard_cells = 2;
+  size_t num_train_cells = 200;
   auto pfa = 1e-3;
-  CFARDetector ca_cfar(num_train_cells, num_guard_cells, pfa);
+  CFARDetector ca_cfar {num_train_cells, num_guard_cells, pfa};
 
   //! Generate data
   // The input data is a square-law input signal with increasing noise power
