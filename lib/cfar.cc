@@ -10,39 +10,39 @@ CFARDetector::CFARDetector(size_t num_train, size_t num_guard, double pfa) {
   d_pfa = pfa;
 }
 
-std::vector<bool> CFARDetector::detect(const Eigen::MatrixXd &x) {
+DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
   std::vector<bool> detections(x.rows(), false);
-  for (size_t i = 1; i <= x.rows(); ++i) {
-    // TODO: Currently assumes the number of rows in x is 1
-    detections[i] = detect(x, i)[0];
+  DetectionReport result;
+  for (size_t i = 0; i < x.rows(); ++i) {
+    detect(x, i, result);
   }
-  return detections;
+  return result;
 }
 
-std::vector<bool> CFARDetector::detect(const Eigen::MatrixXd &x,
-                                       size_t cut_index) {
+void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
+                          DetectionReport &result) {
   using namespace Eigen;
   // Current cell under test
-  ArrayXd cut = x.row(cut_index - 1);
+  ArrayXd cut = x.row(cut_index);
 
   // Index of the beginning and end of each window
-  int front_win_start =
-      std::max(static_cast<int>((cut_index - 1) - d_num_guard_cells / 2 -
+  size_t front_win_start =
+      std::max(static_cast<int>(cut_index - d_num_guard_cells / 2 -
                                 d_num_train_cells / 2),
                0);
-  int front_win_end =
-      std::max(static_cast<int>((cut_index - 1) - d_num_guard_cells / 2), 0);
+  size_t front_win_end =
+      std::max(static_cast<int>(cut_index - d_num_guard_cells / 2), 0);
 
-  int rear_win_start =
-      std::min(static_cast<int>((cut_index - 1) + d_num_guard_cells / 2 + 1),
+  size_t rear_win_start =
+      std::min(static_cast<int>(cut_index + d_num_guard_cells / 2 + 1),
                static_cast<int>(x.rows()));
-  int rear_win_end =
+  size_t rear_win_end =
       std::min(static_cast<int>(rear_win_start + d_num_train_cells / 2),
                static_cast<int>(x.rows()));
 
   // Number of cells in each training window before compensation
-  int num_train_cells_front = front_win_end - front_win_start;
-  int num_train_cells_rear = rear_win_end - rear_win_start;
+  size_t num_train_cells_front = front_win_end - front_win_start;
+  size_t num_train_cells_rear = rear_win_end - rear_win_start;
   // Resize the windows to use the desired number of training cells
   if (num_train_cells_front < num_train_cells_rear) {
     num_train_cells_rear += d_num_train_cells / 2 - num_train_cells_front;
@@ -64,14 +64,18 @@ std::vector<bool> CFARDetector::detect(const Eigen::MatrixXd &x,
   ArrayXd power = (front.array() + rear.array()).colwise().sum();
 
   // Compute the threshold factor and the threshold
-  size_t N = d_num_train_cells;
-  auto alpha = (pow(d_pfa, -1 / (double)N) - 1);
+  auto alpha = (pow(d_pfa, -1 / (double)d_num_train_cells) - 1);
   ArrayXd threshold = alpha * power;
 
-  // Compare data to the threshold and return the results as a vector of bool
+  // Compare data to the threshold
   Array<int, Dynamic, 1> detections = (cut > threshold).cast<int>();
-  return std::vector<bool>(detections.data(),
-                           detections.data() + detections.size());
+
+  // Update the results struct
+  result.detections.push_back(detections(0));
+  result.threshold.push_back(threshold(0));
+  if (detections(0)) {
+    result.indices.push_back(cut_index);
+  }
 }
 
 } // namespace plasma

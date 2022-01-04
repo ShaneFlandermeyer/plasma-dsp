@@ -5,14 +5,37 @@
 #include <Eigen/Dense>
 
 namespace plasma {
-// TODO: Make a CFAR object?
+
+/**
+ * @brief A struct used to store the results of a CFAR detection
+ *
+ * TODO: This struct currently only supports vector inputs to detect()
+ *
+ */
+struct DetectionReport {
+  /**
+   * @brief A logical vector indicating whether a target was detected in each
+   * range bin
+   *
+   */
+  std::vector<bool> detections;
+  /**
+   * @brief A vector of the range bin indices of each detection
+   *
+   */
+  std::vector<size_t> indices;
+  /**
+   * @brief A vector of the computed CFAR threshold at each range bin
+   *
+   */
+  std::vector<double> threshold;
+};
 
 /**
  * @brief Constant False Alarm Rate (CFAR) detector object
  *
  * TODO: Currently only implements cell-averaging CFAR.
  * TODO: Currently only supports 1D CFAR.
- * TODO: Does not handle edge cases.
  *
  */
 class CFARDetector {
@@ -24,7 +47,7 @@ public:
   CFARDetector() = default;
   /**
    * @brief Construct a new CFARDetector object
-   * 
+   *
    * @param cfar CFARDetector object
    */
   CFARDetector(const CFARDetector &cfar) = default;
@@ -36,32 +59,28 @@ public:
    * @param pfa Probability of false alarm
    */
   CFARDetector(size_t num_train, size_t num_guard, double pfa);
-  
+
   /**
    * @brief Perform CFAR detection on the entire input signal
-   * 
-   * TODO: Make a detection report struct. This struct should have:
-   *  - A vector of logical detection results (done!)
-   *  - Vector (1d) or matrix (2d) of detection indices
-   *  - The threshold value at each cell
-   * 
-   * @param x An M x 1 matrix of real-valued input data. 
-   * @return std::vector<bool> 
+   *
+   * @param x An M x 1 matrix of real-valued input data.
+   * @return std::vector<bool>
    */
-  std::vector<bool> detect(const Eigen::MatrixXd &x);
-  
+  DetectionReport detect(const Eigen::MatrixXd &x);
+
   /**
    * @brief Perform CFAR detection on the specified elements of the input data
-   * 
-   * TODO: Does not support multiple CUT indices
+   *
+   * TODO: Currently only supports vector inputs
    *
    * @param x M x N matrix of real-valued input data, where M is the number of
-   * cells in the CFAR window and N is the number of trials.
-   * @param cut_index Index of the current cell under test (CUT)
+   * range bins and N is the number of time instances in the input signal.
+   * @param cut_index Zero-indexed index of the current cell under test (CUT)
    * @return std::vector<bool> N-vector containing logical detection
-   * results for each trial, where N is the number of rows in x
+   * results for each time instance, where N is the number of rows in x
    */
-  std::vector<bool> detect(const Eigen::MatrixXd &x, size_t cut_index);
+  void detect(const Eigen::MatrixXd &x, size_t cut_index,
+              DetectionReport &result);
 
 protected:
   /**

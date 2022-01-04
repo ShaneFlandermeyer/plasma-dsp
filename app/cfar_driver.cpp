@@ -17,7 +17,7 @@ int main() {
   //! CFAR parameters
   auto method = "CA";
   auto num_guard_cells = 2;
-  auto num_train_cells = 20;
+  auto num_train_cells = 200;
   auto pfa = 1e-3;
   CFARDetector ca_cfar(num_train_cells, num_guard_cells, pfa);
 
@@ -42,16 +42,18 @@ int main() {
   // write_binary<double>("/home/shane/bin.dat",filevec);
 
   //! Do CFAR
-  auto detections = ca_cfar.detect(x);
-  auto num_detections = 0;
-  for (auto d : detections)
-    num_detections += d;
-  std::cout << num_detections << std::endl;
+  DetectionReport detections = ca_cfar.detect(x);
+  std::cout << detections.indices.size() << std::endl;
+  for(auto &index : detections.indices)
+    std::cout << index << std::endl;
+  
 
   //! Figures
   std::vector<double> xvec(x.data(), x.data() + x.size());
 
   plot(xvec);
+  hold(true);
+  plot(detections.threshold);
   show();
   return 0;
 }
