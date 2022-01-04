@@ -37,8 +37,16 @@ int main() {
   ArrayXd ramp = ArrayXd::LinSpaced(num_points, 1, 10);
   x = abs2(sqrt(noise_power * ramp / 2) * rsamp.array()).matrix();
 
+  //! Write to a file
+  // std::vector<double> filevec(x.data(), x.data() + x.size());
+  // write_binary<double>("/home/shane/bin.dat",filevec);
+
   //! Do CFAR
-  auto detections = ca_cfar.detect(x,num_points/2);
+  auto detections = ca_cfar.detect(x);
+  auto num_detections = 0;
+  for (auto d : detections)
+    num_detections += d;
+  std::cout << num_detections << std::endl;
 
   //! Figures
   std::vector<double> xvec(x.data(), x.data() + x.size());

@@ -40,6 +40,11 @@ public:
   /**
    * @brief Perform CFAR detection on the entire input signal
    * 
+   * TODO: Make a detection report struct. This struct should have:
+   *  - A vector of logical detection results (done!)
+   *  - Vector (1d) or matrix (2d) of detection indices
+   *  - The threshold value at each cell
+   * 
    * @param x An M x 1 matrix of real-valued input data. 
    * @return std::vector<bool> 
    */
