@@ -19,40 +19,31 @@ int main() {
   auto num_guard_cells = 2;
   auto num_train_cells = 20;
   auto pfa = 1e-3;
-  CFARDetector ca_cfar(num_train_cells,num_guard_cells,pfa);
+  CFARDetector ca_cfar(num_train_cells, num_guard_cells, pfa);
 
   //! Generate data
-  // The data sequence is 23 samples long, and the CUT is at index 12. This
-  // leaves 10 training cells and 1 guard cell on each side of the CUT.
-  // The false alarm rate is calculated using 100k Monte carlo trials
-  // TODO: Create seed
+  // The input data is a square-law input signal with increasing noise power
   auto noise_power = pow(10, -10 / 10);
-  size_t num_trials = 100e3;
-  size_t num_cells = 23;
-  size_t cut_index = 12;
-  // Compute the input samples
+  size_t num_points = 10e3;
   // std::default_random_engine gen;
+  MatrixX<std::complex<double>> rsamp(num_points, 1);
+  MatrixXd x(rsamp.rows(), rsamp.cols());
+  // Start with samples from a complex standard normal distribution
   std::mt19937 gen{1000};
   std::normal_distribution<> normal{0, 1};
-  MatrixX<std::complex<double>> rsamp(num_cells, num_trials);
-  MatrixX<double> x(num_cells, num_trials);
-  // num_cells x num_trials matrix of AWGN samples
-  for (size_t i = 0; i < num_cells; ++i)
-    for (size_t j = 0; j < num_trials; ++j)
-      rsamp(i, j) = std::complex<double>(normal(gen), normal(gen));
-  // Noise samples after the square law detector
-  x = abs2(sqrt(noise_power / 2) * rsamp.array());
-
-  // TODO: Delete this
-  std::vector<double> outvec(x.data(), x.data() + x.size());
-  write_binary<double>("/home/shane/bin.dat", outvec);
+  for (size_t i = 0; i < num_points; ++i)
+    rsamp(i) = std::complex<double>(normal(gen), normal(gen));
+  // Create the square-law input signal
+  ArrayXd ramp = ArrayXd::LinSpaced(num_points, 1, 10);
+  x = abs2(sqrt(noise_power * ramp / 2) * rsamp.array()).matrix();
 
   //! Do CFAR
-  std::vector<bool> x_detected = ca_cfar.detect(x, cut_index);
-  // Print the total # of detections (for debugging)
-  std::cout << std::accumulate(x_detected.begin(), x_detected.end(), 0)
-            << std::endl;
+  auto detections = ca_cfar.detect(x,num_points/2);
 
   //! Figures
+  std::vector<double> xvec(x.data(), x.data() + x.size());
+
+  plot(xvec);
+  show();
   return 0;
 }

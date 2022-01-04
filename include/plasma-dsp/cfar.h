@@ -24,9 +24,10 @@ public:
   CFARDetector() = default;
   /**
    * @brief Construct a new CFARDetector object
-   *
+   * 
+   * @param cfar CFARDetector object
    */
-  CFARDetector(const CFARDetector &) = default;
+  CFARDetector(const CFARDetector &cfar) = default;
   /**
    * @brief Construct a new CFARDetector object
    *
@@ -35,15 +36,25 @@ public:
    * @param pfa Probability of false alarm
    */
   CFARDetector(size_t num_train, size_t num_guard, double pfa);
+  
+  /**
+   * @brief Perform CFAR detection on the entire input signal
+   * 
+   * @param x An M x 1 matrix of real-valued input data. 
+   * @return std::vector<bool> 
+   */
+  std::vector<bool> detect(const Eigen::MatrixXd &x);
+  
   /**
    * @brief Perform CFAR detection on the specified elements of the input data
+   * 
+   * TODO: Does not support multiple CUT indices
    *
    * @param x M x N matrix of real-valued input data, where M is the number of
-   * cells in the CFAR window and N is the number of samples.
+   * cells in the CFAR window and N is the number of trials.
    * @param cut_index Index of the current cell under test (CUT)
-   * @return std::vector<bool> D x N matrix containing logical detection
-   * results, where D is the length of cut_index and N is the number of rows in
-   * x.
+   * @return std::vector<bool> N-vector containing logical detection
+   * results for each trial, where N is the number of rows in x
    */
   std::vector<bool> detect(const Eigen::MatrixXd &x, size_t cut_index);
 
