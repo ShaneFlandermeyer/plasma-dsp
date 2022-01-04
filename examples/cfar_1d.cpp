@@ -1,3 +1,13 @@
+/**
+ * Created on Tue Jan 04 2022
+ *
+ * Shane Flandermeyer, shaneflandermeyer@gmail.com
+ *
+ * A simple example usage of the CFAR detection object when the input is
+ * gaussian noise with a time-varying variance. This example is adapted from
+ * https://www.mathworks.com/help/phased/ug/constant-false-alarm-rate-cfar-detection.html
+ */
+
 #include "cfar.h"
 #include "matrix-utils.h"
 

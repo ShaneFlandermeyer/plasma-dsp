@@ -75,7 +75,7 @@ enable_testing()
 # ##############################################################################
 add_subdirectory(include/plasma-dsp)
 add_subdirectory(lib)
-add_subdirectory(app)
+add_subdirectory(examples)
 add_subdirectory(test)
 
 ########################################################################
