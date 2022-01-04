@@ -2,11 +2,12 @@
 list(APPEND
   PLASMA_HEADERS
   barkercode.h
+  cfar.h
   circ_shift.h
   constants.h
   fmcwwaveform.h
   linearfmwaveform.h
-  matrix2d.h
+  matrix-utils.h
   pcfm.h
   phasecode.h
   phasecodedwaveform.h
@@ -18,6 +19,12 @@ list(APPEND
   waveform.h
   window.h
   vector-utils.h
+)
+
+# FIXME: This may not work properly for the system-wide installation
+configure_file(
+  "${PROJECT_SOURCE_DIR}/include/plasma-dsp/eigen-config.h.in"
+  "${PROJECT_BINARY_DIR}/include/plasma-dsp/eigen-config.h"
 )
 
 # System-wide installation

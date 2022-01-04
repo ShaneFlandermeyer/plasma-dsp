@@ -10,10 +10,6 @@
 #include "constants.h"
 namespace plasma {
 
-// TODO: Make this a real class rather than just an alias
-// It should provide an efficient interface between Eigen and a vector of
-// vectors template <typename T> using Matrix = std::vector<std::vector<T>>;
-
 /**
  * @brief Convert a vector to an eigen matrix object
  *

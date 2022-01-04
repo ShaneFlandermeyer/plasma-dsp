@@ -1,7 +1,6 @@
 # plasma-dsp
 
-A free and open-source C++ signal processing library primarily for generating
-and analyzing RF waveforms.
+A free and open-source C++ library for RF (mostly radar) signal processing.
 
 ## Modules and Features
 
@@ -26,11 +25,14 @@ and analyzing RF waveforms.
 
 ### Signal Processing
 
+- 1D Constant False Alarm Rate (CFAR) detector
 - Convolution
 - Finite impulse response (FIR) filters
 - FFT/IFFT
 - fftshift/ifftshift
-- Spectrogram
+- Matched filtering
+- Range-doppler maps
+- Spectrograms
 
 ## Dependencies
 
@@ -67,6 +69,9 @@ sudo make uninstall
 
 ## Wishlist
 
-- Pulse-doppler processing
-  - CFAR
-- Possibly separate testing repo?
+- 2D CFAR
+- Further FMCW processing
+- Separate repo for simulation tools (plasma-sim?)
+- GNU Radio integration (gr-plasma)
+- Make matplot++ optional (i.e., only needed to build examples)
+  

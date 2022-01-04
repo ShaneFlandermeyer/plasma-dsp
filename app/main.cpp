@@ -1,46 +1,41 @@
+#include "eigen-config.h"
 #include <matplot/matplot.h>
 
-#include <iostream>
-#include <set>
+#include <Eigen/Dense>
 
-#include "barkercode.h"
+#include "cfar.h"
+
 #include "linearfmwaveform.h"
-#include "matrix2d.h"
-#include "pcfm.h"
-#include "phasecode.h"
 #include "rangedoppler.h"
-#include "signal-processing.h"
-#include "spectrogram.h"
-#include "squarewaveform.h"
-#include "vector-utils.h"
-#include "window.h"
-
-using namespace matplot;
 using namespace plasma;
+using namespace matplot;
+using namespace Eigen;
 int main() {
-  auto bandwidth = 10e6;
-  auto pulse_width = 10e-6;
-  auto samp_rate = 20e6;
-  std::vector<double> prf = {1e3};
-  auto lfm = LinearFMWaveform(bandwidth, pulse_width, prf, samp_rate);
-  auto wave = lfm.waveform();
+  // Generate the waveform and matched filter
+  auto lfm = LinearFMWaveform(10e6, 10e-6, 10e3, 20e6);
+  MatrixXcd wave =
+      Map<MatrixXcd>(lfm.waveform().data(), lfm.waveform().size(), 1);
+  VectorXcd mf =
+      Map<VectorXcd>(lfm.MatchedFilter().data(), lfm.MatchedFilter().size());
+  // Generate a fast-time slow-time matrix
+  // TODO: Simulate this for targets with nonzero range and doppler
+  auto num_pulses_cpi = 64;
+  auto cpi_matrix = MatrixXcd(num_pulses_cpi, num_pulses_cpi);
+  cpi_matrix.colwise() = Map<VectorXcd>(wave.data(), wave.size());
 
-  auto mf = lfm.MatchedFilter();
-  auto num_pulses = 32;
-  auto pulse_mat =
-      Matrix2D<std::complex<double>>(wave.size(), num_pulses, wave);
-  // For testing, just make num_pulses copy of the input waveform
-  // In practice this will be filled as we collect data
-  for (auto i_pulse = 1; i_pulse < num_pulses; i_pulse++)
-    for (auto i_sample = 0; i_sample < wave.size(); i_sample++)
-      pulse_mat(i_sample, i_pulse) = wave[i_sample];
+  MatrixXcd rd_map = RangeDopplerMap(cpi_matrix,mf);
+  MatrixXd rd_map_db = 10*log10(abs(rd_map.array())).matrix();
+  figure();
+  auto ax = gca();
+  auto x_min = -rd_map.cols()/2;
+  auto x_max = rd_map.cols()/2;
+  auto y_min = 0;
+  auto y_max = rd_map.rows();
+  ax->imagesc(x_min,x_max,y_min,y_max,rd_map_db.vector2d());
+  ax->xlabel("(Centered) Pulse Index");
+  ax->ylabel("Range Bin Index");
 
-  auto rd_map = RangeDopplerMap(pulse_mat,mf);
-  auto rd_map_vec = std::vector<std::vector<double>>(rd_map.rows(), std::vector<double>(rd_map.cols()));
-  for (auto i_row = 0; i_row < rd_map.rows(); i_row++)
-    for (auto i_col = 0; i_col < rd_map.cols(); i_col++)
-      rd_map_vec[i_row][i_col] = 10*log10(abs(rd_map(i_row, i_col)));
-  image(rd_map_vec, true);
+  colorbar();
   show();
   return 0;
 }

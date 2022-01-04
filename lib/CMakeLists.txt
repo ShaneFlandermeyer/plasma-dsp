@@ -3,13 +3,13 @@ list(
   APPEND
   PLASMA_SOURCES
   barkercode.cc
+  cfar.cc
   fmcwwaveform.cc
   linearfmwaveform.cc
   pcfm.cc
   phasecode.cc
   phasecodedwaveform.cc
   pulsedwaveform.cc
-  rangedoppler.cc
   squarewaveform.cc
   waveform.cc
   window.cc)
@@ -22,6 +22,7 @@ add_library(plasma-dsp SHARED ${PLASMA_SOURCES})
 target_include_directories(
   plasma-dsp PRIVATE
   PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/plasma-dsp>
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/plasma-dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
 target_link_libraries(plasma-dsp Eigen3::Eigen fftw3)
 
