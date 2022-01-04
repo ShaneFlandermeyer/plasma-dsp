@@ -23,7 +23,7 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
                           DetectionReport &result) {
   using namespace Eigen;
   // Current cell under test
-  ArrayXd cut = x.row(cut_index);
+  ArrayXXd cut = x.row(cut_index);
 
   // Index of the beginning and end of each window
   size_t front_win_start =
@@ -61,20 +61,41 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
       x.block(front_win_start, 0, num_train_cells_front, x.cols());
   rear.block(0, 0, num_train_cells_rear, x.cols()) =
       x.block(rear_win_start, 0, num_train_cells_rear, x.cols());
-  ArrayXd power = (front.array() + rear.array()).colwise().sum();
+  ArrayXXd power = (front.array() + rear.array()).colwise().sum();
 
   // Compute the threshold factor and the threshold
-  auto alpha = (pow(d_pfa, -1 / (double)d_num_train_cells) - 1);
-  ArrayXd threshold = alpha * power;
+  double alpha = (pow(d_pfa, -1 / (double)d_num_train_cells) - 1);
+  ArrayXXd threshold = alpha * power;
 
   // Compare data to the threshold
-  Array<int, Dynamic, 1> detections = (cut > threshold).cast<int>();
-
-  // Update the results struct
-  result.detections.push_back(detections(0));
-  result.threshold.push_back(threshold(0));
-  if (detections(0)) {
-    result.indices.push_back(cut_index);
+  Array<bool, Dynamic, Dynamic> detections = cut > threshold;
+  size_t num_new_detections = detections.array().count();
+  // Initialize the result struct if it hasn't been done yet
+  // TODO: Should this resizing be done outside this function?
+  if (result.detections.size() == 0)
+    result.detections.resize(x.rows(), x.cols());
+  if (result.threshold.size() == 0)
+    result.threshold.resize(x.rows(), x.cols());
+  // Save the results to the output struct
+  result.detections.row(cut_index) = detections;
+  result.threshold.row(cut_index) = threshold;
+  if (num_new_detections > 0) {
+    // Save the matrix indices of the new detections. Since we usually don't
+    // know how many detections there will be a priori, we need to resize the
+    // vector every time there's a new detection
+    size_t num_detections = result.indices.rows() + num_new_detections;
+    result.indices.conservativeResize(num_detections, 2);
+    // Get the column indices of the new detections
+    // There's probably a way to do this without a loop (like matlab's find()),
+    // but I don't know how and it shouldn't be too slow this way
+    ArrayXi detection_cols(num_new_detections);
+    for (size_t i = 0; i < cut.size(); ++i) {
+      if (detections(i))
+        detection_cols(i) = i;
+    }
+    result.indices.bottomLeftCorner(num_new_detections, 1) = cut_index;
+    result.indices.bottomRightCorner(num_new_detections, 1) =
+        detection_cols.cast<size_t>();
   }
 }
 

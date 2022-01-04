@@ -26,6 +26,7 @@ and analyzing RF waveforms.
 
 ### Signal Processing
 
+- 1D Constant False Alarm Rate (CFAR) detector
 - Convolution
 - Finite impulse response (FIR) filters
 - FFT/IFFT
@@ -69,6 +70,4 @@ sudo make uninstall
 
 ## Wishlist
 
-- Pulse-doppler processing
-  - CFAR
-- Possibly separate testing repo?
+- Further FMCW processing

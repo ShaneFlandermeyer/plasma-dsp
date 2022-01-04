@@ -14,21 +14,21 @@ namespace plasma {
  */
 struct DetectionReport {
   /**
-   * @brief A logical vector indicating whether a target was detected in each
-   * range bin
+   * @brief A logical matrix indicating whether a target was detected in each
+   * range bin at each time instance
    *
    */
-  std::vector<bool> detections;
+  Eigen::Array<bool, Eigen::Dynamic, Eigen::Dynamic> detections;
   /**
    * @brief A vector of the range bin indices of each detection
    *
    */
-  std::vector<size_t> indices;
+  Eigen::Array<size_t, Eigen::Dynamic, 2> indices;
   /**
    * @brief A vector of the computed CFAR threshold at each range bin
    *
    */
-  std::vector<double> threshold;
+  Eigen::MatrixXd threshold;
 };
 
 /**

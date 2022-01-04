@@ -36,6 +36,7 @@ int main() {
   // Create the square-law input signal
   ArrayXd ramp = ArrayXd::LinSpaced(num_points, 1, 10);
   x = abs2(sqrt(noise_power * ramp / 2) * rsamp.array()).matrix();
+  // x = hcat(x,x);
 
   //! Write to a file
   // std::vector<double> filevec(x.data(), x.data() + x.size());
@@ -43,20 +44,30 @@ int main() {
 
   //! Do CFAR
   DetectionReport detections = ca_cfar.detect(x);
-  std::cout << detections.indices.size() << std::endl;
-  for(auto &index : detections.indices)
-    std::cout << index << std::endl;
+  // std::cout << detections.indices.size() << std::endl;
+  // for(auto &index : detections.indices)
+  //   std::cout << index << std::endl;
   
 
   //! Figures
+  // Input data
   std::vector<double> xvec(x.data(), x.data() + x.size());
+  // Threshold
+  std::vector<double> threshvec(detections.threshold.data(),
+                                detections.threshold.data() +
+                                    detections.threshold.size());
+  // Detections
+  std::vector<size_t> indices(detections.indices.col(0).data(),
+                              detections.indices.col(0).data() +
+                                  detections.indices.col(0).size());
   std::vector<double> detvec(detections.indices.size());
   for (size_t i = 0; i < detections.indices.size(); ++i)
-    detvec[i] = x(detections.indices[i]);
+    detvec[i] = x(detections.indices(i));
+  
   plot(xvec);
   hold(true);
-  plot(detections.threshold);
-  plot(detections.indices,detvec,"o");
+  plot(threshvec);
+  plot(indices,detvec,"o");
   hold(false);
   show();
   return 0;
