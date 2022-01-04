@@ -20,7 +20,7 @@ template <typename T>
 T hcat(const Eigen::EigenBase<T> &A, const Eigen::EigenBase<T> &B) {
   T out(A.rows(), A.cols()+B.cols());
   out.leftCols(A.cols()) = A;
-  out.rightCols(B.rows()) = B;
+  out.rightCols(B.cols()) = B;
   return out;
 }
 
