@@ -4,6 +4,9 @@
 
 namespace plasma {
 
+// *****************************************************************************
+// * CFARDetector
+// *****************************************************************************
 CFARDetector::CFARDetector(size_t num_train, size_t num_guard, double pfa) {
   d_num_guard_cells = num_guard;
   d_num_train_cells = num_train;
@@ -76,6 +79,7 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
     result.detections.resize(x.rows(), x.cols());
   if (result.threshold.size() == 0)
     result.threshold.resize(x.rows(), x.cols());
+
   // Save the results to the output struct
   result.detections.row(cut_index) = detections;
   result.threshold.row(cut_index) = threshold;
@@ -98,5 +102,9 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
         detection_cols.cast<size_t>();
   }
 }
+
+// *****************************************************************************
+// * CFARDetector2D
+// *****************************************************************************
 
 } // namespace plasma
