@@ -9,3 +9,7 @@ target_include_directories(fmcw PUBLIC ${CMAKE_SOURCE_DIR}/include)
 add_executable(cfar_1d cfar_1d.cpp)
 target_link_libraries(cfar_1d PUBLIC Matplot++::matplot plasma-dsp)
 target_include_directories(cfar_1d PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+add_executable(cfar_2d cfar_2d.cpp)
+target_link_libraries(cfar_2d PUBLIC Matplot++::matplot plasma-dsp)
+target_include_directories(cfar_2d PUBLIC ${CMAKE_SOURCE_DIR}/include)

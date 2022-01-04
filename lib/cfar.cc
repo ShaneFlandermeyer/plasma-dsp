@@ -106,7 +106,7 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
 // *****************************************************************************
 // * CFARDetector2D
 // *****************************************************************************
-CFARDetector2D::CFARDetector2D(size_t size_train, size_t size_guard,
+CFARDetector2D::CFARDetector2D(size_t size_guard, size_t size_train,
                                double pfa) {
   d_size_guard_win = size_guard;
   d_size_train_win = size_train;
@@ -125,6 +125,13 @@ DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
 }
 
 void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
-                            size_t cut_col, DetectionReport &result) {}
+                            size_t cut_col, DetectionReport &result) {\
+  using namespace Eigen;
+  // TODO: Implement me
+  // Determine the bounds of the window
+  size_t num_rows = 2*(d_size_train_win+d_size_guard_win) + 1;
+  ArrayXXi mask(num_rows,num_rows);
+  std::cout << mask << std::endl;
+}
 
 } // namespace plasma
