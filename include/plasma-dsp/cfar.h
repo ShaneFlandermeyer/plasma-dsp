@@ -141,23 +141,37 @@ public:
 
   /**
    * @brief Perform CFAR detection on the entire input signal
+   * 
+   * TODO: Enable tensor inputs
    *
-   * @param x An M x 1 matrix of real-valued input data.
+   * @param x An M-by-1 matrix of real-valued input data.
    * @return std::vector<bool>
    */
   DetectionReport detect(const Eigen::MatrixXd &x);
 
   /**
+   * @brief Perform CFAR detection on the specified matrix indices
+   * 
+   * @param x Input data matrix
+   * @param indices A 2-by-D
+   * @return DetectionReport 
+   */
+  DetectionReport detect(const Eigen::MatrixXd &x,
+                         const Eigen::Array2Xi &indices);
+
+  /**
    * @brief Perform CFAR detection on the specified elements of the input data
    * 
-   * TODO: Make the CUT index inputs a 2 x D matrix
    *
-   * @param x M x N matrix of real-valued input data, where M is the number of
+   * @param x M-by-N matrix of real-valued input data, where M is the number of
    * range bins and N is the number of time instances in the input signal.
    * @param cut_row Zero-indexed row of the current cell under test (CUT)
    * @param cut_row Zero-indexed column of the current cell under test (CUT)
-   * @return std::vector<bool> N-vector containing logical detection
-   * results for each time instance, where N is the number of rows in x
+   * @return DetectionReport A struct containing 
+   * 
+   * - A logical matrix indicating whether a target was detected in each bin
+   * - The CFAR threshold at each bin
+   * - The matrix indices of each detection
    */
   void detect(const Eigen::MatrixXd &x, size_t cut_row, size_t cut_col,
               DetectionReport &result);

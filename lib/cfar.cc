@@ -114,12 +114,20 @@ CFARDetector2D::CFARDetector2D(size_t size_guard, size_t size_train,
 }
 
 DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
-  std::vector<bool> detections(x.rows(), false);
   DetectionReport result;
   for (size_t i = 0; i < x.rows(); ++i) {
     for (size_t j = 0; j < x.cols(); ++j) {
       detect(x, i, j, result);
     }
+  }
+  return result;
+}
+
+DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x,
+                                       const Eigen::Array2Xi &indices) {
+  DetectionReport result;
+  for (size_t i = 0; i < indices.rows(); ++i) {
+    detect(x, indices(i, 0), indices(i, 1), result);
   }
   return result;
 }
@@ -174,10 +182,8 @@ void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
 
   // Apply the mask to the data and estimate the power using the sample mean of
   // the training cells
-  size_t block_start_row = std::max(
-      static_cast<int>(cut_row - mask_height), 0);
-  size_t block_start_col = std::max(
-      static_cast<int>(cut_col - mask_width), 0);
+  size_t block_start_row = std::max(static_cast<int>(cut_row - mask_height), 0);
+  size_t block_start_col = std::max(static_cast<int>(cut_col - mask_width), 0);
   ArrayXXd block =
       x.block(block_start_row, block_start_col, mask_height, mask_width);
   double power = (block * mask).sum() / num_train_bins;
@@ -187,6 +193,7 @@ void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
   double threshold = alpha * power;
 
   // Update results struct
+  // TODO: Account for closely-spaced detections that are probably the same
   bool detection = x(cut_row, cut_col) > threshold;
   if (result.detections.size() == 0)
     result.detections.resize(x.rows(), x.cols());
