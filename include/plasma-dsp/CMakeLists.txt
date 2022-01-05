@@ -21,7 +21,6 @@ list(APPEND
   vector-utils.h
 )
 
-# FIXME: This may not work properly for the system-wide installation
 configure_file(
   "${PROJECT_SOURCE_DIR}/include/plasma-dsp/eigen-config.h.in"
   "${PROJECT_BINARY_DIR}/include/plasma-dsp/eigen-config.h"

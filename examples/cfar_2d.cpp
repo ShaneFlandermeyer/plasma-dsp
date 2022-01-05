@@ -1,3 +1,13 @@
+/**
+ * Created on Wed Jan 05 2022
+ *
+ * Shane Flandermeyer, shaneflandermeyer@gmail.com
+ *
+ * Perform 2D cell-averaging (CA) CFAR detection from the data given in the
+ * matlab example at
+ * https://www.mathworks.com/help/phased/ug/constant-false-alarm-rate-cfar-detection.html;jsessionid=a6023502856c0dcfb2d70ddac1a2
+ */
+
 #include "cfar.h"
 #include "matrix-utils.h"
 

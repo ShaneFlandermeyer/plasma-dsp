@@ -74,7 +74,6 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
   Array<bool, Dynamic, Dynamic> detections = cut > threshold;
   size_t num_new_detections = detections.array().count();
   // Initialize the result struct if it hasn't been done yet
-  // TODO: Should this resizing be done outside this function?
   if (result.detections.size() == 0)
     result.detections.resize(x.rows(), x.cols());
   if (result.threshold.size() == 0)
@@ -119,7 +118,7 @@ CFARDetector2D::CFARDetector2D(Eigen::Array<size_t, 2, 1> size_guard,
   d_guard_win_size = size_guard;
   d_train_win_size = size_train;
   d_pfa = pfa;
-}
+                               }
 
 DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
   DetectionReport result;
