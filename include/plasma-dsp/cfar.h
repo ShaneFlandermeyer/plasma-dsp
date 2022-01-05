@@ -149,6 +149,8 @@ public:
 
   /**
    * @brief Perform CFAR detection on the specified elements of the input data
+   * 
+   * TODO: Make the CUT index inputs a 2 x D matrix
    *
    * @param x M x N matrix of real-valued input data, where M is the number of
    * range bins and N is the number of time instances in the input signal.

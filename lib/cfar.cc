@@ -127,21 +127,57 @@ DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
 void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
                             size_t cut_col, DetectionReport &result) {
   using namespace Eigen;
-  // TODO: This does not account for edge cases
+  // Create the CFAR mask. This mask is a boolean matrix where an index of 1
+  // indicates a training cell and an index of 0 indicates a guard cell or the
+  // CUT.
 
-  // Create the default mask
-  size_t mask_height = 2 * (d_size_guard_win + d_size_train_win) + 1;
-  size_t mask_width = mask_height;
+  // First, determine the number of guard cells "available" in each
+  // direction. This makes it possible to properly set the zero portion of the
+  // mask
+  size_t num_guard_left = std::min(cut_col, d_size_guard_win);
+  size_t num_guard_right = std::min(x.cols() - 1 - cut_col, d_size_guard_win);
+  size_t num_guard_up = std::min(cut_row, d_size_guard_win);
+  size_t num_guard_down = std::min(x.rows() - 1 - cut_row, d_size_guard_win);
+  // Do the same for the number of training cells. Note that for corner cases
+  // the window may become asymmetric - the number of training cells will be
+  // conserved but the number of guard cells may not, leading to a different
+  // mask size than desired
+  size_t num_train_left = std::min(cut_col - num_guard_left, d_size_train_win);
+  size_t num_train_right =
+      std::min(x.cols() - 1 - cut_col - num_guard_right, d_size_train_win);
+  size_t num_train_up = std::min(cut_row - num_guard_up, d_size_train_win);
+  size_t num_train_down =
+      std::min(x.rows() - 1 - cut_row - num_guard_down, d_size_train_win);
+  // Conserve the number of training cells
+  if (num_train_left < d_size_train_win)
+    num_train_right += d_size_train_win - num_train_left;
+  else if (num_train_right < d_size_train_win)
+    num_train_left += d_size_train_win - num_train_right;
+  if (num_train_up < d_size_train_win)
+    num_train_down += d_size_train_win - num_train_up;
+  else if (num_train_down < d_size_train_win)
+    num_train_up += d_size_train_win - num_train_down;
+
+  // The CUT index within the mask follows directly from above
+  size_t mask_width =
+      num_guard_left + num_guard_right + num_train_left + num_train_right + 1;
+  size_t mask_height =
+      num_guard_up + num_guard_down + num_train_up + num_train_down + 1;
   ArrayXXd mask = ArrayXXd::Ones(mask_height, mask_width);
-  mask.block(d_size_train_win, d_size_train_win, 2 * d_size_guard_win + 1,
-             2 * d_size_guard_win + 1) = 0;
+  mask.block(num_train_up, num_train_left, num_guard_up + num_guard_down + 1,
+             num_guard_left + num_guard_right + 1)
+      .setZero();
+  // The number of training bins in the mask is equal to the number of ones.
+  // Guard bins (and the CUT) make up the rest of the mask
   size_t num_train_bins = mask.sum();
   size_t num_guard_bins = mask.size() - num_train_bins;
 
   // Apply the mask to the data and estimate the power using the sample mean of
   // the training cells
-  size_t block_start_row = cut_row - d_size_guard_win - d_size_train_win;
-  size_t block_start_col = cut_col - d_size_guard_win - d_size_train_win;
+  size_t block_start_row = std::max(
+      static_cast<int>(cut_row - mask_height), 0);
+  size_t block_start_col = std::max(
+      static_cast<int>(cut_col - mask_width), 0);
   ArrayXXd block =
       x.block(block_start_row, block_start_col, mask_height, mask_width);
   double power = (block * mask).sum() / num_train_bins;
