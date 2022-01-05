@@ -26,6 +26,9 @@ A free and open-source C++ library for RF (mostly radar) signal processing.
 ### Signal Processing
 
 - 1D Constant False Alarm Rate (CFAR) detector
+  - Cell averaging (CA)
+- 2D CFAR detector
+  - Cell averaging (CA)
 - Convolution
 - Finite impulse response (FIR) filters
 - FFT/IFFT
@@ -69,7 +72,6 @@ sudo make uninstall
 
 ## Wishlist
 
-- 2D CFAR
 - Further FMCW processing
 - Separate repo for simulation tools (plasma-sim?)
 - GNU Radio integration (gr-plasma)

@@ -116,8 +116,7 @@ protected:
 /**
  * @brief 2D Constant False Alarm Rate (CFAR) detector object
  *
- * TODO: Enable non-square windows.
- * This can be done by making the protected members vectors insteaad of scalars
+ * TODO: Add a constructor for non-square train/guard windows
  * TODO: Currently only implements cell-averaging CFAR.
  *
  */
@@ -186,17 +185,26 @@ public:
 
 protected:
   /**
-   * @brief Number of guard cells in each direction around the cell under test
+   * @brief The number of rows and columns of the guard band cells on each side
+   * of the CUT cell, specified as nonnegative integers.
+   *
+   * A 2-by-1 array where the first element specifies the guard band size along
+   * the row dimension (height) and the second element specifies the guard band
+   * size along the column dimension (width)
    *
    */
-  size_t d_size_guard_win;
+  Eigen::Array<size_t, 2, 1> d_guard_win_size;
 
   /**
-   * @brief Number of training cells in each direction around the cell under
-   * test
+   * @brief The number of rows and columns of the training band cells on each
+   * side of the CUT cell, specified as nonnegative integers.
+   *
+   * A 2-by-1 array where the first element specifies the training band size
+   * along the row dimension (height) and the second element specifies the guard
+   * band size along the column dimension (width)
    *
    */
-  size_t d_size_train_win;
+  Eigen::Array<size_t, 2, 1> d_train_win_size;
 
   /**
    * @brief Probability of false alarm
