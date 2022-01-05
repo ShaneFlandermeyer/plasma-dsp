@@ -14,6 +14,8 @@ namespace plasma {
  */
 struct DetectionReport {
 
+  DetectionReport() { num_detections = 0; };
+
   /**
    * @brief A logical matrix indicating whether a target was detected in each
    * range bin at each time instance
@@ -32,6 +34,12 @@ struct DetectionReport {
    *
    */
   Eigen::MatrixXd threshold;
+
+  /**
+   * @brief Number of detections
+   *
+   */
+  size_t num_detections;
 };
 
 /**
@@ -141,7 +149,7 @@ public:
 
   /**
    * @brief Perform CFAR detection on the entire input signal
-   * 
+   *
    * TODO: Enable tensor inputs
    *
    * @param x An M-by-1 matrix of real-valued input data.
@@ -151,24 +159,24 @@ public:
 
   /**
    * @brief Perform CFAR detection on the specified matrix indices
-   * 
+   *
    * @param x Input data matrix
    * @param indices A 2-by-D
-   * @return DetectionReport 
+   * @return DetectionReport
    */
   DetectionReport detect(const Eigen::MatrixXd &x,
                          const Eigen::Array2Xi &indices);
 
   /**
    * @brief Perform CFAR detection on the specified elements of the input data
-   * 
+   *
    *
    * @param x M-by-N matrix of real-valued input data, where M is the number of
    * range bins and N is the number of time instances in the input signal.
    * @param cut_row Zero-indexed row of the current cell under test (CUT)
    * @param cut_row Zero-indexed column of the current cell under test (CUT)
-   * @return DetectionReport A struct containing 
-   * 
+   * @return DetectionReport A struct containing
+   *
    * - A logical matrix indicating whether a target was detected in each bin
    * - The CFAR threshold at each bin
    * - The matrix indices of each detection

@@ -87,8 +87,8 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
     // Save the matrix indices of the new detections. Since we usually don't
     // know how many detections there will be a priori, we need to resize the
     // vector every time there's a new detection
-    size_t num_detections = result.indices.rows() + num_new_detections;
-    result.indices.conservativeResize(num_detections, 2);
+    result.num_detections += num_new_detections;
+    result.indices.conservativeResize(result.num_detections, 2);
     // Get the column indices of the new detections
     // There's probably a way to do this without a loop (like matlab's find()),
     // but I don't know how and it shouldn't be too slow this way
@@ -203,8 +203,8 @@ void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
     // Save the matrix indices of the new detections. Since we usually don't
     // know how many detections there will be a priori, we need to resize the
     // vector every time there's a new detection
-    size_t num_detections = result.indices.rows() + 1;
-    result.indices.conservativeResize(num_detections, 2);
+    result.num_detections++;
+    result.indices.conservativeResize(result.num_detections, 2);
     result.indices.bottomRows(1) << cut_row, cut_col;
   }
   result.detections(cut_row, cut_col) = detection;

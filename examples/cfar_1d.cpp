@@ -25,7 +25,7 @@ int main() {
   size_t num_guard_cells = 2;
   size_t num_train_cells = 200;
   auto pfa = 1e-3;
-  CFARDetector ca_cfar {num_train_cells, num_guard_cells, pfa};
+  CFARDetector ca_cfar{num_train_cells, num_guard_cells, pfa};
 
   //! Generate data
   // The input data is a square-law input signal with increasing noise power
@@ -49,22 +49,23 @@ int main() {
   // write_binary<double>("/home/shane/bin.dat",filevec);
 
   //! Do CFAR
-  DetectionReport detections = ca_cfar.detect(x);
+  DetectionReport det = ca_cfar.detect(x);
 
   //! Figures
   // Input data
   std::vector<double> xvec(x.data(), x.data() + x.size());
   // Threshold
-  std::vector<double> threshvec(detections.threshold.data(),
-                                detections.threshold.data() +
-                                    detections.threshold.size());
+  std::vector<double> threshvec(det.threshold.data(),
+                                det.threshold.data() + det.threshold.size());
   // Detections
-  std::vector<size_t> indices(detections.indices.col(0).data(),
-                              detections.indices.col(0).data() +
-                                  detections.indices.col(0).size());
-  std::vector<double> detvec(detections.indices.size());
-  for (size_t i = 0; i < detections.indices.size(); ++i)
-    detvec[i] = x(detections.indices(i));
+  std::vector<size_t> indices(det.indices.col(0).data(),
+                              det.indices.col(0).data() +
+                                  det.indices.col(0).size());
+  std::vector<double> detvec(det.indices.size());
+  for (size_t i = 0; i < det.indices.size(); ++i)
+    detvec[i] = x(det.indices(i));
+
+  std::cout << "Number of Detections: " << det.num_detections << std::endl;
 
   plot(xvec);
   hold(true);

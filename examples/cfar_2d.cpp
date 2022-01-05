@@ -31,14 +31,13 @@ int main() {
   CFARDetector2D cfar{5, 10, 1e-5};
 
   // Read range doppler map data from a file
+  // TODO: Make a way to generate this internally
   std::vector<double> data = read_file("/home/shane/data.bin");
   ArrayXXd x = Map<ArrayXXd>(data.data(), 200, 1024);
   DetectionReport det;
-  // cfar.detect(x, 0, 1020, det);
-  // cfar.detect(x, 82, 512, det);
-  // cfar.detect(x, 199, 1023, det);
   det = cfar.detect(x);
-  std::cout << det.indices << std::endl;
+  std::cout << "Number of Detections: " << det.num_detections << std::endl;
+
   // Figures
   figure();
   x = 10 * log10(x);
