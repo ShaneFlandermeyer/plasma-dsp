@@ -113,6 +113,14 @@ CFARDetector2D::CFARDetector2D(size_t size_guard, size_t size_train,
   d_pfa = pfa;
 }
 
+CFARDetector2D::CFARDetector2D(Eigen::Array<size_t, 2, 1> size_guard,
+                               Eigen::Array<size_t, 2, 1> size_train,
+                               double pfa) {
+  d_guard_win_size = size_guard;
+  d_train_win_size = size_train;
+  d_pfa = pfa;
+}
+
 DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
   DetectionReport result;
   for (size_t i = 0; i < x.rows(); ++i) {
@@ -143,17 +151,19 @@ void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
   // direction. This makes it possible to properly set the zero portion of the
   // mask
   size_t num_guard_left = std::min(cut_col, d_guard_win_size(1));
-  size_t num_guard_right = std::min(x.cols() - 1 - cut_col, d_guard_win_size(1));
+  size_t num_guard_right =
+      std::min(x.cols() - 1 - cut_col, d_guard_win_size(1));
   size_t num_guard_up = std::min(cut_row, d_guard_win_size(0));
   size_t num_guard_down = std::min(x.rows() - 1 - cut_row, d_guard_win_size(0));
   // Do the same for the number of training cells. Note that for corner cases
   // the window may become asymmetric - the number of training cells will be
   // conserved but the number of guard cells may not, leading to a different
   // mask size than desired
-  size_t num_train_left = std::min(cut_col - num_guard_left, d_train_win_size(1));
-  size_t num_train_right = 2*d_train_win_size(1) - num_train_left;
+  size_t num_train_left =
+      std::min(cut_col - num_guard_left, d_train_win_size(1));
+  size_t num_train_right = 2 * d_train_win_size(1) - num_train_left;
   size_t num_train_up = std::min(cut_row - num_guard_up, d_train_win_size(0));
-  size_t num_train_down = 2*d_train_win_size(0) - num_train_up;
+  size_t num_train_down = 2 * d_train_win_size(0) - num_train_up;
 
   // The CUT index within the mask follows directly from above
   size_t mask_width =

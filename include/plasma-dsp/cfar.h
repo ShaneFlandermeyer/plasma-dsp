@@ -146,6 +146,9 @@ public:
    */
   CFARDetector2D(size_t size_train, size_t size_guard, double pfa);
 
+  CFARDetector2D(Eigen::Array<size_t, 2, 1> size_guard,
+                 Eigen::Array<size_t, 2, 1> size_train, double pfa);
+
   /**
    * @brief Perform CFAR detection on the entire input signal
    *
