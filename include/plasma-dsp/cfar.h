@@ -108,6 +108,8 @@ protected:
 /**
  * @brief 2D Constant False Alarm Rate (CFAR) detector object
  *
+ * TODO: Enable non-square windows.
+ * This can be done by making the protected members vectors insteaad of scalars
  * TODO: Currently only implements cell-averaging CFAR.
  *
  */
@@ -147,7 +149,7 @@ public:
 
   /**
    * @brief Perform CFAR detection on the specified elements of the input data
-   *   
+   *
    * @param x M x N matrix of real-valued input data, where M is the number of
    * range bins and N is the number of time instances in the input signal.
    * @param cut_row Zero-indexed row of the current cell under test (CUT)
@@ -155,7 +157,7 @@ public:
    * @return std::vector<bool> N-vector containing logical detection
    * results for each time instance, where N is the number of rows in x
    */
-  void detect(const Eigen::MatrixXd &x, size_t cut_row, size_t cut_col, 
+  void detect(const Eigen::MatrixXd &x, size_t cut_row, size_t cut_col,
               DetectionReport &result);
 
 protected:

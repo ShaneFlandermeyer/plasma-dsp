@@ -125,13 +125,47 @@ DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
 }
 
 void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
-                            size_t cut_col, DetectionReport &result) {\
+                            size_t cut_col, DetectionReport &result) {
   using namespace Eigen;
-  // TODO: Implement me
-  // Determine the bounds of the window
-  size_t num_rows = 2*(d_size_train_win+d_size_guard_win) + 1;
-  ArrayXXi mask(num_rows,num_rows);
-  std::cout << mask << std::endl;
+  // TODO: This does not account for edge cases
+
+  // Create the default mask
+  size_t mask_height = 2 * (d_size_guard_win + d_size_train_win) + 1;
+  size_t mask_width = mask_height;
+  ArrayXXd mask = ArrayXXd::Ones(mask_height, mask_width);
+  mask.block(d_size_train_win, d_size_train_win, 2 * d_size_guard_win + 1,
+             2 * d_size_guard_win + 1) = 0;
+  size_t num_train_bins = mask.sum();
+  size_t num_guard_bins = mask.size() - num_train_bins;
+
+  // Apply the mask to the data and estimate the power using the sample mean of
+  // the training cells
+  size_t block_start_row = cut_row - d_size_guard_win - d_size_train_win;
+  size_t block_start_col = cut_col - d_size_guard_win - d_size_train_win;
+  ArrayXXd block =
+      x.block(block_start_row, block_start_col, mask_height, mask_width);
+  double power = (block * mask).sum() / num_train_bins;
+
+  // Compute the threshold factor and the threshold itself
+  double alpha = num_train_bins * (pow(d_pfa, -1 / (double)num_train_bins) - 1);
+  double threshold = alpha * power;
+
+  // Update results struct
+  bool detection = x(cut_row, cut_col) > threshold;
+  if (result.detections.size() == 0)
+    result.detections.resize(x.rows(), x.cols());
+  if (result.threshold.size() == 0)
+    result.threshold.resize(x.rows(), x.cols());
+  if (detection) {
+    // Save the matrix indices of the new detections. Since we usually don't
+    // know how many detections there will be a priori, we need to resize the
+    // vector every time there's a new detection
+    size_t num_detections = result.indices.rows() + 1;
+    result.indices.conservativeResize(num_detections, 2);
+    result.indices.bottomRows(1) << cut_row, cut_col;
+  }
+  result.detections(cut_row, cut_col) = detection;
+  result.threshold(cut_row, cut_col) = threshold;
 }
 
 } // namespace plasma
