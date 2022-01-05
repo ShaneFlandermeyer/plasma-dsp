@@ -151,20 +151,9 @@ void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
   // conserved but the number of guard cells may not, leading to a different
   // mask size than desired
   size_t num_train_left = std::min(cut_col - num_guard_left, d_size_train_win);
-  size_t num_train_right =
-      std::min(x.cols() - 1 - cut_col - num_guard_right, d_size_train_win);
+  size_t num_train_right = 2*d_size_train_win - num_train_left;
   size_t num_train_up = std::min(cut_row - num_guard_up, d_size_train_win);
-  size_t num_train_down =
-      std::min(x.rows() - 1 - cut_row - num_guard_down, d_size_train_win);
-  // Conserve the number of training cells
-  if (num_train_left < d_size_train_win)
-    num_train_right += d_size_train_win - num_train_left;
-  else if (num_train_right < d_size_train_win)
-    num_train_left += d_size_train_win - num_train_right;
-  if (num_train_up < d_size_train_win)
-    num_train_down += d_size_train_win - num_train_up;
-  else if (num_train_down < d_size_train_win)
-    num_train_up += d_size_train_win - num_train_down;
+  size_t num_train_down = 2*d_size_train_win - num_train_up;
 
   // The CUT index within the mask follows directly from above
   size_t mask_width =
