@@ -45,20 +45,24 @@ int main() {
   std::vector<double> data = read_file("/home/shane/data.bin");
   ArrayXXd x = Map<ArrayXXd>(data.data(), 200, 1024);
   DetectionReport det;
+  auto start = std::chrono::high_resolution_clock::now();
   det = cfar.detect(x);
+  auto stop = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+  std::cout << "CFAR took " << duration.count() << "  milliseconds" << std::endl;
   std::cout << "Number of Detections: " << det.num_detections << std::endl;
 
   // Figures
-  figure();
-  x = 10 * log10(x);
-  std::vector<std::vector<double>> xvec(x.rows(),
-                                        std::vector<double>(x.cols()));
-  for (uint i = 0; i < x.rows(); i++) {
-    for (uint j = 0; j < x.cols(); j++) {
-      xvec[i][j] = x.operator()(i, j);
-    }
-  }
-  imagesc(xvec);
-  show();
+  // figure();
+  // x = 10 * log10(x);
+  // std::vector<std::vector<double>> xvec(x.rows(),
+  //                                       std::vector<double>(x.cols()));
+  // for (uint i = 0; i < x.rows(); i++) {
+  //   for (uint j = 0; j < x.cols(); j++) {
+  //     xvec[i][j] = x.operator()(i, j);
+  //   }
+  // }
+  // imagesc(xvec);
+  // show();
   return 0;
 }

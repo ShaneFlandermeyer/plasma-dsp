@@ -1,7 +1,5 @@
 #include "cfar.h"
 
-#include <iostream>
-
 namespace plasma {
 
 // *****************************************************************************
@@ -14,8 +12,10 @@ CFARDetector::CFARDetector(size_t num_train, size_t num_guard, double pfa) {
 }
 
 DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
-  std::vector<bool> detections(x.rows(), false);
   DetectionReport result;
+#ifdef USE_OPENMP
+#pragma omp parallel for
+#endif
   for (size_t i = 0; i < x.rows(); ++i) {
     detect(x, i, result);
   }
@@ -118,10 +118,13 @@ CFARDetector2D::CFARDetector2D(Eigen::Array<size_t, 2, 1> size_guard,
   d_guard_win_size = size_guard;
   d_train_win_size = size_train;
   d_pfa = pfa;
-                               }
+}
 
 DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
   DetectionReport result;
+#ifdef USE_OPENMP
+#pragma omp parallel for
+#endif
   for (size_t i = 0; i < x.rows(); ++i) {
     for (size_t j = 0; j < x.cols(); ++j) {
       detect(x, i, j, result);
@@ -133,6 +136,9 @@ DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
 DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x,
                                        const Eigen::Array2Xi &indices) {
   DetectionReport result;
+#ifdef USE_OPENMP
+#pragma omp parallel for
+#endif
   for (size_t i = 0; i < indices.rows(); ++i) {
     detect(x, indices(i, 0), indices(i, 1), result);
   }

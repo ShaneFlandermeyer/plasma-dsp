@@ -14,6 +14,11 @@ if(EXISTS "${LOC_PATH}")
 endif()
 
 # ##############################################################################
+# Build options
+# ##############################################################################
+option(ENABLE_OPENMP "ENABLE_OPENMP" ON)
+
+# ##############################################################################
 # Configure Compiler
 # ##############################################################################
 set(CMAKE_CXX_STANDARD 20)
@@ -43,6 +48,9 @@ set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma-dsp)
 ########################################################################
 find_package(Matplot++ REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+if (${ENABLE_OPENMP})
+  find_package(OpenMP REQUIRED)
+endif()
 
 ########################################################################
 # Create uninstall target
