@@ -116,7 +116,6 @@ protected:
 /**
  * @brief 2D Constant False Alarm Rate (CFAR) detector object
  *
- * TODO: Add a constructor for non-square train/guard windows
  * TODO: Currently only implements cell-averaging CFAR.
  *
  */

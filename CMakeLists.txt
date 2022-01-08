@@ -43,7 +43,7 @@ set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma-dsp)
 ########################################################################
 find_package(Matplot++ REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-
+find_package(OpenMP)
 ########################################################################
 # Create uninstall target
 ########################################################################

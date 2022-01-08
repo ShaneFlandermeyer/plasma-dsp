@@ -24,7 +24,11 @@ target_include_directories(
   PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/plasma-dsp>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/plasma-dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
-target_link_libraries(plasma-dsp Eigen3::Eigen fftw3)
+target_link_libraries(plasma-dsp PUBLIC Eigen3::Eigen fftw3)
+if(OpenMP_CXX_FOUND)
+  target_compile_definitions(plasma-dsp PUBLIC USE_OPENMP)
+  target_link_libraries(plasma-dsp PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 # Install the shared library file
 install(TARGETS plasma-dsp
