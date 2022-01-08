@@ -15,8 +15,10 @@ CFARDetector::CFARDetector(size_t num_train, size_t num_guard, double pfa) {
 }
 
 DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
-  std::vector<bool> detections(x.rows(), false);
   DetectionReport result;
+#ifdef USE_OPENMP
+#pragma omp parallel for
+#endif
   for (size_t i = 0; i < x.rows(); ++i) {
     detect(x, i, result);
   }
