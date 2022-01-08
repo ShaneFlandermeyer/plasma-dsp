@@ -1,19 +1,19 @@
 #ifndef D4D7CDC7_8DAA_42DF_A71A_3840A89194E5
 #define D4D7CDC7_8DAA_42DF_A71A_3840A89194E5
-#include <complex>
-#include <vector>
-#include <Eigen/Dense>
+
 #ifdef USE_OPENMP
 #include "omp.h"
 #endif
+
+#include <complex>
+#include <vector>
+#include <Eigen/Dense>
 
 namespace plasma {
 
 /**
  * @brief A struct used to store the results of a CFAR detection
- *
- * TODO: This struct currently only supports vector inputs to detect()
- *
+ * 
  */
 struct DetectionReport {
 
