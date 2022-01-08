@@ -1,8 +1,5 @@
 #include "cfar.h"
 
-#include "omp.h"
-#include <iostream>
-
 namespace plasma {
 
 // *****************************************************************************

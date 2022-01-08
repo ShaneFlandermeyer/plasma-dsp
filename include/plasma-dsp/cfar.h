@@ -3,6 +3,9 @@
 #include <complex>
 #include <vector>
 #include <Eigen/Dense>
+#ifdef USE_OPENMP
+#include "omp.h"
+#endif
 
 namespace plasma {
 
