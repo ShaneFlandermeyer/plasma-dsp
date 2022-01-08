@@ -49,7 +49,7 @@ int main() {
   det = cfar.detect(x);
   auto stop = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-  std::cout << "CFAR took " << duration.count() << " milliseconds" << std::endl;
+  std::cout << "CFAR took " << duration.count() << "  milliseconds" << std::endl;
   std::cout << "Number of Detections: " << det.num_detections << std::endl;
 
   // Figures
