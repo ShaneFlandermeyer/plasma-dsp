@@ -38,7 +38,8 @@ std::vector<double> read_file(std::string filename) {
 }
 
 int main() {
-  CFARDetector2D cfar{5, 10, 1e-5};
+  // TODO: Change this back to 2D
+  CFARDetector cfar {20, 2, 1e-5};
 
   // Read range doppler map data from a file
   // TODO: Make a way to generate this internally

@@ -16,12 +16,25 @@ DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
 #ifdef USE_OPENMP
 #pragma omp parallel for
 #endif
+  // TODO: Can the detection indices be computed and stored outside of the loop
   for (size_t i = 0; i < x.rows(); ++i) {
     detect(x, i, result);
+  }
+  // Store all the detection indices
+  result.indices =
+      Eigen::Array<size_t, Eigen::Dynamic, 2>(result.num_detections, 2);
+  size_t i_detection = 0;
+  for (size_t i = 0; i < x.rows(); ++i) {
+    for (size_t j = 0; j < x.cols(); ++j) {
+      if (result.detections(i, j)) {
+        result.indices.row(i_detection) << i, j;
+      }
+    }
   }
   return result;
 }
 
+// TODO: Consider making this private
 void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
                           DetectionReport &result) {
   using namespace Eigen;
@@ -72,34 +85,22 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
 
   // Compare data to the threshold
   Array<bool, Dynamic, Dynamic> detections = cut > threshold;
-  size_t num_new_detections = detections.array().count();
   // Initialize the result struct if it hasn't been done yet
   if (result.detections.size() == 0)
     result.detections.resize(x.rows(), x.cols());
   if (result.threshold.size() == 0)
     result.threshold.resize(x.rows(), x.cols());
+  for (size_t i = 0; i < cut.size(); ++i) {
+    if (detections(i)) {
+      result.num_detections++;
+      // result.indices.conservativeResize(result.num_detections, 2);
+      // result.indices.row(result.num_detections - 1) << cut_index, i;
+      // result.indices.bottomRows(1) << cut_index, i;
+    }
+  }
 
-  // Save the results to the output struct
   result.detections.row(cut_index) = detections;
   result.threshold.row(cut_index) = threshold;
-  if (num_new_detections > 0) {
-    // Save the matrix indices of the new detections. Since we usually don't
-    // know how many detections there will be a priori, we need to resize the
-    // vector every time there's a new detection
-    result.num_detections += num_new_detections;
-    result.indices.conservativeResize(result.num_detections, 2);
-    // Get the column indices of the new detections
-    // There's probably a way to do this without a loop (like matlab's find()),
-    // but I don't know how and it shouldn't be too slow this way
-    ArrayXi detection_cols(num_new_detections);
-    for (size_t i = 0; i < cut.size(); ++i) {
-      if (detections(i))
-        detection_cols(i) = i;
-    }
-    result.indices.bottomLeftCorner(num_new_detections, 1) = cut_index;
-    result.indices.bottomRightCorner(num_new_detections, 1) =
-        detection_cols.cast<size_t>();
-  }
 }
 
 // *****************************************************************************
