@@ -11,30 +11,37 @@ CFARDetector::CFARDetector(size_t num_train, size_t num_guard, double pfa) {
   d_pfa = pfa;
 }
 
-DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
-  DetectionReport result;
-#ifdef USE_OPENMP
-#pragma omp parallel for
-#endif
-  // TODO: Can the detection indices be computed and stored outside of the loop
-  for (size_t i = 0; i < x.rows(); ++i) {
-    detect(x, i, result);
-  }
-  // Store all the detection indices
-  result.indices =
-      Eigen::Array<size_t, Eigen::Dynamic, 2>(result.num_detections, 2);
-  size_t i_detection = 0;
-  for (size_t i = 0; i < x.rows(); ++i) {
-    for (size_t j = 0; j < x.cols(); ++j) {
-      if (result.detections(i, j)) {
-        result.indices.row(i_detection) << i, j;
-      }
-    }
-  }
+DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x,
+                                     size_t cut_index) {
+  DetectionReport result(x);
+
+  detect(x, cut_index, result);
+  result.num_detections = result.detections.cast<int>().sum();
+
+  // Store The detection indices
+  StoreDetectionIndices(result);
+
   return result;
 }
 
-// TODO: Consider making this private
+DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
+  // Initialize the DetectionReport
+  DetectionReport result(x);
+
+#ifdef USE_OPENMP
+#pragma omp parallel for
+#endif
+  // Do CFAR
+  for (size_t i = 0; i < x.rows(); ++i)
+    detect(x, i, result);
+  result.num_detections = result.detections.cast<int>().sum();
+
+  // Store The detection indices
+  StoreDetectionIndices(result);
+
+  return result;
+}
+
 void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
                           DetectionReport &result) {
   using namespace Eigen;
@@ -81,26 +88,21 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
 
   // Compute the threshold factor and the threshold
   double alpha = (pow(d_pfa, -1 / (double)d_num_train_cells) - 1);
-  ArrayXXd threshold = alpha * power;
+  result.threshold.row(cut_index) = alpha * power;
 
   // Compare data to the threshold
-  Array<bool, Dynamic, Dynamic> detections = cut > threshold;
-  // Initialize the result struct if it hasn't been done yet
-  if (result.detections.size() == 0)
-    result.detections.resize(x.rows(), x.cols());
-  if (result.threshold.size() == 0)
-    result.threshold.resize(x.rows(), x.cols());
-  for (size_t i = 0; i < cut.size(); ++i) {
-    if (detections(i)) {
-      result.num_detections++;
-      // result.indices.conservativeResize(result.num_detections, 2);
-      // result.indices.row(result.num_detections - 1) << cut_index, i;
-      // result.indices.bottomRows(1) << cut_index, i;
-    }
-  }
+  result.detections.row(cut_index) =
+      cut > result.threshold.row(cut_index).array();
+}
 
-  result.detections.row(cut_index) = detections;
-  result.threshold.row(cut_index) = threshold;
+inline void CFARDetector::StoreDetectionIndices(DetectionReport &result) {
+  result.indices =
+      Eigen::Array<size_t, Eigen::Dynamic, 2>(result.num_detections, 2);
+  size_t i_detection = 0;
+  for (size_t i = 0; i < result.detections.rows(); ++i)
+    for (size_t j = 0; j < result.detections.cols(); ++j)
+      if (result.detections(i, j))
+        result.indices.row(i_detection++) << i, j;
 }
 
 // *****************************************************************************
