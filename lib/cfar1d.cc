@@ -2,18 +2,6 @@
 
 namespace plasma {
 
-// TODO: This is very ugly, but I haven't figured out a good way to store
-// detection indices without breaking multithreading
-inline void ComputeCFARDetectionIndices(DetectionReport &result) {
-  result.indices =
-      Eigen::Array<size_t, Eigen::Dynamic, 2>(result.num_detections, 2);
-  size_t i_detection = 0;
-  for (size_t i = 0; i < result.detections.rows(); ++i)
-    for (size_t j = 0; j < result.detections.cols(); ++j)
-      if (result.detections(i, j))
-        result.indices.row(i_detection++) << i, j;
-}
-
 CFARDetector::CFARDetector(size_t num_train, size_t num_guard, double pfa) {
   d_num_guard_cells = num_guard;
   d_num_train_cells = num_train;
@@ -24,21 +12,17 @@ DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x,
                                                   size_t cut_index) {
   DetectionReport result;
   detect(x, cut_index, result);
-  result.num_detections = result.detections.cast<int>().sum();
+  result.num_detections = result.detection.cast<int>().sum();
 
   // Store The detection indices
-  ComputeCFARDetectionIndices(result);
+  ComputeDetectionIndices(result);
 
   return result;
 }
 
 DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
   // Initialize the DetectionReport
-  DetectionReport result;
-  result.detections = Eigen::Array<bool, Eigen::Dynamic, Eigen::Dynamic>::Zero(
-      x.rows(), x.cols());
-  result.thresholds = Eigen::ArrayXXd(x.rows(), x.cols());
-  result.num_detections = 0;
+  DetectionReport result(x);
 
   #ifdef USE_OPENMP
   #pragma omp parallel for
@@ -46,10 +30,10 @@ DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
   // Do CFAR
   for (size_t i = 0; i < x.rows(); ++i)
     detect(x, i, result);
-  result.num_detections = result.detections.cast<int>().sum();
+  result.num_detections = result.detection.cast<int>().sum();
 
   // Compute and store the indices for each detection
-  ComputeCFARDetectionIndices(result);
+  ComputeDetectionIndices(result);
 
   return result;
 }
@@ -100,9 +84,9 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
 
   // Compute the threshold factor and the threshold
   double alpha = (pow(d_pfa, -1 / (double)d_num_train_cells) - 1);
-  result.thresholds.row(cut_index) = alpha * power;
-  result.detections.row(cut_index) =
-      (cut > result.thresholds.row(cut_index)).array();
+  result.threshold.row(cut_index) = alpha * power;
+  result.detection.row(cut_index) =
+      (cut > result.threshold.row(cut_index)).array();
 }
 
 } // namespace plasma

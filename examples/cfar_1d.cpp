@@ -54,8 +54,8 @@ int main() {
   //! Figures
   // Input data
   std::vector<double> xvec(x.data(), x.data() + x.size());
-  std::vector<double> threshvec(det.thresholds.data(),
-                                det.thresholds.data() + det.thresholds.size());
+  std::vector<double> threshvec(det.threshold.data(),
+                                det.threshold.data() + det.threshold.size());
   std::vector<size_t> indices(det.indices.col(0).data(),
                               det.indices.col(0).data() +
                                   det.indices.col(0).size());

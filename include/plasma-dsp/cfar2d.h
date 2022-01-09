@@ -1,14 +1,15 @@
 #ifndef A775376E_2D30_4128_8EC3_7F3F35F6FD7A
 #define A775376E_2D30_4128_8EC3_7F3F35F6FD7A
 
-#include <Eigen/Dense>
-
 #ifdef USE_OPENMP
 #include "omp.h"
 #endif
 
+#include "detector.h"
+#include <Eigen/Dense>
+
 namespace plasma {
-  /**
+/**
  * @brief 2D Constant False Alarm Rate (CFAR) detector object
  *
  * TODO: Currently only implements cell-averaging CFAR.
@@ -44,10 +45,12 @@ public:
                  Eigen::Array<size_t, 2, 1> size_train, double pfa);
 
   // /**
-  //  * @brief Perform CFAR detection on the specified elements of the input data
+  //  * @brief Perform CFAR detection on the specified elements of the input
+  //  data
   //  *
   //  *
-  //  * @param x M-by-N matrix of real-valued input data, where M is the number of
+  //  * @param x M-by-N matrix of real-valued input data, where M is the number
+  //  of
   //  * range bins and N is the number of time instances in the input signal.
   //  * @param cut_row Zero-indexed row of the current cell under test (CUT)
   //  * @param cut_row Zero-indexed column of the current cell under test (CUT)
@@ -57,8 +60,9 @@ public:
   //  * - The CFAR threshold at each bin
   //  * - The matrix indices of each detection
   //  */
-  // DetectionReport detect(const Eigen::MatrixXd &x, size_t cut_row, size_t cut_col);
-  
+  // DetectionReport detect(const Eigen::MatrixXd &x, size_t cut_row, size_t
+  // cut_col);
+
   /**
    * @brief Perform CFAR detection on the specified matrix indices
    *
@@ -77,7 +81,7 @@ public:
    * @param x An M-by-1 matrix of real-valued input data.
    * @return std::vector<bool>
    */
-  DetectionReport detect(const Eigen::MatrixXd &x);  
+  DetectionReport detect(const Eigen::MatrixXd &x);
 
 private:
   /**
@@ -130,6 +134,6 @@ protected:
 //  * @param result A DetectionReport object
 //  */
 // inline void ComputeCFARDetectionIndices(DetectionReport &result);
-}
+} // namespace plasma
 
 #endif /* A775376E_2D30_4128_8EC3_7F3F35F6FD7A */

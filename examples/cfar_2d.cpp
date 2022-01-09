@@ -9,7 +9,7 @@
  */
 
 // #include "cfar.h"
-#include "cfar1d.h"
+#include "cfar2d.h"
 #include "matrix-utils.h"
 
 #include <fstream>
@@ -40,7 +40,7 @@ std::vector<double> read_file(std::string filename) {
 
 int main() {
   // TODO: Change this back to 2D
-  CFARDetector cfar{10, 2, 1e-5};
+  CFARDetector2D cfar{5, 10, 1e-5};
 
   // Read range doppler map data from a file
   // TODO: Make a way to generate this internally
@@ -48,7 +48,7 @@ int main() {
   ArrayXXd x = Map<ArrayXXd>(data.data(), 200, 1024);
   // DetectionReport det;
   auto start = std::chrono::high_resolution_clock::now();
-  std::vector<DetectionReport> det = cfar.detect(x);
+  DetectionReport det = cfar.detect(x);
   auto stop = std::chrono::high_resolution_clock::now();
   auto duration =
       std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
