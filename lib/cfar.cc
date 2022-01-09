@@ -11,14 +11,34 @@ CFARDetector::CFARDetector(size_t num_train, size_t num_guard, double pfa) {
   d_pfa = pfa;
 }
 
-DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
-  DetectionReport result;
+std::vector<DetectionReport> CFARDetector::detect(const Eigen::MatrixXd &x,
+                                     size_t cut_index) {
+  std::vector<De
+
+  detect(x, cut_index, result);
+  result.num_detections = result.detections.cast<int>().sum();
+
+  // Store The detection indices
+  ComputeCFARDetectionIndices(result);
+
+  return result;
+}
+
+std::vector<DetectionReport> CFARDetector::detect(const Eigen::MatrixXd &x) {
+  // Initialize the DetectionReport
+  DetectionReport result(x);
+
 #ifdef USE_OPENMP
 #pragma omp parallel for
 #endif
-  for (size_t i = 0; i < x.rows(); ++i) {
+  // Do CFAR
+  for (size_t i = 0; i < x.rows(); ++i)
     detect(x, i, result);
-  }
+  result.num_detections = result.detections.cast<int>().sum();
+
+  // Compute and store the indices for each detection
+  ComputeCFARDetectionIndices(result);
+
   return result;
 }
 
@@ -68,38 +88,21 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
 
   // Compute the threshold factor and the threshold
   double alpha = (pow(d_pfa, -1 / (double)d_num_train_cells) - 1);
-  ArrayXXd threshold = alpha * power;
+  result.threshold.row(cut_index) = alpha * power;
 
   // Compare data to the threshold
-  Array<bool, Dynamic, Dynamic> detections = cut > threshold;
-  size_t num_new_detections = detections.array().count();
-  // Initialize the result struct if it hasn't been done yet
-  if (result.detections.size() == 0)
-    result.detections.resize(x.rows(), x.cols());
-  if (result.threshold.size() == 0)
-    result.threshold.resize(x.rows(), x.cols());
+  result.detections.row(cut_index) =
+      cut > result.threshold.row(cut_index).array();
+}
 
-  // Save the results to the output struct
-  result.detections.row(cut_index) = detections;
-  result.threshold.row(cut_index) = threshold;
-  if (num_new_detections > 0) {
-    // Save the matrix indices of the new detections. Since we usually don't
-    // know how many detections there will be a priori, we need to resize the
-    // vector every time there's a new detection
-    result.num_detections += num_new_detections;
-    result.indices.conservativeResize(result.num_detections, 2);
-    // Get the column indices of the new detections
-    // There's probably a way to do this without a loop (like matlab's find()),
-    // but I don't know how and it shouldn't be too slow this way
-    ArrayXi detection_cols(num_new_detections);
-    for (size_t i = 0; i < cut.size(); ++i) {
-      if (detections(i))
-        detection_cols(i) = i;
-    }
-    result.indices.bottomLeftCorner(num_new_detections, 1) = cut_index;
-    result.indices.bottomRightCorner(num_new_detections, 1) =
-        detection_cols.cast<size_t>();
-  }
+inline void ComputeCFARDetectionIndices(DetectionReport &result) {
+  result.indices =
+      Eigen::Array<size_t, Eigen::Dynamic, 2>(result.num_detections, 2);
+  size_t i_detection = 0;
+  for (size_t i = 0; i < result.detections.rows(); ++i)
+    for (size_t j = 0; j < result.detections.cols(); ++j)
+      if (result.detections(i, j))
+        result.indices.row(i_detection++) << i, j;
 }
 
 // *****************************************************************************
@@ -120,28 +123,42 @@ CFARDetector2D::CFARDetector2D(Eigen::Array<size_t, 2, 1> size_guard,
   d_pfa = pfa;
 }
 
-DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
-  DetectionReport result;
-#ifdef USE_OPENMP
-#pragma omp parallel for
-#endif
-  for (size_t i = 0; i < x.rows(); ++i) {
-    for (size_t j = 0; j < x.cols(); ++j) {
-      detect(x, i, j, result);
-    }
-  }
-  return result;
-}
+// DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
+//                                        size_t cut_col) {
+//   DetectionReport result(x.block(cut_row,cut_col,1,1).matrix());
+//   detect(x, cut_row, cut_col, result);
+//   result.num_detections = result.detections.cast<int>().sum();
+
+//   ComputeCFARDetectionIndices(result);
+//   return result;
+// }
 
 DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x,
                                        const Eigen::Array2Xi &indices) {
-  DetectionReport result;
+  DetectionReport result(x);
 #ifdef USE_OPENMP
 #pragma omp parallel for
 #endif
   for (size_t i = 0; i < indices.rows(); ++i) {
     detect(x, indices(i, 0), indices(i, 1), result);
   }
+  result.num_detections = result.detections.cast<int>().sum();
+
+  ComputeCFARDetectionIndices(result);
+  return result;
+}
+
+DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
+  DetectionReport result(x);
+#ifdef USE_OPENMP
+#pragma omp parallel for
+#endif
+  for (size_t i = 0; i < x.rows(); ++i)
+    for (size_t j = 0; j < x.cols(); ++j)
+      detect(x, i, j, result);
+  result.num_detections = result.detections.cast<int>().sum();
+
+  ComputeCFARDetectionIndices(result);
   return result;
 }
 
@@ -177,8 +194,7 @@ void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
       num_guard_up + num_guard_down + num_train_up + num_train_down + 1;
   ArrayXXd mask = ArrayXXd::Ones(mask_height, mask_width);
   mask.block(num_train_up, num_train_left, num_guard_up + num_guard_down + 1,
-             num_guard_left + num_guard_right + 1)
-      .setZero();
+             num_guard_left + num_guard_right + 1) = 0;
   // The number of training bins in the mask is equal to the number of ones.
   // Guard bins (and the CUT) make up the rest of the mask
   size_t num_train_bins = mask.sum();
@@ -190,29 +206,14 @@ void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
   size_t block_start_col = std::max(static_cast<int>(cut_col - mask_width), 0);
   ArrayXXd block =
       x.block(block_start_row, block_start_col, mask_height, mask_width);
-  double power = (block * mask).sum() / num_train_bins;
+  double power = (block * mask).sum();
 
   // Compute the threshold factor and the threshold itself
-  double alpha = num_train_bins * (pow(d_pfa, -1 / (double)num_train_bins) - 1);
-  double threshold = alpha * power;
-
-  // Update results struct
+  double alpha = (pow(d_pfa, -1 / (double)num_train_bins) - 1);
+  result.threshold(cut_row, cut_col) = alpha * power;
   // TODO: Account for closely-spaced detections that are probably the same
-  bool detection = x(cut_row, cut_col) > threshold;
-  if (result.detections.size() == 0)
-    result.detections.resize(x.rows(), x.cols());
-  if (result.threshold.size() == 0)
-    result.threshold.resize(x.rows(), x.cols());
-  if (detection) {
-    // Save the matrix indices of the new detections. Since we usually don't
-    // know how many detections there will be a priori, we need to resize the
-    // vector every time there's a new detection
-    result.num_detections++;
-    result.indices.conservativeResize(result.num_detections, 2);
-    result.indices.bottomRows(1) << cut_row, cut_col;
-  }
-  result.detections(cut_row, cut_col) = detection;
-  result.threshold(cut_row, cut_col) = threshold;
+  result.detections(cut_row, cut_col) =
+      x(cut_row, cut_col) > result.threshold(cut_row, cut_col);
 }
 
 } // namespace plasma
