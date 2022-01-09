@@ -40,7 +40,7 @@ std::vector<double> read_file(std::string filename) {
 
 int main() {
   // TODO: Change this back to 2D
-  CFARDetector2D cfar{5, 10, 1e-5};
+  CFARDetector2D cfar{2, 5, 1e-5};
 
   // Read range doppler map data from a file
   // TODO: Make a way to generate this internally
@@ -54,20 +54,33 @@ int main() {
       std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
   std::cout << "CFAR took " << duration.count() << "  milliseconds"
             << std::endl;
-  // std::cout << "Number of Detections: " << det.num_detections << std::endl;
+  std::cout << "Number of Detections: " << det.num_detections << std::endl;
   // cfar.detect(x,6,852);
 
   // Figures
-  // figure();
-  // x = 10 * log10(x);
-  // std::vector<std::vector<double>> xvec(x.rows(),
-  //                                       std::vector<double>(x.cols()));
-  // for (uint i = 0; i < x.rows(); i++) {
-  //   for (uint j = 0; j < x.cols(); j++) {
-  //     xvec[i][j] = x.operator()(i, j);
-  //   }
-  // }
-  // imagesc(xvec);
-  // show();
+  figure();
+
+  // Range doppler map 
+  x = 10 * log10(x);
+  std::vector<std::vector<double>> rd_map(x.rows(),
+                                        std::vector<double>(x.cols()));
+  for (uint i = 0; i < x.rows(); i++) {
+    for (uint j = 0; j < x.cols(); j++) {
+      rd_map[i][j] = x.operator()(i, j);
+    }
+  }
+
+
+  std::vector<double> detection_row(det.indices.rows());
+  std::vector<double> detection_col(det.indices.rows());
+  for (size_t i = 0; i < det.indices.rows(); i++) {
+    detection_row[i] = det.indices(i, 0);
+    detection_col[i] = det.indices(i, 1);
+  }
+  imagesc(rd_map);
+  hold(true);
+  plot(detection_col,detection_row,"r+");
+  hold(false);
+  show();
   return 0;
 }
