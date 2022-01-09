@@ -60,26 +60,27 @@ int main() {
   // Figures
   figure();
 
-  // Range doppler map 
+  // Range doppler map
   x = 10 * log10(x);
   std::vector<std::vector<double>> rd_map(x.rows(),
-                                        std::vector<double>(x.cols()));
+                                          std::vector<double>(x.cols()));
   for (uint i = 0; i < x.rows(); i++) {
     for (uint j = 0; j < x.cols(); j++) {
       rd_map[i][j] = x.operator()(i, j);
     }
   }
 
+  // Rows and columns of each CFAR detection
+  std::vector<double> detection_row(det.indices.col(0).data(),
+                                    det.indices.col(0).data() +
+                                        det.indices.col(0).size());
+  std::vector<double> detection_col(det.indices.col(1).data(),
+                                    det.indices.col(1).data() +
+                                        det.indices.col(1).size());
 
-  std::vector<double> detection_row(det.indices.rows());
-  std::vector<double> detection_col(det.indices.rows());
-  for (size_t i = 0; i < det.indices.rows(); i++) {
-    detection_row[i] = det.indices(i, 0);
-    detection_col[i] = det.indices(i, 1);
-  }
   imagesc(rd_map);
   hold(true);
-  plot(detection_col,detection_row,"r+");
+  plot(detection_col, detection_row, "r+");
   hold(false);
   show();
   return 0;
