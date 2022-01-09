@@ -11,9 +11,9 @@ CFARDetector::CFARDetector(size_t num_train, size_t num_guard, double pfa) {
   d_pfa = pfa;
 }
 
-DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x,
+std::vector<DetectionReport> CFARDetector::detect(const Eigen::MatrixXd &x,
                                      size_t cut_index) {
-  DetectionReport result(x);
+  std::vector<De
 
   detect(x, cut_index, result);
   result.num_detections = result.detections.cast<int>().sum();
@@ -24,7 +24,7 @@ DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x,
   return result;
 }
 
-DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
+std::vector<DetectionReport> CFARDetector::detect(const Eigen::MatrixXd &x) {
   // Initialize the DetectionReport
   DetectionReport result(x);
 

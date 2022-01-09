@@ -3,7 +3,8 @@ list(
   APPEND
   PLASMA_SOURCES
   barkercode.cc
-  cfar.cc
+  cfar1d.cc
+  cfar2d.cc
   fmcwwaveform.cc
   linearfmwaveform.cc
   pcfm.cc
