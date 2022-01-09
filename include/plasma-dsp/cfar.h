@@ -13,6 +13,8 @@ namespace plasma {
 
 /**
  * @brief A struct used to store the results of a CFAR detection
+ * 
+ * TODO: Modify this so that it makes sense with single-bin detect()
  *
  */
 struct DetectionReport {
@@ -183,16 +185,22 @@ public:
   CFARDetector2D(Eigen::Array<size_t, 2, 1> size_guard,
                  Eigen::Array<size_t, 2, 1> size_train, double pfa);
 
-  /**
-   * @brief Perform CFAR detection on the entire input signal
-   *
-   * TODO: Enable tensor inputs
-   *
-   * @param x An M-by-1 matrix of real-valued input data.
-   * @return std::vector<bool>
-   */
-  DetectionReport detect(const Eigen::MatrixXd &x);
-
+  // /**
+  //  * @brief Perform CFAR detection on the specified elements of the input data
+  //  *
+  //  *
+  //  * @param x M-by-N matrix of real-valued input data, where M is the number of
+  //  * range bins and N is the number of time instances in the input signal.
+  //  * @param cut_row Zero-indexed row of the current cell under test (CUT)
+  //  * @param cut_row Zero-indexed column of the current cell under test (CUT)
+  //  * @return DetectionReport A struct containing
+  //  *
+  //  * - A logical matrix indicating whether a target was detected in each bin
+  //  * - The CFAR threshold at each bin
+  //  * - The matrix indices of each detection
+  //  */
+  // DetectionReport detect(const Eigen::MatrixXd &x, size_t cut_row, size_t cut_col);
+  
   /**
    * @brief Perform CFAR detection on the specified matrix indices
    *
@@ -203,6 +211,16 @@ public:
   DetectionReport detect(const Eigen::MatrixXd &x,
                          const Eigen::Array2Xi &indices);
 
+  /**
+   * @brief Perform CFAR detection on the entire input signal
+   *
+   * TODO: Enable tensor inputs
+   *
+   * @param x An M-by-1 matrix of real-valued input data.
+   * @return std::vector<bool>
+   */
+  DetectionReport detect(const Eigen::MatrixXd &x);  
+
 private:
   /**
    * @brief Perform CFAR detection on the specified elements of the input data
@@ -212,11 +230,7 @@ private:
    * range bins and N is the number of time instances in the input signal.
    * @param cut_row Zero-indexed row of the current cell under test (CUT)
    * @param cut_row Zero-indexed column of the current cell under test (CUT)
-   * @return DetectionReport A struct containing
-   *
-   * - A logical matrix indicating whether a target was detected in each bin
-   * - The CFAR threshold at each bin
-   * - The matrix indices of each detection
+   * @param result The detection report struct to be modified
    */
   void detect(const Eigen::MatrixXd &x, size_t cut_row, size_t cut_col,
               DetectionReport &result);
@@ -257,6 +271,7 @@ protected:
  *
  * @param result A DetectionReport object
  */
-inline void ComputeDetectionIndices(DetectionReport &result);
+inline void ComputeCFARDetectionIndices(DetectionReport &result);
+
 } // namespace plasma
 #endif /* D4D7CDC7_8DAA_42DF_A71A_3840A89194E5 */

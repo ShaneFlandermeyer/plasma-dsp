@@ -19,7 +19,7 @@ DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x,
   result.num_detections = result.detections.cast<int>().sum();
 
   // Store The detection indices
-  ComputeDetectionIndices(result);
+  ComputeCFARDetectionIndices(result);
 
   return result;
 }
@@ -37,7 +37,7 @@ DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
   result.num_detections = result.detections.cast<int>().sum();
 
   // Compute and store the indices for each detection
-  ComputeDetectionIndices(result);
+  ComputeCFARDetectionIndices(result);
 
   return result;
 }
@@ -95,7 +95,7 @@ void CFARDetector::detect(const Eigen::MatrixXd &x, size_t cut_index,
       cut > result.threshold.row(cut_index).array();
 }
 
-inline void ComputeDetectionIndices(DetectionReport &result) {
+inline void ComputeCFARDetectionIndices(DetectionReport &result) {
   result.indices =
       Eigen::Array<size_t, Eigen::Dynamic, 2>(result.num_detections, 2);
   size_t i_detection = 0;
@@ -123,19 +123,15 @@ CFARDetector2D::CFARDetector2D(Eigen::Array<size_t, 2, 1> size_guard,
   d_pfa = pfa;
 }
 
-DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
-  DetectionReport result(x);
-#ifdef USE_OPENMP
-#pragma omp parallel for
-#endif
-  for (size_t i = 0; i < x.rows(); ++i)
-    for (size_t j = 0; j < x.cols(); ++j)
-      detect(x, i, j, result);
-  result.num_detections = result.detections.cast<int>().sum();
+// DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
+//                                        size_t cut_col) {
+//   DetectionReport result(x.block(cut_row,cut_col,1,1).matrix());
+//   detect(x, cut_row, cut_col, result);
+//   result.num_detections = result.detections.cast<int>().sum();
 
-  ComputeDetectionIndices(result);
-  return result;
-}
+//   ComputeCFARDetectionIndices(result);
+//   return result;
+// }
 
 DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x,
                                        const Eigen::Array2Xi &indices) {
@@ -148,7 +144,21 @@ DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x,
   }
   result.num_detections = result.detections.cast<int>().sum();
 
-  ComputeDetectionIndices(result);
+  ComputeCFARDetectionIndices(result);
+  return result;
+}
+
+DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
+  DetectionReport result(x);
+#ifdef USE_OPENMP
+#pragma omp parallel for
+#endif
+  for (size_t i = 0; i < x.rows(); ++i)
+    for (size_t j = 0; j < x.cols(); ++j)
+      detect(x, i, j, result);
+  result.num_detections = result.detections.cast<int>().sum();
+
+  ComputeCFARDetectionIndices(result);
   return result;
 }
 
@@ -194,9 +204,8 @@ void CFARDetector2D::detect(const Eigen::MatrixXd &x, size_t cut_row,
   // the training cells
   size_t block_start_row = std::max(static_cast<int>(cut_row - mask_height), 0);
   size_t block_start_col = std::max(static_cast<int>(cut_col - mask_width), 0);
-  ArrayXXd block = x.block(block_start_row,
-                           block_start_col,
-                           mask_height, mask_width);
+  ArrayXXd block =
+      x.block(block_start_row, block_start_col, mask_height, mask_width);
   double power = (block * mask).sum();
 
   // Compute the threshold factor and the threshold itself

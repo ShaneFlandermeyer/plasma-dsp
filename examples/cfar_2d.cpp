@@ -52,6 +52,7 @@ int main() {
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
   std::cout << "CFAR took " << duration.count() << "  milliseconds" << std::endl;
   std::cout << "Number of Detections: " << det.num_detections << std::endl;
+  // cfar.detect(x,6,852);
 
   // Figures
   // figure();
