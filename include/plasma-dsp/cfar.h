@@ -128,14 +128,6 @@ private:
   void detect(const Eigen::MatrixXd &x, size_t cut_index,
               DetectionReport &result);
 
-  /**
-   * @brief Compute the matrix indices of each detection from a detection
-   * report, and store them in the report struct
-   *
-   * @param result A DetectionReport object
-   */
-  static inline void StoreDetectionIndices(DetectionReport &result);
-
 protected:
   /**
    * @brief Number of guard cells on either side of the cell under test
@@ -211,6 +203,7 @@ public:
   DetectionReport detect(const Eigen::MatrixXd &x,
                          const Eigen::Array2Xi &indices);
 
+private:
   /**
    * @brief Perform CFAR detection on the specified elements of the input data
    *
@@ -257,5 +250,13 @@ protected:
    */
   double d_pfa;
 };
+
+/**
+ * @brief Compute the matrix indices of each detection from a detection
+ * report, and store them in the report struct
+ *
+ * @param result A DetectionReport object
+ */
+inline void ComputeDetectionIndices(DetectionReport &result);
 } // namespace plasma
 #endif /* D4D7CDC7_8DAA_42DF_A71A_3840A89194E5 */
