@@ -1,8 +1,8 @@
 #ifndef D44B01D2_E99D_42FF_9E9A_BFDE907AE626
 #define D44B01D2_E99D_42FF_9E9A_BFDE907AE626
-#include "phasecode.h"
-#include "phasecodedwaveform.h"
-#include "pulsedwaveform.h"
+#include "phase-code.h"
+#include "phase-coded-waveform.h"
+#include "pulsed-waveform.h"
 
 namespace plasma {
 

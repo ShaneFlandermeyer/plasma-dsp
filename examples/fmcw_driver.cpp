@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-#include "fmcwwaveform.h"
+#include "fmcw-waveform.h"
 #include "spectrogram.h"
 #include "vector-utils.h"
 #include "window.h"

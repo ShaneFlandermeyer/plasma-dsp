@@ -5,8 +5,8 @@
 
 // #include "cfar.h"
 
-#include "linearfmwaveform.h"
-#include "rangedoppler.h"
+#include "linear-fm-waveform.h"
+#include "range-doppler.h"
 using namespace plasma;
 using namespace matplot;
 using namespace Eigen;
