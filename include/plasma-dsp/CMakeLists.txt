@@ -2,9 +2,11 @@
 list(APPEND
   PLASMA_HEADERS
   barkercode.h
-  cfar.h
+  cfar1d.h
+  cfar2d.h
   circ_shift.h
   constants.h
+  detector.h
   fmcwwaveform.h
   linearfmwaveform.h
   matrix-utils.h

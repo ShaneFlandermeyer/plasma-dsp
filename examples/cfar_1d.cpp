@@ -8,7 +8,7 @@
  * https://www.mathworks.com/help/phased/ug/constant-false-alarm-rate-cfar-detection.html
  */
 
-#include "cfar.h"
+#include "cfar1d.h"
 #include "matrix-utils.h"
 
 #include <random>
@@ -25,7 +25,7 @@ int main() {
   size_t num_guard_cells = 2;
   size_t num_train_cells = 200;
   auto pfa = 1e-3;
-  CFARDetector ca_cfar{num_train_cells, num_guard_cells, pfa};
+  CFARDetector cfar{num_train_cells, num_guard_cells, pfa};
 
   //! Generate data
   // The input data is a square-law input signal with increasing noise power
@@ -49,15 +49,13 @@ int main() {
   // write_binary<double>("/home/shane/bin.dat",filevec);
 
   //! Do CFAR
-  DetectionReport det = ca_cfar.detect(x);
+  DetectionReport det = cfar.detect(x);
 
   //! Figures
   // Input data
   std::vector<double> xvec(x.data(), x.data() + x.size());
-  // Threshold
-  std::vector<double> threshvec(det.threshold.data(),
-                                det.threshold.data() + det.threshold.size());
-  // Detections
+  std::vector<double> threshvec(det.thresholds.data(),
+                                det.thresholds.data() + det.thresholds.size());
   std::vector<size_t> indices(det.indices.col(0).data(),
                               det.indices.col(0).data() +
                                   det.indices.col(0).size());
