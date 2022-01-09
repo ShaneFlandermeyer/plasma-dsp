@@ -1,4 +1,4 @@
-#include "phasecodedwaveform.h"
+#include "phase-coded-waveform.h"
 
 #include <iostream>
 #include <limits>

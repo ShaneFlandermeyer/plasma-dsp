@@ -4,20 +4,20 @@ list(APPEND
   barkercode.h
   cfar1d.h
   cfar2d.h
-  circ_shift.h
+  circ-shift.h
   constants.h
   detector.h
-  fmcwwaveform.h
-  linearfmwaveform.h
+  fmcw-waveform.h
+  linear-fm-waveform.h
   matrix-utils.h
   pcfm.h
-  phasecode.h
-  phasecodedwaveform.h
-  pulsedwaveform.h
-  rangedoppler.h
+  phase-code.h
+  phase-coded-waveform.h
+  pulsed-waveform.h
+  range-doppler.h
   signal-processing.h
   spectrogram.h
-  squarewaveform.h
+  square-waveform.h
   waveform.h
   window.h
   vector-utils.h

@@ -1,7 +1,7 @@
 #ifndef BD5E6A09_B96F_4379_84DF_C755B8C14BF8
 #define BD5E6A09_B96F_4379_84DF_C755B8C14BF8
 
-#include "pulsedwaveform.h"
+#include "pulsed-waveform.h"
 #include "waveform.h"
 
 namespace plasma {

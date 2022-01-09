@@ -4,7 +4,7 @@
 #include <numeric>
 #include <vector>
 
-#include "pulsedwaveform.h"
+#include "pulsed-waveform.h"
 #include "signal-processing.h"
 
 namespace plasma {

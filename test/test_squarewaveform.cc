@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <numeric>
 
-#include "squarewaveform.h"
+#include "square-waveform.h"
 
 using namespace plasma;
 

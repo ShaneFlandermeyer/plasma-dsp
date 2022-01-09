@@ -1,4 +1,4 @@
-#include "linearfmwaveform.h"
+#include "linear-fm-waveform.h"
 
 namespace plasma {
 

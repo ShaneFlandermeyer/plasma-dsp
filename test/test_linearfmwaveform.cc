@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "linearfmwaveform.h"
+#include "linear-fm-waveform.h"
 
 using namespace plasma;
 TEST(LinearFMWaveformTest,HandlesWaveformGeneration) {

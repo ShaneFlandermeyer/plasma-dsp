@@ -1,4 +1,4 @@
-#include "pulsedwaveform.h"
+#include "pulsed-waveform.h"
 
 #include <iostream>
 #include <numeric>

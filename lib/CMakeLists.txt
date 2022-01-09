@@ -2,16 +2,16 @@
 list(
   APPEND
   PLASMA_SOURCES
-  barkercode.cc
+  barker-coded-waveform.cc
   cfar1d.cc
   cfar2d.cc
-  fmcwwaveform.cc
-  linearfmwaveform.cc
+  fmcw-waveform.cc
+  linear-fm-waveform.cc
   pcfm.cc
-  phasecode.cc
-  phasecodedwaveform.cc
-  pulsedwaveform.cc
-  squarewaveform.cc
+  phase-code.cc
+  phase-coded-waveform.cc
+  pulsed-waveform.cc
+  square-waveform.cc
   waveform.cc
   window.cc)
 set(PLASMA_SOURCES
