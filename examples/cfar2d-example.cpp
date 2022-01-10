@@ -82,6 +82,7 @@ int main() {
   hold(true);
   plot(detection_col, detection_row, "r+");
   hold(false);
+  gca()->y_axis().reverse(false);
   show();
   return 0;
 }
