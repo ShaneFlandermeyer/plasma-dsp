@@ -1,7 +1,7 @@
 # List of headers
 list(APPEND
   PLASMA_HEADERS
-  barkercode.h
+  barker-coded-waveform.h
   cfar1d.h
   cfar2d.h
   circ-shift.h
