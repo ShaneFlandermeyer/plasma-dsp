@@ -17,6 +17,7 @@ endif()
 # Build options
 # ##############################################################################
 option(ENABLE_OPENMP "ENABLE_OPENMP" ON)
+option(ENABLE_MATPLOT++ "ENABLE_MATPLOT++" ON)
 
 # ##############################################################################
 # Configure Compiler
@@ -33,7 +34,6 @@ include(BuildType)
 ########################################################################
 # Install directories
 ########################################################################
-
 # CMake module base path
 if (NOT CMAKE_MODULES_DIR)
   set(CMAKE_MODULES_DIR lib/cmake)
@@ -46,7 +46,11 @@ set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma-dsp)
 ########################################################################
 # Find build dependencies
 ########################################################################
-find_package(Matplot++ REQUIRED)
+if (${ENABLE_MATPLOT++})
+  find_package(Matplot++ REQUIRED)
+  set(Matplot++_FOUND TRUE)
+endif()
+# find_package(Matplot++ REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 if (${ENABLE_OPENMP})
   find_package(OpenMP REQUIRED)
@@ -83,8 +87,12 @@ enable_testing()
 # ##############################################################################
 add_subdirectory(include/plasma-dsp)
 add_subdirectory(lib)
-add_subdirectory(examples)
 add_subdirectory(test)
+if (${Matplot++_FOUND})
+  add_subdirectory(examples)
+else()
+  message(STATUS "Matplot++ support disabled, example folder will not be built.")
+endif()
 
 ########################################################################
 # Install cmake search helper for this library
