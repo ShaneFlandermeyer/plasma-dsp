@@ -72,6 +72,8 @@ sudo make uninstall
 
 ## Wishlist
 
+- Eigen support for waveform generators
+- Complex float option for generated waveform
 - Further FMCW processing
 - Separate repo for simulation tools (plasma-sim?)
 - GNU Radio integration (gr-plasma)
