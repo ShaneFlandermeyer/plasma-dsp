@@ -26,8 +26,9 @@ PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
   // Phase vector
   auto phase = std::vector<double>(alpha.size());
   // Waveform vector
-  d_waveform = std::vector<std::complex<double>>(alpha.size());
-  // FIXME: Assumes values are in range [-pi, pi]
+  // d_waveform = std::vector<std::complex<double>>(alpha.size());
+  d_waveform = Eigen::ArrayXcd(alpha.size());
+  // TODO: Assumes values are in range [-pi, pi]
   std::adjacent_difference(d_code.begin(), d_code.end(), diff.begin());
   for (int i = 0; i < diff.size(); i++) alpha[i * num_samps_chip] = diff[i];
   // Convolve phase difference code with shaping filter
@@ -38,10 +39,10 @@ PCFMWaveform::PCFMWaveform(const std::vector<double>& code,
                    std::plus<double>());
   // Take complex exponential of the phase vector
   std::transform(phase.begin(), phase.end(), d_waveform.begin(),
-                 [](auto x) { return std::exp(Im * x); });
+                 [](const auto &x) { return std::exp(Im * x); });
 }
 
-std::vector<std::complex<double>> PCFMWaveform::sample() {
+Eigen::ArrayXcd PCFMWaveform::sample() {
   // TODO: Update the waveform whenever the code or filter changes
   return d_waveform;
 }

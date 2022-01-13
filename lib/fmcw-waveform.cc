@@ -18,14 +18,14 @@ Eigen::ArrayXcd FMCWWaveform::sample() {
   Eigen::ArrayXcd out(num_samps_sweep);
   // Compute sample times
   // TODO: Is this actually right?
-  Eigen::ArrayXd t(num_samps_sweep, ts);
-  t(0) = 0;
-  std::partial_sum(t.begin(), t.end(), t.begin());
+  // Eigen::ArrayXd t(num_samps_sweep, ts);
+  // t(0) = 0;
+  // std::partial_sum(t.begin(), t.end(), t.begin());
   // If the sweep direction is UP (1), the frequency increases over the
   // interval. If the sweep direction is DOWN (-1), the frequency decreases
   // over the interval
   // TODO: Vectorize this with elementwise multiplications
-  for (int i = 0; i < num_samps_sweep; i++) {
+  for (size_t i = 0; i < num_samps_sweep; i++) {
     // If the sweep direction is UP (1), the frequency increases over the
     // interval. If the sweep direction is DOWN (-1), the frequency decreases
     // over the interval

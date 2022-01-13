@@ -29,7 +29,7 @@ class PCFMWaveform : public PulsedWaveform {
    * @brief Waveform samples
    * 
    */
-  std::vector<std::complex<double>> d_waveform;
+  Eigen::ArrayXcd d_waveform;
 
  public:
   /**
@@ -88,7 +88,7 @@ class PCFMWaveform : public PulsedWaveform {
    *
    * @return std::vector<std::complex<double>>
    */
-  std::vector<std::complex<double>> sample() override;
+  Eigen::ArrayXcd sample() override;
 };
 
 }  // namespace plasma

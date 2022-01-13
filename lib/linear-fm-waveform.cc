@@ -6,17 +6,18 @@ Eigen::ArrayXcd LinearFMWaveform::sample() {
   // TODO: Document this
   // Sample interval
   double ts = 1 / samp_rate();
+  double t;
   // Number of samples per pulse
   size_t num_samps_pulse = static_cast<int>(samp_rate() * pulse_width());
-  // Compute sample times
-  // TODO: Is this actually right?
-  Eigen::ArrayXd t(num_samps_pulse, ts);
-  t(0) = 0;
-  std::partial_sum(t.begin(), t.end(), t.begin());
+  Eigen::ArrayXcd out(num_samps_pulse);
+  for (size_t i = 0; i < num_samps_pulse; i++) {
+    t = i * ts;
+    out[i] = std::exp(
+        Im * (2 * M_PI) *
+        (-bandwidth() / 2 * t + bandwidth() / (2 * pulse_width()) * pow(t, 2)));
+  }
 
-  return exp(
-      Im * (2 * M_PI) *
-      (-bandwidth() / 2 * t + bandwidth() / (2 * pulse_width()) * t.square()));
+  return out;
 }
 
 LinearFMWaveform::LinearFMWaveform() : PulsedWaveform() { d_bandwidth = 0; }
