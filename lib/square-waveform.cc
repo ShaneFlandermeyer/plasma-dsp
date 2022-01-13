@@ -4,13 +4,10 @@
 #include <cmath>
 
 namespace plasma {
-std::vector<std::complex<double>> SquareWaveform::sample() {
+Eigen::ArrayXcd SquareWaveform::sample() {
   // Number of samples per pulse
-  int nSampsPulse = static_cast<int>(pulse_width() * samp_rate());
-  // Output vector
-  std::vector<std::complex<double>> wave(nSampsPulse);
-  std::fill(wave.begin(), wave.end(), std::complex<double>(1, 0));
-  return wave;
+  int num_samps_pulse = static_cast<int>(pulse_width() * samp_rate());
+  return Eigen::ArrayXcd::Ones(num_samps_pulse);
 }
 
 SquareWaveform::SquareWaveform() : PulsedWaveform() {}
