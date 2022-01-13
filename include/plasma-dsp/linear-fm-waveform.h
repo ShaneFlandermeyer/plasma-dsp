@@ -3,7 +3,7 @@
 
 #include "pulsed-waveform.h"
 #include "waveform.h"
-
+#include <numeric>
 namespace plasma {
 
 /**
@@ -11,14 +11,14 @@ namespace plasma {
  *
  */
 class LinearFMWaveform : public PulsedWaveform {
- protected:
+protected:
   /**
    * @brief Sweep bandwidth (Hz)
    *
    */
   double d_bandwidth;
 
- public:
+public:
   /**
    * @brief Get the waveform bandwidth.
    *
@@ -55,21 +55,21 @@ class LinearFMWaveform : public PulsedWaveform {
    * @param prf Vector of pulse repetition frequency values (Hz)
    * @param samp_rate Sample rate (samples/s)
    */
-  LinearFMWaveform(double bandwidth, double pulse_width, std::vector<double> prf,
-                   double samp_rate);
+  LinearFMWaveform(double bandwidth, double pulse_width,
+                   std::vector<double> prf, double samp_rate);
   /**
    * @brief Destroy the Linear FM Waveform object
    *
    */
   ~LinearFMWaveform() = default;
 
- protected:
+protected:
   /**
    * @brief Generate a single pulse of the waveform.
    *
    * @return std::vector<std::complex<double>> The pulse data
    */
-  std::vector<std::complex<double>> sample() override;
+  Eigen::ArrayXcd sample() override;
 };
-}  // namespace plasma
+} // namespace plasma
 #endif /* BD5E6A09_B96F_4379_84DF_C755B8C14BF8 */
