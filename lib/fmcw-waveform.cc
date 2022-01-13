@@ -44,12 +44,6 @@ Eigen::ArrayXcd FMCWWaveform::sample() {
 Eigen::ArrayXcd
 FMCWWaveform::demod(Eigen::ArrayXcd &in) {
   auto ref = sample();
-  // Eigen::ArrayXcd out = conj(in)*ref;
-
-  // std::transform(in.begin(), in.end(), ref.begin(), out.begin(),
-  //                [](std::complex<double> a, std::complex<double> b) {
-  //                  return conj(a) * b;
-  //                });
   return conj(in)*ref;
 }
 

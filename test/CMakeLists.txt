@@ -1,5 +1,6 @@
 add_executable(
   waveform-test
+  test-fmcw-waveform.cc
   test-linear-fm-waveform.cc
   test-square-waveform.cc
 )
