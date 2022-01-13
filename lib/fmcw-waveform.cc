@@ -12,10 +12,19 @@ FMCWWaveform::FMCWWaveform(double sweep_time, double sweep_bandwidth,
   d_sweep_direction = direction;
 }
 
-std::vector<std::complex<double>> FMCWWaveform::sample() {
-  int num_samps_sweep = d_sweep_time * d_samp_rate;
-  std::vector<std::complex<double>> out(num_samps_sweep);
-  auto ts = 1 / samp_rate();
+Eigen::ArrayXcd FMCWWaveform::sample() {
+  size_t num_samps_sweep = d_sweep_time * d_samp_rate;
+  double ts = 1 / samp_rate();
+  Eigen::ArrayXcd out(num_samps_sweep);
+  // Compute sample times
+  // TODO: Is this actually right?
+  Eigen::ArrayXd t(num_samps_sweep, ts);
+  t(0) = 0;
+  std::partial_sum(t.begin(), t.end(), t.begin());
+  // If the sweep direction is UP (1), the frequency increases over the
+  // interval. If the sweep direction is DOWN (-1), the frequency decreases
+  // over the interval
+  // TODO: Vectorize this with elementwise multiplications
   for (int i = 0; i < num_samps_sweep; i++) {
     // If the sweep direction is UP (1), the frequency increases over the
     // interval. If the sweep direction is DOWN (-1), the frequency decreases
@@ -32,8 +41,8 @@ std::vector<std::complex<double>> FMCWWaveform::sample() {
   return out;
 }
 
-std::vector<std::complex<double>> FMCWWaveform::demod(
-    std::vector<std::complex<double>> &in) {
+std::vector<std::complex<double>>
+FMCWWaveform::demod(std::vector<std::complex<double>> &in) {
   auto ref = sample();
   std::vector<std::complex<double>> out(in.size());
   std::transform(in.begin(), in.end(), ref.begin(), out.begin(),
@@ -43,4 +52,4 @@ std::vector<std::complex<double>> FMCWWaveform::demod(
   return out;
 }
 
-}  // namespace plasma
+} // namespace plasma
