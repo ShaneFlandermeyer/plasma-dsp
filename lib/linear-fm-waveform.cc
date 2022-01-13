@@ -11,7 +11,7 @@ Eigen::ArrayXcd LinearFMWaveform::sample() {
   // Compute sample times
   Eigen::ArrayXd t(num_samps_pulse, ts);
   t(0) = 0;
-  std::accumulate(t.data(), t.data() + t.size(), t.data());
+  std::accumulate(t.begin(), t.end(), t.begin());
 
   return exp(
       Im * (2 * M_PI) *

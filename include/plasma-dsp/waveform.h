@@ -1,10 +1,10 @@
 #ifndef EB650315_AD21_460C_9B80_13EA6DC8F155
 #define EB650315_AD21_460C_9B80_13EA6DC8F155
 
-#include <Eigen/Dense>
 #include <algorithm>
 #include <complex>
 #include <vector>
+#include <Eigen/Dense>
 
 #include "constants.h"
 #include "vector-utils.h"
@@ -16,7 +16,7 @@ namespace plasma {
  */
 
 class Waveform {
- public:
+public:
   /**
    * @brief Construct a new Waveform object
    *
@@ -80,7 +80,7 @@ class Waveform {
    */
   void freq_offset(double freq_offset) { d_freq_offset = freq_offset; }
 
- protected:
+protected:
   /**
    * @brief Generate the non-zero portion of the waveform at complex baseband
    *
@@ -94,8 +94,7 @@ class Waveform {
    * @param waveform Complex baseband waveform samples
    * @param offset Frequency offset (Hz)
    */
-  void FrequencyShift(Eigen::ArrayXcd& waveform,
-                      double offset);
+  void FrequencyShift(Eigen::ArrayXcd &waveform, double offset);
 
   /**
    * @brief Sample rate (waveform/second)
@@ -112,6 +111,6 @@ class Waveform {
   double d_freq_offset;
 };
 
-}  // namespace plasma
+} // namespace plasma
 
 #endif /* EB650315_AD21_460C_9B80_13EA6DC8F155 */
