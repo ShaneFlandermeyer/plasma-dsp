@@ -1,6 +1,7 @@
 #ifndef EB650315_AD21_460C_9B80_13EA6DC8F155
 #define EB650315_AD21_460C_9B80_13EA6DC8F155
 
+#include <Eigen/Dense>
 #include <algorithm>
 #include <complex>
 #include <vector>
@@ -37,9 +38,9 @@ class Waveform {
    * representation of the waveform. Otherwise, this returns a waveform centered
    * at the frequency offset.
    *
-   * @return std::vector<std::complex<double>>
+   * @return Eigen::ArrayXcd
    */
-  std::vector<std::complex<double>> waveform();
+  Eigen::ArrayXcd waveform();
 
   /**
    * @brief Generate the matched filter for the waveform.
@@ -47,9 +48,9 @@ class Waveform {
    * The matched filter is the time-reversed complex conjugate of the nonzero
    * samples of the waveform.
    *
-   * @return std::vector<std::complex<double>> Matched filter vector
+   * @return Eigen::ArrayXcd Matched filter vector
    */
-  std::vector<std::complex<double>> MatchedFilter();
+  Eigen::ArrayXcd MatchedFilter();
 
   /**
    * @brief Get the sample rate
@@ -83,9 +84,9 @@ class Waveform {
   /**
    * @brief Generate the non-zero portion of the waveform at complex baseband
    *
-   * @return std::vector<std::complex<double>>
+   * @return Eigen::ArrayXcd
    */
-  virtual std::vector<std::complex<double>> sample() = 0;
+  virtual Eigen::ArrayXcd sample() = 0;
 
   /**
    * @brief Apply a frequency shift to the input waveform
@@ -93,7 +94,7 @@ class Waveform {
    * @param waveform Complex baseband waveform samples
    * @param offset Frequency offset (Hz)
    */
-  void FrequencyShift(std::vector<std::complex<double>>& waveform,
+  void FrequencyShift(Eigen::ArrayXcd& waveform,
                       double offset);
 
   /**
