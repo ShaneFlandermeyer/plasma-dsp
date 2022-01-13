@@ -5,15 +5,15 @@
 
 namespace plasma {
 
-std::vector<std::complex<double>> PhaseCodedWaveform::sample() {
+Eigen::ArrayXcd PhaseCodedWaveform::sample() {
   // Oversampling factor
-  int num_samps_chip = std::round(d_chip_width * samp_rate());
-  std::vector<std::complex<double>> pulse(num_samps_chip * d_num_chips);
+  size_t num_samps_chip = std::round(d_chip_width * samp_rate());
+  // std::vector<std::complex<double>> pulse(num_samps_chip * d_num_chips);
+  Eigen::ArrayXcd pulse(num_samps_chip * d_num_chips);
   // Create the oversampled waveform vector
   for (int i = 0; i < d_code.size(); i++) {
-    std::fill(pulse.begin() + i * num_samps_chip,
-              pulse.begin() + (i + 1) * num_samps_chip,
-              std::exp(Im * d_code[i]));
+    pulse(Eigen::seqN(i*num_samps_chip, num_samps_chip)) =
+        d_code[i] * Eigen::ArrayXcd::Ones(num_samps_chip);
   }
   return pulse;
 }
@@ -38,4 +38,4 @@ PhaseCodedWaveform::PhaseCodedWaveform(int num_chips, double chip_width,
         "The number of samples per chip must be an integer.");
   }
 }
-}  // namespace plasma
+} // namespace plasma

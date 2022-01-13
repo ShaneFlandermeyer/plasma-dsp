@@ -5,6 +5,7 @@
 
 #include "constants.h"
 #include "waveform.h"
+#include <Eigen/Core>
 
 namespace plasma {
 /**
@@ -35,7 +36,7 @@ class PhaseCodedWaveform : virtual public Waveform {
    *
    * @return std::vector<std::complex<double>> The pulse data
    */
-  virtual std::vector<std::complex<double>> sample() override;
+  virtual Eigen::ArrayXcd sample() override;
   /**
    * @brief Get the phase code vector
    *
