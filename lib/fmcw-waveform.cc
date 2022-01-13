@@ -41,15 +41,16 @@ Eigen::ArrayXcd FMCWWaveform::sample() {
   return out;
 }
 
-std::vector<std::complex<double>>
-FMCWWaveform::demod(std::vector<std::complex<double>> &in) {
+Eigen::ArrayXcd
+FMCWWaveform::demod(Eigen::ArrayXcd &in) {
   auto ref = sample();
-  std::vector<std::complex<double>> out(in.size());
-  std::transform(in.begin(), in.end(), ref.begin(), out.begin(),
-                 [](std::complex<double> a, std::complex<double> b) {
-                   return conj(a) * b;
-                 });
-  return out;
+  // Eigen::ArrayXcd out = conj(in)*ref;
+
+  // std::transform(in.begin(), in.end(), ref.begin(), out.begin(),
+  //                [](std::complex<double> a, std::complex<double> b) {
+  //                  return conj(a) * b;
+  //                });
+  return conj(in)*ref;
 }
 
 } // namespace plasma

@@ -14,7 +14,7 @@ namespace plasma {
  */
 class FMCWWaveform : public Waveform {
 
- public:
+public:
   /**
    * @brief Location of FM Sweep interval
    *
@@ -74,8 +74,7 @@ class FMCWWaveform : public Waveform {
    * @param ref Reference signal
    * @return std::vector<std::complex<double>> dechirped beat signal
    */
-  std::vector<std::complex<double>> demod(
-      std::vector<std::complex<double>> &in);
+  Eigen::ArrayXcd demod(Eigen::ArrayXcd &in);
 
   /**
    * @brief Get the sweep time (s)
@@ -104,7 +103,7 @@ class FMCWWaveform : public Waveform {
     d_sweep_bandwidth = sweep_bandwidth;
   }
 
- protected:
+protected:
   /**
    * @brief Sweep duration (s)
    *
@@ -137,5 +136,5 @@ class FMCWWaveform : public Waveform {
    */
   Eigen::ArrayXcd sample() override;
 };
-}  // namespace plasma
+} // namespace plasma
 #endif /* B50A8067_E867_4FD6_AE82_CDA1990F0971 */

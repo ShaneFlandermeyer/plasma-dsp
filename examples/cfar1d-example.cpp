@@ -32,7 +32,7 @@ int main() {
   auto noise_power = pow(10, -10 / 10);
   size_t num_points = 10e3;
   // std::default_random_engine gen;
-  MatrixX<std::complex<double>> rsamp(num_points, 1);
+  MatrixXcd rsamp(num_points, 1);
   MatrixXd x(rsamp.rows(), rsamp.cols());
   // Start with samples from a complex standard normal distribution
   std::mt19937 gen{1000};
