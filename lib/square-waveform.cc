@@ -15,7 +15,7 @@ SquareWaveform::SquareWaveform() : PulsedWaveform() {}
 SquareWaveform::SquareWaveform(double pulse_width, double prf, double samp_rate)
     : Waveform(samp_rate), PulsedWaveform(pulse_width, prf) {}
 
-SquareWaveform::SquareWaveform(double pulse_width, std::vector<double> prf,
+SquareWaveform::SquareWaveform(double pulse_width, Eigen::ArrayXd prf,
                                double samp_rate)
     : Waveform(samp_rate), PulsedWaveform(pulse_width, prf) {}
 

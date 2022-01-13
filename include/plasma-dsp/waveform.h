@@ -8,6 +8,7 @@
 
 #include "constants.h"
 #include "vector-utils.h"
+
 namespace plasma {
 
 /**
@@ -55,16 +56,16 @@ public:
   /**
    * @brief Get the sample rate
    *
-   * @return auto sample rate
+   * @return double sample rate
    */
-  auto samp_rate() const { return d_samp_rate; }
+  double samp_rate() const { return d_samp_rate; }
 
   /**
    * @brief Get the frequency offset (Hz)
    *
-   * @return auto
+   * @return double Frequency offset (Hz)
    */
-  auto freq_offset() const { return d_freq_offset; }
+  double freq_offset() const { return d_freq_offset; }
 
   /**
    * @brief Set the sample rate

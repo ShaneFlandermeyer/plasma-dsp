@@ -56,7 +56,7 @@ public:
    * @param samp_rate Sample rate (samples/s)
    */
   LinearFMWaveform(double bandwidth, double pulse_width,
-                   std::vector<double> prf, double samp_rate);
+                   Eigen::ArrayXd prf, double samp_rate);
   /**
    * @brief Destroy the Linear FM Waveform object
    *

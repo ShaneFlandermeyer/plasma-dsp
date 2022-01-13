@@ -29,7 +29,7 @@ LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulse_width,
 }
 
 LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulse_width,
-                                   std::vector<double> prf, double samp_rate)
+                                   Eigen::ArrayXd prf, double samp_rate)
     : Waveform(samp_rate), PulsedWaveform(pulse_width, prf) {
   d_bandwidth = bandwidth;
 }
