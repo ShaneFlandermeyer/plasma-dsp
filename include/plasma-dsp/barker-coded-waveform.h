@@ -10,7 +10,7 @@ namespace plasma {
  * @brief Barker-coded waveform
  *
  */
-class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
+class BarkerCode : public PhaseCodedWaveform {
  public:
   /**
    * @brief Construct a new Barker Code object

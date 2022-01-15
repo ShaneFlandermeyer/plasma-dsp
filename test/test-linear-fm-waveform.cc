@@ -41,17 +41,12 @@ TEST_F(LinearFMWaveformTest, RandomSinglePRF) {
   // Actual result from the object
   Eigen::ArrayXcd actual = waveform.pulse();
 
-  std::vector<double> expected_real(expected.real().data(),
-                                    expected.real().data() + expected.size());
-  std::vector<double> actual_real(actual.real().data(),
-                                  actual.real().data() + actual.size());
-
   // Check the pulse length
   ASSERT_EQ(actual.size(), expected.size())
-      << "SquareWaveform: Incorrect pulse length";
+      << "LinearFMWaveform: Incorrect pulse length";
 
   // Check that the values are the same
   EXPECT_THAT(actual.real(),
               testing::Pointwise(testing::FloatEq(), expected.real()))
-      << "SquareWaveform: Incorrect pulse values";
+      << "LinearFMWaveform: Incorrect pulse values";
 }
