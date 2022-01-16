@@ -36,11 +36,11 @@ TEST_F(FMCWWaveformTest, RandomUpsweep) {
   }
 
   // Check the pulse length
-  ASSERT_EQ(actual.size(), expected.size())
-      << "FMCWWaveform: Incorrect pulse length";
-
+  ASSERT_EQ(actual.size(), expected.size());
+  
   // Check that the values are the same
   EXPECT_THAT(actual.real(),
-              testing::Pointwise(testing::FloatEq(), expected.real()))
-      << "FMCWWaveform: Incorrect pulse values";
+              testing::Pointwise(testing::FloatNear(1e-10), expected.real()));
+  EXPECT_THAT(actual.imag(),
+              testing::Pointwise(testing::FloatNear(1e-10), expected.imag()));
 }

@@ -11,7 +11,7 @@ protected:
 /**
  * @brief Test the square waveform object by feeding it a random PRF between 1
  * and 10 kHz and a pulse width between 10 and 100 us.
- * 
+ *
  */
 TEST_F(SquareWaveformTest, RandomSinglePRF) {
   // Choose a random PRF and pulse width, then use it to instantiate the
@@ -33,9 +33,12 @@ TEST_F(SquareWaveformTest, RandomSinglePRF) {
   // Actual result from the object
   Eigen::ArrayXcd actual = waveform.pulse();
 
-  // Check the pulse length, then the values themselves
-  ASSERT_EQ(actual.size(), expected.size())
-      << "SquareWaveform: Incorrect pulse length";
-  EXPECT_THAT(actual.abs(), testing::Pointwise(testing::FloatEq(), expected.abs()))
-      << "SquareWaveform: Incorrect pulse values";
+  // Check the pulse length
+  ASSERT_EQ(actual.size(), expected.size());
+
+  // Check that the values are the same
+  EXPECT_THAT(actual.real(),
+              testing::Pointwise(testing::FloatNear(1e-10), expected.real()));
+  EXPECT_THAT(actual.imag(),
+              testing::Pointwise(testing::FloatNear(1e-10), expected.imag()));
 }
