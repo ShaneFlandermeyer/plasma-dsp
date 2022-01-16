@@ -10,7 +10,7 @@ namespace plasma {
  * @brief Barker-coded waveform
  *
  */
-class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
+class BarkerCode : public PhaseCodedWaveform {
  public:
   /**
    * @brief Construct a new Barker Code object
@@ -43,7 +43,7 @@ class BarkerCode : public PulsedWaveform, public PhaseCodedWaveform {
    * @param prf Pulse repetition frequency (Hz)
    * @param samp_rate Sample Rate (Samples/second)
    */
-  BarkerCode(int n, double chip_width, std::vector<double> prf,
+  BarkerCode(int n, double chip_width, Eigen::ArrayXd prf,
              double samp_rate);
 };
 

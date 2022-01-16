@@ -2,7 +2,7 @@
 list(
   APPEND
   PLASMA_SOURCES
-  barker-coded-waveform.cc
+  # barker-coded-waveform.cc
   cfar1d.cc
   cfar2d.cc
   fmcw-waveform.cc

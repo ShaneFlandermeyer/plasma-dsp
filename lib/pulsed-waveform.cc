@@ -5,52 +5,43 @@
 
 namespace plasma {
 PulsedWaveform::PulsedWaveform() : Waveform() {
-  d_prf = std::vector<double>();
+  d_prf = Eigen::ArrayXd();
   d_pulse_width = 0;
 }
 
 PulsedWaveform::PulsedWaveform(double pulse_width, double prf) {
   d_pulse_width = pulse_width;
-  d_prf = {prf};
+  d_prf = Eigen::ArrayXd(1);
+  d_prf << prf;
 }
 
-PulsedWaveform::PulsedWaveform(double pulse_width, std::vector<double> prf) {
+PulsedWaveform::PulsedWaveform(double pulse_width, Eigen::ArrayXd prf) {
   d_pulse_width = pulse_width;
   d_prf = prf;
 }
 
-std::vector<std::complex<double>> PulsedWaveform::pulse() {
-  // Compute a vector of PRIs
-  std::vector<double> pri;
-  std::transform(d_prf.begin(), d_prf.end(), std::back_inserter(pri),
-                 [](double prf) { return 1 / prf; });
-  // Store the sample rate in a separate variable for lambda functions
-  auto samp_rate = d_samp_rate;
-  // Number of samples for every PRI
-  std::vector<int> num_samps_pri(pri.size());
-  // Compute the number of samples per pulse in each PRI
-  std::transform(pri.begin(), pri.end(), num_samps_pri.begin() + 1,
-                 [&samp_rate](auto& pri) { return pri * samp_rate; });
-  // Compute a cumulative sum of the number of samples per pulse to get the
-  // start indices for each pulse
-  std::vector<int> start_index(pri.size());
-  std::partial_sum(num_samps_pri.begin(), num_samps_pri.end(),
-                   start_index.begin(), std::plus<int>());
-  // Assign values to the nonzero indices
-  // Total time duration of the waveform
-  auto duration = std::accumulate(pri.begin(), pri.end(), 0.0);
-  // Total number of samples in the PRF schedule
-  auto num_samps_total = static_cast<int>(duration * d_samp_rate);
-  std::vector<std::complex<double>> wave(num_samps_total);
-  // Generate the waveform
-  for (int index : start_index) {
-    auto data = waveform();
-    auto num_samps_pulse = data.size();
-    for (int ii = 0; ii < num_samps_pulse; ii++) {
-      wave[index + ii] = data[ii];
-    }
-  }
+Eigen::ArrayXcd PulsedWaveform::pulse() {
+  // Determine the number of samples per PRI (including zeros), and if there is
+  // more than one PRF we also need to determine the starting index of the
+  // nonzero part for each pulse
+  Eigen::ArrayXd pri = 1 / d_prf;
+  Eigen::Array<size_t, Eigen::Dynamic, 1> num_samps_pri =
+      round(pri * samp_rate()).cast<size_t>();
+  Eigen::Array<size_t, Eigen::Dynamic, 1> start_index =
+      Eigen::Array<size_t, Eigen::Dynamic, 1>::Zero(pri.size());
+  if (pri.size() > 1)
+    std::partial_sum(num_samps_pri.begin(), num_samps_pri.end(),
+                     start_index.data());
 
+  // Create the full pulse train by filling all the nonzero indices with the
+  // appropriate values
+  double duration = pri.sum();
+  size_t num_samps_total = round(duration * samp_rate());
+  Eigen::ArrayXcd wave = Eigen::ArrayXcd::Zero(num_samps_total);
+  for (const size_t &index : start_index) {
+    Eigen::ArrayXcd data = waveform();
+    wave(Eigen::seqN(index, data.size())) = data;
+  }
   return wave;
 }
-}  // namespace plasma
+} // namespace plasma

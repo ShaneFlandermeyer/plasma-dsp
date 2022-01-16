@@ -4,79 +4,85 @@
 #include <vector>
 
 #include "constants.h"
+#include "pulsed-waveform.h"
 #include "waveform.h"
+#include <Eigen/Core>
+#include <Eigen/Dense>
 
 namespace plasma {
 /**
  * @brief Phase coded waveform object.
  *
  */
-class PhaseCodedWaveform : virtual public Waveform {
- protected:
+class PhaseCodedWaveform : virtual public PulsedWaveform {
+protected:
   /**
    * @brief Number of phase chips in the waveform
    *
    */
-  int d_num_chips;
+  size_t d_num_chips;
+
   /**
    * @brief Chip duration (seconds)
    *
    */
   double d_chip_width;
+
   /**
    * @brief Vector of phase code values
    *
    */
-  std::vector<double> d_code;
+  Eigen::ArrayXd d_code;
 
- public:
+public:
   /**
    * @brief Generate a single pulse of the waveform.
    *
    * @return std::vector<std::complex<double>> The pulse data
    */
-  virtual std::vector<std::complex<double>> sample() override;
+  virtual Eigen::ArrayXcd sample() override;
+
   /**
    * @brief Get the phase code vector
    *
    * @return auto Code values
    */
-  auto code() const { return d_code; }
+  Eigen::ArrayXd code() const { return d_code; }
 
   /**
    * @brief Get the number of chips
    *
    * @return int Number of chips
    */
-  auto num_chips() const { return d_num_chips; }
+  size_t num_chips() const { return d_num_chips; }
 
   /**
    * @brief Get the chip width
    *
-   * @return int Chip width (seconds)
+   * @return double Chip width (seconds)
    */
-  auto chip_width() const { return d_chip_width; }
+  double chip_width() const { return d_chip_width; }
 
   /**
    * @brief Set the phase code vector
    *
    * @param code New code values
    */
-  auto code(const std::vector<double>& code) { d_code = code; }
+  void code(const Eigen::ArrayXd &code) { d_code = code; }
 
   /**
    * @brief Set the number of chips
    *
    * @param num_chips
    */
-  auto num_chips(int num_chips) { d_num_chips = num_chips; };
+  void num_chips(size_t num_chips) { d_num_chips = num_chips; };
 
   /**
    * @brief Set the chip width
    *
-   * @param chipWidth New chip width
+   * @param chip_width New chip width
    */
-  auto chip_width(int chip_width) { d_chip_width = chip_width; };
+  void chip_width(double chip_width) { d_chip_width = chip_width; };
 
   /**
    * @brief Construct a new Phase Coded Waveform object
@@ -87,11 +93,24 @@ class PhaseCodedWaveform : virtual public Waveform {
   /**
    * @brief Construct a new Phase Coded Waveform object
    *
-   * @param num_chips Number of phase code values
-   * @param chip_width Duration of each code value (seconds)
-   * @param code Vector of code values
+   * @param code Code values
+   * @param chip_width chip duration (seconds)
+   * @param prf Pulse repetition frequency (Hz)
+   * @param samp_rate Sample rate (Hz)
    */
-  PhaseCodedWaveform(int num_chips, double chip_width, std::vector<double> code);
+  PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width, double prf,
+                     double samp_rate);
+
+  /**
+   * @brief Construct a new Phase Coded Waveform object
+   *
+   * @param code Code values
+   * @param chip_width chip duration (seconds)
+   * @param prf Pulse repetition frequency (Hz)
+   * @param samp_rate Sample rate (Hz)
+   */
+  PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width, Eigen::ArrayXd prf,
+                     double samp_rate);
 };
-}  // namespace plasma
+} // namespace plasma
 #endif /* F76EB5C6_3C7E_46B6_AC56_C303873CDA4A */

@@ -6,6 +6,8 @@
 
 #include "pulsed-waveform.h"
 #include "signal-processing.h"
+#include <Eigen/Dense>
+#include <unsupported/Eigen/FFT>
 
 namespace plasma {
 
@@ -14,41 +16,43 @@ namespace plasma {
  *
  */
 class PCFMWaveform : public PulsedWaveform {
- protected:
+protected:
   /**
    * @brief Phase code vector
-   * 
+   *
    */
-  std::vector<double> d_code;
+  Eigen::ArrayXd d_code;
   /**
    * @brief Shaping filter vector
-   * 
+   *
    */
-  std::vector<double> d_filter;
+  Eigen::ArrayXd d_filter;
   /**
    * @brief Waveform samples
-   * 
+   *
    */
-  std::vector<std::complex<double>> d_waveform;
+  Eigen::ArrayXcd d_waveform;
 
- public:
+public:
   /**
    * @brief Construct a new PCFMWaveform object
    *
    */
-  PCFMWaveform();
+  PCFMWaveform() = default;
   /**
    * @brief Construct a new PCFMWaveform object
    *
-   * @param code Vector of phase code values
+   * @param code Phase code values
    * @param filter Shaping filter taps
+   * @param samp_rate Sample rate
+   * @param prf Pulse repetition frequency (Hz)
    */
-  PCFMWaveform(const std::vector<double>& code,
-               const std::vector<double>& filter);
+  PCFMWaveform(const Eigen::ArrayXd &code, const Eigen::ArrayXd &filter,
+               double samp_rate, double prf);
 
   /**
    * @brief Destroy the PCFMWaveform object
-   * 
+   *
    */
   ~PCFMWaveform() = default;
 
@@ -65,14 +69,14 @@ class PCFMWaveform : public PulsedWaveform {
    * @param code Desired code vector
    * @return auto
    */
-  auto code(std::vector<double> code) { d_code = code; }
+  auto code(Eigen::ArrayXd code) { d_code = code; }
 
   /**
    * @brief Get the shaping filter
    *
    * @return Shaping filter taps
    */
-  auto filter() const { return d_filter; }
+  auto ShapingFilter() const { return d_filter; }
 
   /**
    * @brief Set the shaping filter
@@ -80,16 +84,28 @@ class PCFMWaveform : public PulsedWaveform {
    * @param filt Desired shaping filter
    * @return auto The vector of filter taps
    */
-  auto filter(std::vector<double> filt) { d_filter = filt; }
+  auto ShapingFilter(Eigen::ArrayXd filt) { d_filter = filt; }
 
- protected:
+protected:
   /**
    * @brief Generate the non-zero samples for a single pulse
    *
    * @return std::vector<std::complex<double>>
    */
-  std::vector<std::complex<double>> sample() override;
+  Eigen::ArrayXcd sample() override;
+
+private:
+  // TODO: These are general utilities and should not be class members
+
+  // Compute the phase change between successive phase code chips
+  Eigen::ArrayXd ComputePhaseChange();
+
+  Eigen::ArrayXd oversample(const Eigen::ArrayXd &in, size_t factor);
+
+  Eigen::ArrayXd filter(const Eigen::ArrayXd &in, const Eigen::ArrayXd &filter);
+
+  Eigen::ArrayXd cumsum(const Eigen::ArrayXd &in);
 };
 
-}  // namespace plasma
+} // namespace plasma
 #endif /* F9D71799_6DD6_49D7_89EC_155A8D8D6228 */

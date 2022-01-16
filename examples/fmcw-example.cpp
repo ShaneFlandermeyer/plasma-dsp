@@ -8,9 +8,11 @@
  */
 
 #include <matplot/matplot.h>
+#include <unsupported/Eigen/FFT>
 
 #include <iostream>
 
+#include "circ-shift.h"
 #include "fmcw-waveform.h"
 #include "spectrogram.h"
 #include "vector-utils.h"
@@ -18,6 +20,7 @@
 
 using namespace plasma;
 using namespace matplot;
+using namespace Eigen;
 
 int main() {
   auto fc = 77e9;
@@ -50,14 +53,21 @@ int main() {
       FMCWWaveform(tm, bw, fs, FMCWWaveform::SweepInterval::POSITIVE,
                    FMCWWaveform::SweepDirection::UP);
   auto sig = waveform.waveform();
-  std::string path = "/home/shane/sig.dat"; 
+  std::string path = "/home/shane/sig.dat";
   auto dechirped = waveform.demod(sig);
+  auto dechirped_vec = std::vector<std::complex<double>>(
+      dechirped.data(), dechirped.data() + dechirped.size());
+  FFT<double> fft;
+  std::vector<std::complex<double>> sig_fft;
+
+  fft.fwd(sig_fft, dechirped_vec);
+
   figure();
   auto freq_axis = linspace(-fs / 2, fs / 2, dechirped.size());
-  plot(freq_axis,db(abs(fftshift(fft(dechirped)))));
+  plot(freq_axis,db(abs(fftshift(sig_fft))));
   // auto sigf = std::vector<std::complex<float>>(sig.size());
-  // std::transform(sig.begin(),sig.end(),sigf.begin(),[](auto x){return (std::complex<float>)x;});
-  // write_binary(path,sigf);
+  // std::transform(sig.begin(),sig.end(),sigf.begin(),[](auto x){return
+  // (std::complex<float>)x;}); write_binary(path,sigf);
 
   // figure();
   // image(spectrogram(sig, hamming(32), 32, 16), true);

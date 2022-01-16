@@ -4,9 +4,11 @@
 #include <algorithm>
 #include <complex>
 #include <vector>
+#include <Eigen/Dense>
 
 #include "constants.h"
 #include "vector-utils.h"
+
 namespace plasma {
 
 /**
@@ -15,7 +17,7 @@ namespace plasma {
  */
 
 class Waveform {
- public:
+public:
   /**
    * @brief Construct a new Waveform object
    *
@@ -37,9 +39,9 @@ class Waveform {
    * representation of the waveform. Otherwise, this returns a waveform centered
    * at the frequency offset.
    *
-   * @return std::vector<std::complex<double>>
+   * @return Eigen::ArrayXcd
    */
-  std::vector<std::complex<double>> waveform();
+  Eigen::ArrayXcd waveform();
 
   /**
    * @brief Generate the matched filter for the waveform.
@@ -47,23 +49,23 @@ class Waveform {
    * The matched filter is the time-reversed complex conjugate of the nonzero
    * samples of the waveform.
    *
-   * @return std::vector<std::complex<double>> Matched filter vector
+   * @return Eigen::ArrayXcd Matched filter vector
    */
-  std::vector<std::complex<double>> MatchedFilter();
+  Eigen::ArrayXcd MatchedFilter();
 
   /**
    * @brief Get the sample rate
    *
-   * @return auto sample rate
+   * @return double sample rate
    */
-  auto samp_rate() const { return d_samp_rate; }
+  double samp_rate() const { return d_samp_rate; }
 
   /**
    * @brief Get the frequency offset (Hz)
    *
-   * @return auto
+   * @return double Frequency offset (Hz)
    */
-  auto freq_offset() const { return d_freq_offset; }
+  double freq_offset() const { return d_freq_offset; }
 
   /**
    * @brief Set the sample rate
@@ -79,13 +81,13 @@ class Waveform {
    */
   void freq_offset(double freq_offset) { d_freq_offset = freq_offset; }
 
- protected:
+protected:
   /**
    * @brief Generate the non-zero portion of the waveform at complex baseband
    *
-   * @return std::vector<std::complex<double>>
+   * @return Eigen::ArrayXcd
    */
-  virtual std::vector<std::complex<double>> sample() = 0;
+  virtual Eigen::ArrayXcd sample() = 0;
 
   /**
    * @brief Apply a frequency shift to the input waveform
@@ -93,8 +95,7 @@ class Waveform {
    * @param waveform Complex baseband waveform samples
    * @param offset Frequency offset (Hz)
    */
-  void FrequencyShift(std::vector<std::complex<double>>& waveform,
-                      double offset);
+  void FrequencyShift(Eigen::ArrayXcd &waveform, double offset);
 
   /**
    * @brief Sample rate (waveform/second)
@@ -111,6 +112,6 @@ class Waveform {
   double d_freq_offset;
 };
 
-}  // namespace plasma
+} // namespace plasma
 
 #endif /* EB650315_AD21_460C_9B80_13EA6DC8F155 */

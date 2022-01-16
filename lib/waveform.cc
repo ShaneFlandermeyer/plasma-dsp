@@ -12,24 +12,18 @@ Waveform::Waveform(double samp_rate) {
   d_freq_offset = 0;
 }
 
-void Waveform::FrequencyShift(std::vector<std::complex<double>> &waveform,
-                              double offset) {
+void Waveform::FrequencyShift(Eigen::ArrayXcd &waveform, double offset) {
+  std::complex<double> freq = Im * 2.0 * M_PI * offset / d_samp_rate;
   for (auto i = 0; i < waveform.size(); i++)
-    waveform[i] *= exp(Im * 2.0 * M_PI * offset * (double)i / d_samp_rate);
+    waveform[i] *= exp(freq * (double)i);
 }
 
-std::vector<std::complex<double>> Waveform::waveform() {
-  auto samples = sample();
+Eigen::ArrayXcd Waveform::waveform() {
+  Eigen::ArrayXcd samples = sample();
   FrequencyShift(samples, d_freq_offset);
   return samples;
 }
 
-std::vector<std::complex<double>> Waveform::MatchedFilter() {
-  auto mf = waveform();
-  std::reverse(mf.begin(),mf.end());
-  mf = conj(mf);
-  return mf;
+Eigen::ArrayXcd Waveform::MatchedFilter() { return conj(waveform().reverse()); }
 
-}
-
-}  // namespace plasma
+} // namespace plasma

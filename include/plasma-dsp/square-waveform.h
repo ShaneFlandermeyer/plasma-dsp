@@ -28,7 +28,7 @@ class SquareWaveform : public PulsedWaveform {
    * @param prf PRF (Hz)
    * @param samp_rate Sample Rate (samples/second)
    */
-  SquareWaveform(double pulse_width, std::vector<double> prf, double samp_rate);
+  SquareWaveform(double pulse_width, Eigen::ArrayXd prf, double samp_rate);
   /**
    * @brief Destroy the Square Waveform object
    *
@@ -41,7 +41,7 @@ class SquareWaveform : public PulsedWaveform {
    *
    * @return std::vector<std::complex<double>> Nonzero pulse samples
    */
-  std::vector<std::complex<double>> sample() override;
+  Eigen::ArrayXcd sample() override;
 };
 }  // namespace plasma
 #endif /* B13D1A87_AACE_484D_9498_899C106CD35A */
