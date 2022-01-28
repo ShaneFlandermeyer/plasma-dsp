@@ -8,8 +8,8 @@
 #include <iostream>
 #include <vector>
 
-#include "signal-processing.h"
-#include "vector-utils.h"
+#include "signal_processing.h"
+#include "vector_utils.h"
 
 namespace plasma {
 

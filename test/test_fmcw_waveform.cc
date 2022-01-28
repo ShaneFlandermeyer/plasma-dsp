@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "fmcw-waveform.h"
+#include "fmcw_waveform.h"
 
 class FMCWWaveformTest : public testing::Test {
 protected:

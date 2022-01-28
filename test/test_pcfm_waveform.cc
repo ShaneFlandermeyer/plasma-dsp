@@ -1,4 +1,4 @@
-#include "matrix-utils.h"
+#include "matrix_utils.h"
 #include "pcfm.h"
 #include <random>
 #include <gmock/gmock.h>

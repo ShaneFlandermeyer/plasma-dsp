@@ -1,11 +1,11 @@
-#include "eigen-config.h"
+#include "eigen_config.h"
 #include <matplot/matplot.h>
 
 #include <Eigen/Dense>
 
 // #include "cfar.h"
 
-#include "linear-fm-waveform.h"
+#include "linear_fm_waveform.h"
 #include "range-doppler.h"
 using namespace plasma;
 using namespace matplot;

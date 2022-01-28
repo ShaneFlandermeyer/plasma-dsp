@@ -1,4 +1,4 @@
-#include "barker-coded-waveform.h"
+#include "barker_coded_waveform.h"
 
 #include <iostream>
 

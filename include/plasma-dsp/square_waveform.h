@@ -1,6 +1,6 @@
 #ifndef B13D1A87_AACE_484D_9498_899C106CD35A
 #define B13D1A87_AACE_484D_9498_899C106CD35A
-#include "pulsed-waveform.h"
+#include "pulsed_waveform.h"
 namespace plasma {
 /**
  * @brief A square (constant-amplitude) pulsed waveform.

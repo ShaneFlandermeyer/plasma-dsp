@@ -7,7 +7,7 @@
 #include <Eigen/Dense>
 
 #include "constants.h"
-#include "vector-utils.h"
+#include "vector_utils.h"
 
 namespace plasma {
 

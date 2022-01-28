@@ -1,4 +1,4 @@
-#include "square-waveform.h"
+#include "square_waveform.h"
 
 #include <algorithm>
 #include <cmath>
