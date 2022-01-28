@@ -1,10 +1,10 @@
 add_executable(
   waveform-test
-  test-fmcw-waveform.cc
-  test-linear-fm-waveform.cc
-  test-pcfm-waveform.cc
-  test-phase-coded-waveform.cc
-  test-square-waveform.cc
+  test_fmcw_waveform.cc
+  test_linear_fm_waveform.cc
+  test_pcfm_waveform.cc
+  test_phase_coded_waveform.cc
+  test_square_waveform.cc
 )
 
 target_link_libraries(

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "constants.h"
-#include "pulsed-waveform.h"
+#include "pulsed_waveform.h"
 #include "waveform.h"
 #include <Eigen/Core>
 #include <Eigen/Dense>

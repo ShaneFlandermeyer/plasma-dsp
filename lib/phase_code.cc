@@ -1,4 +1,4 @@
-#include "phase-code.h"
+#include "phase_code.h"
 
 namespace plasma {
 /**

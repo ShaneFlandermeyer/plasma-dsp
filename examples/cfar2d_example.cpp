@@ -10,7 +10,7 @@
 
 // #include "cfar.h"
 #include "cfar2d.h"
-#include "matrix-utils.h"
+#include "matrix_utils.h"
 
 #include <fstream>
 #include <random>

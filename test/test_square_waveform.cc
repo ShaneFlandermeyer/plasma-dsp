@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "square-waveform.h"
+#include "square_waveform.h"
 
 class SquareWaveformTest : public testing::Test {
 protected:

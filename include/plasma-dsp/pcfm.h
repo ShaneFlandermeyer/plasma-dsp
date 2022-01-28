@@ -4,15 +4,15 @@
 #include <numeric>
 #include <vector>
 
-#include "pulsed-waveform.h"
-#include "signal-processing.h"
+#include "pulsed_waveform.h"
+#include "signal_processing.h"
 #include <Eigen/Dense>
 #include <unsupported/Eigen/FFT>
 
 namespace plasma {
 
 /**
- * @brief Polyphase-coded frequency modulated waveform
+ * @brief Polyphase_coded frequency modulated waveform
  *
  */
 class PCFMWaveform : public PulsedWaveform {

@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "linear-fm-waveform.h"
+#include "linear_fm_waveform.h"
 
 class LinearFMWaveformTest : public testing::Test {
 protected:

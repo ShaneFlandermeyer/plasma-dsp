@@ -13,9 +13,9 @@
 #include <iostream>
 
 #include "circ-shift.h"
-#include "fmcw-waveform.h"
+#include "fmcw_waveform.h"
 #include "spectrogram.h"
-#include "vector-utils.h"
+#include "vector_utils.h"
 #include "window.h"
 
 using namespace plasma;

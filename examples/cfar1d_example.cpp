@@ -9,7 +9,7 @@
  */
 
 #include "cfar1d.h"
-#include "matrix-utils.h"
+#include "matrix_utils.h"
 
 #include <random>
 #include <Eigen/Dense>

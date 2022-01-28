@@ -13,7 +13,7 @@ A free and open-source C++ library for RF (mostly radar) signal processing.
 - Phase codes
   - Barker
   - Frank
-- Polyphase-coded frequency modulated (PCFM)
+- Polyphase_coded frequency modulated (PCFM)
 - Square wave
 
 ### Windows

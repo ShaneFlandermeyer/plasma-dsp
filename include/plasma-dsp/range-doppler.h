@@ -2,7 +2,7 @@
 #include <unsupported/Eigen/FFT>
 
 #include "circ-shift.h"
-#include "matrix-utils.h"
+#include "matrix_utils.h"
 namespace plasma {
 using namespace Eigen;
 

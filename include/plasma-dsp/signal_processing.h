@@ -10,7 +10,7 @@
 #include <complex>
 #include <vector>
 
-#include "vector-utils.h"
+#include "vector_utils.h"
 
 namespace plasma {
 
