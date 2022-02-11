@@ -1,7 +1,7 @@
 #include <Eigen/Dense>
 #include <unsupported/Eigen/FFT>
 
-#include "circ-shift.h"
+#include "circ_shift.h"
 #include "matrix_utils.h"
 namespace plasma {
 using namespace Eigen;

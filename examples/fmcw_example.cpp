@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-#include "circ-shift.h"
+#include "circ_shift.h"
 #include "fmcw_waveform.h"
 #include "spectrogram.h"
 #include "vector_utils.h"

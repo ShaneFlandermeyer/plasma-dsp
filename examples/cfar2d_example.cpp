@@ -17,6 +17,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include <matplot/matplot.h>
+#include <pulse_doppler.h>
 
 using namespace plasma;
 using namespace matplot;
