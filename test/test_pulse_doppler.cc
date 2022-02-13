@@ -9,11 +9,14 @@ class PulseDopplerTest : public testing::Test {
 protected:
 };
 
-TEST_F(PulseDopplerTest, Delay) {
-  Eigen::ArrayXd x = Eigen::ArrayXd::Ones(10);
+TEST_F(PulseDopplerTest, TestIntegerDelay) {
+  // TODO: For some reason the solution to this test changes every run
+  Eigen::MatrixXd x = Eigen::MatrixXd::Ones(10,1);
   size_t num_samps_delay = 10;
-  size_t nfft = 10;
+  size_t nfft = 30;
   double fs = 1e6;
-  double t = 10 / fs;
-  auto y = plasma::delay(x,t,nfft+num_samps_delay,fs);
+  double ts = 1 / fs;
+  double t = num_samps_delay * ts;
+  // Eigen::MatrixXd y = plasma::delay(x,t,nfft,fs);
+  plasma::delay(x,t,nfft,fs);
 }

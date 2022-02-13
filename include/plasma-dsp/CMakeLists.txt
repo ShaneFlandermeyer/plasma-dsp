@@ -4,7 +4,6 @@ list(APPEND
   # barker_coded_waveform.h
   cfar1d.h
   cfar2d.h
-  circ_shift.h
   constants.h
   detector.h
   fmcw_waveform.h
