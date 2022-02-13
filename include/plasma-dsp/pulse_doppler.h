@@ -7,6 +7,7 @@
 #include <iostream>
 #include <Eigen/Dense>
 #include <unsupported/Eigen/FFT>
+
 namespace plasma {
 
 /**
@@ -88,10 +89,26 @@ template <typename T>
 Eigen::VectorX<T> delay(const Eigen::VectorX<T> &x, double t, size_t nfft,
                         double fs) {
   Eigen::VectorX<std::complex<T>> x_fft = x.template cast<std::complex<T>>();
-  Eigen::VectorX<std::complex<T>> y = delay(x_fft, t, nfft, fs);
-  return y.real().template cast<T>();
+  Eigen::VectorXcd y = delay(x_fft, t, nfft, fs);
+  return y.real().cast<T>();
 }
 
+Eigen::VectorXcd conv(Eigen::VectorXcd x, Eigen::VectorXcd h) {
+  Eigen::FFT<double> fft;
+  // Zero pad the inputs to the length of the convolution output
+  size_t conv_length = x.size() + h.size() - 1;
+  x.conservativeResize(conv_length);
+  h.conservativeResize(conv_length);
+  // Compute the FFT of the input signals
+  Eigen::VectorXcd x_fft, h_fft;
+  fft.fwd(x_fft, x);
+  fft.fwd(h_fft, h);
+  // Multiply the two FFTs
+  Eigen::VectorXcd y = x_fft.array() * h_fft.array();
+  // IFFT back to the time domain
+  fft.inv(y, y);
+  return y;
+}
 } // namespace plasma
 
 #endif /* F3BDADEA_1E2F_4FAA_8815_5EE937357AC0 */
