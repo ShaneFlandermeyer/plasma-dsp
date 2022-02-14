@@ -4,7 +4,6 @@ list(APPEND
   # barker_coded_waveform.h
   cfar1d.h
   cfar2d.h
-  circ-shift.h
   constants.h
   detector.h
   fmcw_waveform.h
@@ -13,6 +12,7 @@ list(APPEND
   pcfm.h
   phase_code.h
   phase_coded_waveform.h
+  pulse_doppler.h
   pulsed_waveform.h
   range-doppler.h
   signal_processing.h
