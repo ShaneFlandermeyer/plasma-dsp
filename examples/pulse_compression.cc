@@ -36,13 +36,15 @@ int main() {
 
   // Range doppler map
   // TODO: Make a function for matrix FFTs
-  Eigen::FFT<double> fft;
-  Eigen::VectorXcd tmp;
-  for (size_t i = 0; i < range_doppler_map.rows(); i++) {
-    fft.fwd(tmp, range_pulse_map.row(i));
-    fftshift(tmp.data(),tmp.size());
-    range_doppler_map.row(i) = tmp;
-  }
+  range_doppler_map = fftshift(fft(range_pulse_map, 1),1);
+
+  // Eigen::FFT<double> fft;
+  // Eigen::VectorXcd tmp;
+  // for (size_t i = 0; i < range_doppler_map.rows(); i++) {
+  //   fft.fwd(tmp, range_pulse_map.row(i));
+  //   fftshift(tmp.data(),tmp.size());
+  //   range_doppler_map.row(i) = tmp;
+  // }
 
   // Convert the Eigen matrix to a vector of vectors
   figure();

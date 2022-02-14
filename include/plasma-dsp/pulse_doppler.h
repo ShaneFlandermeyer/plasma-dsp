@@ -17,7 +17,7 @@ namespace plasma {
  * @param data Input data
  * @param count Input data size
  */
-template <typename T> inline void fftshift(T *data, const size_t count) {
+template <typename T> inline void fftshift(T *data, size_t count) {
   int center = (int)floor((float)count / 2);
   if (count % 2 != 0) {
     center++;
@@ -33,10 +33,85 @@ template <typename T> inline void fftshift(T *data, const size_t count) {
  * @param data Input data
  * @param count Input data size
  */
-template <typename T> inline void ifftshift(T *data, const size_t count) {
+template <typename T> inline void ifftshift(T *data, size_t count) {
   int center = (int)floor((float)count / 2);
   // odd: 01 234 changes to 234 01
   std::rotate(data, data + center, data + count);
+}
+
+/**
+ * @brief Compute the FFT of the input matrix along the given dimension
+ *
+ * TODO: Either template this or move it to a .cc file
+ *
+ * @param x Input matrix
+ * @param dim FFT dimension
+ *   - 0: Compute the FFT of each column
+ *   - 1: Compute the FFT of each row
+ * @param: n FFT size
+ *   - If n is not specified, the FFT size is the size of the input matrix
+ * @return Eigen::MatrixXcd
+ */
+Eigen::MatrixXcd fft(Eigen::MatrixXcd &x, size_t dim = 0, int n = -1) {
+
+  // TODO: There's probably a better way to do this than repeating for each dim
+  Eigen::FFT<double> fft;
+  Eigen::MatrixXcd y;
+  Eigen::VectorXcd tmp;
+
+  if (n == -1 && dim == 0)
+    n = x.rows();
+  if (n == -1 && dim == 1)
+    n = x.cols();
+  if (dim == 0) { // FFT across columns
+
+    y = Eigen::MatrixXcd::Zero(n, x.cols());
+    y.topRows(std::min(n, (int)x.rows())) =
+        x.topRows(std::min(n, (int)x.rows()));
+    for (size_t i = 0; i < x.cols(); i++) {
+      tmp = x.col(i);
+      fft.fwd(tmp, x.col(i));
+      y.col(i) = tmp;
+    }
+  } else if (dim == 1) { // FFT across rows
+    y = Eigen::MatrixXcd::Zero(x.rows(), n);
+    y.leftCols(std::min(n, (int)x.cols())) =
+        x.leftCols(std::min(n, (int)x.cols()));
+    for (size_t i = 0; i < x.rows(); i++) {
+      tmp = x.row(i);
+      fft.fwd(tmp, x.row(i));
+      y.row(i) = tmp;
+    }
+  }
+
+  return y;
+}
+
+/**
+ * @brief Do an fftshift along one dimension of a matrix
+ * 
+ * @param x Input matrix
+ * @param dim Dimension to shift
+ * 
+ * @return Eigen::MatrixXcd Shifted matrix
+ */
+Eigen::MatrixXcd fftshift(const Eigen::MatrixXcd &x, size_t dim = 0) {
+  Eigen::MatrixXcd y = x;
+  Eigen::MatrixXcd tmp;
+  if (dim == 0) { // Shift columns
+    for (size_t i = 0; i < x.cols(); i++) { 
+      tmp = y.col(i);
+      fftshift(tmp.data(), y.rows());
+      y.col(i) = tmp;
+    }
+  } else if (dim == 1) { // Shift rows
+    for (size_t i = 0; i < x.rows(); i++) {
+      tmp = y.row(i);
+      fftshift(tmp.data(), y.cols());
+      y.row(i) = tmp;
+    }
+  }
+  return y;
 }
 
 /**
