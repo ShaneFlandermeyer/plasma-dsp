@@ -24,6 +24,6 @@ Eigen::ArrayXcd Waveform::waveform() {
   return samples;
 }
 
-Eigen::ArrayXcd Waveform::MatchedFilter() { return conj(waveform().reverse()); }
+Eigen::ArrayXcd Waveform::MatchedFilter() { return conj(sample().reverse()); }
 
 } // namespace plasma

@@ -1,7 +1,6 @@
 # List of headers
 list(APPEND
   PLASMA_HEADERS
-  # barker_coded_waveform.h
   cfar1d.h
   cfar2d.h
   constants.h

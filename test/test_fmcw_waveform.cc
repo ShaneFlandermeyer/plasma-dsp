@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 #include "fmcw_waveform.h"
+#include "matplot/matplot.h"
 
 class FMCWWaveformTest : public testing::Test {
 protected:
@@ -18,9 +19,12 @@ TEST_F(FMCWWaveformTest, RandomUpsweep) {
   std::default_random_engine engine(std::random_device{}());
   std::uniform_int_distribution uniform(1, 10);
   double sweep_time = uniform(engine) * 1e-4;
-  double sweep_bandwidth = uniform(engine) * 1e5;
+  // double sweep_bandwidth = uniform(engine) * 1e5;
+  double sweep_bandwidth = 10e6;
   double samp_rate = 2 * sweep_bandwidth;
-  plasma::FMCWWaveform waveform(sweep_time, sweep_bandwidth, samp_rate);
+  plasma::FMCWWaveform waveform(sweep_time, sweep_bandwidth, samp_rate,
+                                plasma::FMCWWaveform::SweepInterval::SYMMETRIC,
+                                plasma::FMCWWaveform::SweepDirection::UP);
   Eigen::ArrayXcd actual = waveform.waveform();
 
   // Generate the expected waveform
@@ -35,12 +39,23 @@ TEST_F(FMCWWaveformTest, RandomUpsweep) {
                             sweep_bandwidth / (2 * sweep_time) * pow(t, 2)));
   }
 
+  // std::vector<double> ev(expected.real().data(),
+  //                        expected.real().data() + expected.size());
+  // std::vector<double> av(actual.real().data(),
+  //                         actual.real().data() + actual.size());
+  // matplot::figure();
+  // matplot::plot(ev);
+  // // matplot::hold(true);
+  // matplot::figure();
+  // matplot::plot(av);
+  // matplot::show();
+
   // Check the pulse length
   ASSERT_EQ(actual.size(), expected.size());
   
   // Check that the values are the same
   EXPECT_THAT(actual.real(),
-              testing::Pointwise(testing::FloatNear(1e-10), expected.real()));
+              testing::Pointwise(testing::FloatNear(1e-8), expected.real()));
   EXPECT_THAT(actual.imag(),
-              testing::Pointwise(testing::FloatNear(1e-10), expected.imag()));
+              testing::Pointwise(testing::FloatNear(1e-8), expected.imag()));
 }

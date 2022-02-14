@@ -4,9 +4,11 @@
 #include <cmath>
 
 namespace plasma {
-Eigen::ArrayXcd SquareWaveform::sample() {
+Eigen::ArrayXcd SquareWaveform::sample(double t1, double t2) {
   // Number of samples per pulse
-  int num_samps_pulse = static_cast<int>(pulse_width() * samp_rate());
+  if (t1 == -1) t1 = 0;
+  if (t2 == -1) t2 = pulse_width();
+  int num_samps_pulse = static_cast<int>((t2-t1) * samp_rate());
   return Eigen::ArrayXcd::Ones(num_samps_pulse);
 }
 

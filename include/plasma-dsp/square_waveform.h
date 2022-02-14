@@ -41,7 +41,7 @@ class SquareWaveform : public PulsedWaveform {
    *
    * @return std::vector<std::complex<double>> Nonzero pulse samples
    */
-  Eigen::ArrayXcd sample() override;
+  Eigen::ArrayXcd sample(double t1, double t2) override;
 };
 }  // namespace plasma
 #endif /* B13D1A87_AACE_484D_9498_899C106CD35A */

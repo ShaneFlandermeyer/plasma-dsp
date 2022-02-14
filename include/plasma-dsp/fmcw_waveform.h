@@ -63,7 +63,7 @@ public:
                SweepInterval interval = SYMMETRIC,
                SweepDirection direction = UP);
   /**
-   * @brief "Dechirp" the FMCW signal
+   * @brief Dechirp the FMCW signal
    *
    * @details This function demodulates the input FMCW signal by mixing it with
    * the transmitted reference signal. For a discrete-time signal, this mixing
@@ -130,11 +130,12 @@ protected:
    */
   double d_num_sweeps;
   /**
-   * @brief Generate the non-zero portion of the waveform at complex baseband
+   * @brief Generate samples of the complex baseband waveform in the time range
+   * [t1,t2)
    *
-   * @return std::vector<std::complex<double>>
+   * @return Eigen::ArrayXcd
    */
-  Eigen::ArrayXcd sample() override;
+  Eigen::ArrayXcd sample(double t1, double t2) override;
 };
 } // namespace plasma
 #endif /* B50A8067_E867_4FD6_AE82_CDA1990F0971 */

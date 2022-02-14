@@ -69,7 +69,7 @@ protected:
    *
    * @return std::vector<std::complex<double>> The pulse data
    */
-  Eigen::ArrayXcd sample() override;
+  Eigen::ArrayXcd sample(double t1 = -1, double t2 = -1) override;
 };
 } // namespace plasma
 #endif /* BD5E6A09_B96F_4379_84DF_C755B8C14BF8 */

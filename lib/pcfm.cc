@@ -19,7 +19,8 @@ PCFMWaveform::PCFMWaveform(const Eigen::ArrayXd &code,
   d_prf(0) = prf;
 }
 
-Eigen::ArrayXcd PCFMWaveform::sample() {
+Eigen::ArrayXcd PCFMWaveform::sample(double t1, double t2) {
+  // TODO: Actually do something with the time inputs
   Eigen::ArrayXd difference = ComputePhaseChange();
   Eigen::ArrayXd impulse_train = oversample(difference, d_filter.size());
   // Apply the shaping filter

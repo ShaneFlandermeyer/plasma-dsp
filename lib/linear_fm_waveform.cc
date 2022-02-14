@@ -2,20 +2,19 @@
 
 namespace plasma {
 
-Eigen::ArrayXcd LinearFMWaveform::sample() {
-  // TODO: Document this
+Eigen::ArrayXcd LinearFMWaveform::sample(double t1, double t2) {
+  // Handle default time index arguments
+  if (t1 == -1) 
+    t1 = 0; 
+  if (t2 == -1) t2 = pulse_width();
   // Sample interval
   double ts = 1 / samp_rate();
-  double t;
-  // Number of samples per pulse
-  size_t num_samps_pulse = static_cast<int>(samp_rate() * pulse_width());
-  Eigen::ArrayXcd out(num_samps_pulse);
-  for (size_t i = 0; i < num_samps_pulse; i++) {
-    t = i * ts;
-    out[i] = std::exp(
-        Im * (2 * M_PI) *
-        (-bandwidth() / 2 * t + bandwidth() / (2 * pulse_width()) * pow(t, 2)));
-  }
+  size_t num_samps = static_cast<int>(samp_rate() * (t2 - t1));
+  Eigen::ArrayXd t =
+      Eigen::ArrayXd::LinSpaced(num_samps, 0, num_samps-1) * ts + t1;
+  Eigen::ArrayXcd out = exp(
+      Im * (2 * M_PI) *
+      (-bandwidth() / 2 * t + bandwidth() / (2 * pulse_width()) * pow(t, 2)));
 
   return out;
 }
