@@ -10,6 +10,7 @@ int main() {
   // Waveform parameter
   double B = 50e6;
   double fs = 4 * B;
+  double ts = 1 / fs;
   double Tp = 5e-6;
   double prf = 20e3;
   LinearFMWaveform wave(B, Tp, prf, fs);
@@ -35,16 +36,7 @@ int main() {
   }
 
   // Range doppler map
-  // TODO: Make a function for matrix FFTs
-  range_doppler_map = fftshift(fft(range_pulse_map, 1),1);
-
-  // Eigen::FFT<double> fft;
-  // Eigen::VectorXcd tmp;
-  // for (size_t i = 0; i < range_doppler_map.rows(); i++) {
-  //   fft.fwd(tmp, range_pulse_map.row(i));
-  //   fftshift(tmp.data(),tmp.size());
-  //   range_doppler_map.row(i) = tmp;
-  // }
+  range_doppler_map = fftshift(fft(range_pulse_map, 1), 1);
 
   // Convert the Eigen matrix to a vector of vectors
   figure();
@@ -55,7 +47,14 @@ int main() {
       xv[i][j] = abs(range_doppler_map(i, j));
     }
   }
-  imagesc(xv);
+
+  // Plot the range doppler map
+  double ti = 0;
+  double min_range = physconst::c / 2 * (ts - Tp + ti);
+  double max_range = physconst::c / 2 * (ts*(num_range_bins-1) - Tp + ti);
+  double min_doppler = -prf / 2;
+  double max_doppler = prf / 2 - 1 / (double)num_pulses;
+  imagesc(min_doppler, max_doppler, min_range, max_range, xv);
 
   show();
 
