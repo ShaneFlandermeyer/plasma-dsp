@@ -10,22 +10,26 @@ const std::complex<double> Im(0, 1);
 
 /**
  * @brief Scale factor for db function
- * 
+ *
  */
 enum DbUnit {
   /**
    * @brief db function uses voltage reference
-   * 
+   *
    * @details db(x) = 20 * log10(x)
    */
   VOLTAGE,
   /**
    * @brief db function uses power reference
-   * 
+   *
    * @details db(x) = 10 * log10(x)
    */
   POWER
 };
+
+namespace physconst {
+  const double c = 299792458;
+}
 
 } // namespace plasma
 

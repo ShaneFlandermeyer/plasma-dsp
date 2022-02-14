@@ -56,20 +56,20 @@ template <typename T>
 Eigen::VectorX<std::complex<T>> delay(const Eigen::VectorX<std::complex<T>> &x,
                                       double t, size_t nfft, double fs) {
   Eigen::FFT<double> fft;
-  // Compute the shifted FFT of the input signal
-  Eigen::VectorXcd x_fft = x.template cast<std::complex<double>>();
-  x_fft.conservativeResize(nfft);
+  // Zero pad the input signal vector to the FFT size
+  Eigen::VectorXcd x_fft = Eigen::VectorXcd::Zero(nfft);
+  x_fft.head(x.size()) = x.template cast<std::complex<double>>();
+  // Apply the delay as a phase shift in the frequency domain
   fft.fwd(x_fft, x_fft);
   fftshift(x_fft.data(), x_fft.size());
-  // Apply the delay as a phase shift in the frequency domain
   Eigen::ArrayXd F =
       Eigen::ArrayXd::LinSpaced(nfft, 0.0, nfft - 1) * (fs / nfft) - (fs / 2);
   x_fft = x_fft.array() * exp(-Im * 2.0 * M_PI * F * t);
   // IFFT back to the time domain
-  Eigen::VectorXcd y(nfft, 1);
+  Eigen::VectorXcd y;
   ifftshift(x_fft.data(), x_fft.size());
   fft.inv(y, x_fft);
-  return y.cast<std::complex<T>>();
+  return y.template cast<std::complex<T>>();
 }
 
 /**
@@ -93,22 +93,25 @@ Eigen::VectorX<T> delay(const Eigen::VectorX<T> &x, double t, size_t nfft,
   return y.real().cast<T>();
 }
 
-Eigen::VectorXcd conv(Eigen::VectorXcd x, Eigen::VectorXcd h) {
+Eigen::VectorXcd conv(const Eigen::VectorXcd &x, const Eigen::VectorXcd &h) {
   Eigen::FFT<double> fft;
   // Zero pad the inputs to the length of the convolution output
   size_t conv_length = x.size() + h.size() - 1;
-  x.conservativeResize(conv_length);
-  h.conservativeResize(conv_length);
-  // Compute the FFT of the input signals
-  Eigen::VectorXcd x_fft, h_fft;
-  fft.fwd(x_fft, x);
-  fft.fwd(h_fft, h);
-  // Multiply the two FFTs
+  // Zero pad the input signals
+  Eigen::VectorXcd x_fft = Eigen::VectorXcd::Zero(conv_length);
+  Eigen::VectorXcd h_fft = Eigen::VectorXcd::Zero(conv_length);
+  x_fft.head(x.size()) = x;
+  h_fft.head(h.size()) = h;
+  // Compute the FFT of the input points and multiply them in the frequency
+  // domain
+  fft.fwd(x_fft, x_fft);
+  fft.fwd(h_fft, h_fft);
   Eigen::VectorXcd y = x_fft.array() * h_fft.array();
   // IFFT back to the time domain
   fft.inv(y, y);
   return y;
 }
+
 } // namespace plasma
 
 #endif /* F3BDADEA_1E2F_4FAA_8815_5EE937357AC0 */
