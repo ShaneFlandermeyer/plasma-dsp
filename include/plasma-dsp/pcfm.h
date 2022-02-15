@@ -92,7 +92,7 @@ protected:
    *
    * @return std::vector<std::complex<double>>
    */
-  Eigen::ArrayXcd sample() override;
+  Eigen::ArrayXcd sample(double t1, double t2) override;
 
 private:
   // TODO: These are general utilities and should not be class members

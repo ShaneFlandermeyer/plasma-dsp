@@ -1,6 +1,7 @@
 #include <random>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <matplot/matplot.h>
 
 #include "linear_fm_waveform.h"
 
@@ -22,7 +23,7 @@ TEST_F(LinearFMWaveformTest, RandomSinglePRF) {
   double prf = uniform(engine) * 1e3;
   double pulse_width = uniform(engine) * 10e-6;
   double bandwidth = uniform(engine) * 1e6;
-  double samp_rate = bandwidth * 1.5;
+  double samp_rate = bandwidth * 2;
   plasma::LinearFMWaveform waveform(bandwidth, pulse_width, prf, samp_rate);
 
   // Generate the expected result
@@ -40,7 +41,6 @@ TEST_F(LinearFMWaveformTest, RandomSinglePRF) {
 
   // Actual result from the object
   Eigen::ArrayXcd actual = waveform.pulse();
-
   // Check the pulse length
   ASSERT_EQ(actual.size(), expected.size());
 
@@ -49,4 +49,9 @@ TEST_F(LinearFMWaveformTest, RandomSinglePRF) {
               testing::Pointwise(testing::FloatNear(1e-10), expected.real()));
   EXPECT_THAT(actual.imag(),
               testing::Pointwise(testing::FloatNear(1e-10), expected.imag()));
+
+  std::vector<double> ev(expected.real().data(),
+                         expected.real().data() + expected.size());
+  std::vector<double> av(actual.real().data(),
+                         actual.real().data() + actual.size());
 }

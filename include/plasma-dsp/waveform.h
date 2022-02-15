@@ -87,7 +87,7 @@ protected:
    *
    * @return Eigen::ArrayXcd
    */
-  virtual Eigen::ArrayXcd sample() = 0;
+  virtual Eigen::ArrayXcd sample(double t1 = -1, double t2 = -1) = 0;
 
   /**
    * @brief Apply a frequency shift to the input waveform

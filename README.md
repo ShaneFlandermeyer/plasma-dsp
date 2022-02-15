@@ -13,7 +13,7 @@ A free and open-source C++ library for RF (mostly radar) signal processing.
 - Phase codes
   - Barker
   - Frank
-- Polyphase_coded frequency modulated (PCFM)
+- Polyphase coded frequency modulated (PCFM)
 - Square wave
 
 ### Windows
@@ -40,7 +40,7 @@ A free and open-source C++ library for RF (mostly radar) signal processing.
 ## Dependencies
 
 - C++20
-- [Eigen](https://eigen.tuxfamily.org/)
+- [Eigen](https://gitlab.com/libeigen/eigen/-/tree/3.4)
 - [FFTW3](https://www.fftw.org/)
 - [Matplot++](https://alandefreitas.github.io/matplotplusplus/)
 
@@ -69,13 +69,3 @@ To uninstall, run the following from the build folder
 ```bash
 sudo make uninstall
 ```
-
-## Wishlist
-
-- Eigen support for waveform generators
-- Complex float option for generated waveform
-- Further FMCW processing
-- Separate repo for simulation tools (plasma-sim?)
-- GNU Radio integration (gr-plasma)
-- Make matplot++ optional (i.e., only needed to build examples)
-  
