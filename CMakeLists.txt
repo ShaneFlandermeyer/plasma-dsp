@@ -17,7 +17,7 @@ endif()
 # Build options
 # ##############################################################################
 option(ENABLE_OPENMP "ENABLE_OPENMP" ON)
-option(ENABLE_MATPLOT++ "ENABLE_MATPLOT++" ON)
+option(ENABLE_MATPLOT "ENABLE_MATPLOT" ON)
 
 # ##############################################################################
 # Configure Compiler
@@ -25,11 +25,14 @@ option(ENABLE_MATPLOT++ "ENABLE_MATPLOT++" ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+# set(CMAKE_CXX_FLAGS "/utf-8")
 add_compile_definitions(EIGEN_FFTW_DEFAULT)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 # Include custom cmake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(BuildType)
+include(CPM)
+include(FetchContent)
 
 ########################################################################
 # Install directories
@@ -46,12 +49,43 @@ set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma-dsp)
 ########################################################################
 # Find build dependencies
 ########################################################################
-if (${ENABLE_MATPLOT++})
-  find_package(Matplot++ REQUIRED)
-  set(Matplot++_FOUND TRUE)
+if (${ENABLE_MATPLOT})
+  find_package(Matplot++)
+  if (TARGET Matplot++::matplot)
+    message(STATUS "Using matplot++ from system")
+  else()
+    message(STATUS "Building Matplot++ from submodule...")
+    FetchContent_Declare(Matplot++
+    GIT_REPOSITORY https://github.com/alandefreitas/matplotplusplus.git
+    GIT_TAG origin/master)
+    set(CMAKE_CXX_STANDARD 17)
+    FetchContent_MakeAvailable(Matplot++)
+    set(CMAKE_CXX_STANDARD 20)
+  endif()
 endif()
-# find_package(Matplot++ REQUIRED)
-find_package(Eigen3 3.4 REQUIRED NO_MODULE)
+
+find_package(Eigen3 3.4 NO_MODULE)
+if (TARGET Eigen3::Eigen)
+  message(STATUS "Using Eigen v3.4 from system")
+else()
+  message(STATUS "Building Eigen v3.4 from submodule...")
+  CPMAddPackage(
+  NAME Eigen
+  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+  GIT_TAG origin/3.4
+  # Eigen's CMakelists are not intended for library use
+  DOWNLOAD_ONLY YES 
+  )
+
+  if(Eigen_ADDED)
+    add_library(Eigen3::Eigen INTERFACE IMPORTED)
+    target_include_directories(Eigen3::Eigen INTERFACE ${Eigen_SOURCE_DIR})
+  endif()
+
+endif()
+
+
+
 if (${ENABLE_OPENMP})
   find_package(OpenMP REQUIRED)
 endif()
@@ -72,7 +106,7 @@ add_custom_target(uninstall
 # Set up Google Test
 ########################################################################
 # Declare gtest dependency and download it from git
-include(FetchContent)
+# include(FetchContent)
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
@@ -88,7 +122,7 @@ enable_testing()
 add_subdirectory(include/plasma-dsp)
 add_subdirectory(lib)
 add_subdirectory(test)
-if (${Matplot++_FOUND})
+if (${ENABLE_MATPLOT})
   add_subdirectory(examples)
 else()
   message(STATUS "Matplot++ support disabled, example folder will not be built.")
