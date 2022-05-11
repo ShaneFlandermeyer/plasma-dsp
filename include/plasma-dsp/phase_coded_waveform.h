@@ -40,7 +40,7 @@ public:
    *
    * @return std::vector<std::complex<double>> The pulse data
    */
-  virtual Eigen::ArrayXcd sample(double t1, double t2) override;
+  virtual Eigen::ArrayXcd sample() override;
 
   /**
    * @brief Get the phase code vector

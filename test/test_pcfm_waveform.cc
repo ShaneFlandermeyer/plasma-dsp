@@ -3,7 +3,6 @@
 #include <random>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <matplot/matplot.h>
 #include <unsupported/Eigen/FFT>
 
 class PCFMWaveformTest : public testing::Test {
@@ -14,10 +13,8 @@ TEST_F(PCFMWaveformTest, RandomSinglePRF) {
   // Choose a random bandwidth, pulse width, and PRF, then use it to instantiate
   // the waveform object
   std::default_random_engine engine(std::random_device{}());
-  std::uniform_int_distribution uniform(1, 10);
-  double prf = uniform(engine) * 1e3;
-  size_t num_chips = uniform(engine);
-  // size_t num_chips = 10;
+  double prf = 1e3;
+  size_t num_chips = 100;
   double samp_rate = 1e6;
 
   // Expected result
@@ -69,7 +66,7 @@ TEST_F(PCFMWaveformTest, RandomSinglePRF) {
   // Generate the waveform from the obnect
   plasma::PCFMWaveform waveform(code, filter.head(num_samps_chip), samp_rate,
                                 prf);
-  Eigen::ArrayXcd actual = waveform.pulse();
+  Eigen::ArrayXcd actual = waveform.step();
 
   // Check the pulse length
   ASSERT_EQ(actual.size(), expected.size());

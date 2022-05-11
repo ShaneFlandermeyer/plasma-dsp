@@ -12,7 +12,7 @@ namespace plasma {
  *
  */
 class PhaseCode {
- public:
+public:
   /**
    * Enumeration of supported phase code types
    *
@@ -44,5 +44,5 @@ class PhaseCode {
    */
   static std::vector<double> generate_code(CodeType type, int n);
 };
-}  // namespace plasma
+} // namespace plasma
 #endif /* C8DA77F0_9C11_4535_8359_C56C62F68E47 */

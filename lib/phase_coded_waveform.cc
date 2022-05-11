@@ -5,16 +5,13 @@
 
 namespace plasma {
 
-Eigen::ArrayXcd PhaseCodedWaveform::sample(double t1, double t2) {
-  // TODO: Use the time input parameters
+Eigen::ArrayXcd PhaseCodedWaveform::sample() {
   // Oversampling factor
-  size_t num_samps_chip = std::round(d_chip_width * samp_rate());
-  Eigen::ArrayXcd out = Eigen::ArrayXcd::Zero(num_samps_chip * d_num_chips);
-  // Create the oversampled waveform vector
-  for (int i = 0; i < d_code.size(); i++) {
-    out(Eigen::seqN(i * num_samps_chip, num_samps_chip)) =
-        exp(Im * d_code[i] * Eigen::ArrayXcd::Ones(num_samps_chip));
-  }
+  size_t num_samps_chip = round(d_chip_width * d_samp_rate);
+  size_t num_samps_out = num_samps_chip * d_num_chips;
+  // Repeat each element in the phase code vector num_samps_chip times
+  Eigen::ArrayXcd out = exp(Im * d_code(Eigen::VectorXi::LinSpaced(
+                                     num_samps_out, 0, d_code.size() - 1)));
   return out;
 }
 

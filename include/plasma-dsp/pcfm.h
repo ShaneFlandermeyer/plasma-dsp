@@ -92,11 +92,9 @@ protected:
    *
    * @return std::vector<std::complex<double>>
    */
-  Eigen::ArrayXcd sample(double t1, double t2) override;
+  Eigen::ArrayXcd sample() override;
 
 private:
-  // TODO: These are general utilities and should not be class members
-
   // Compute the phase change between successive phase code chips
   Eigen::ArrayXd ComputePhaseChange();
 

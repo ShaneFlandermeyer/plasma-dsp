@@ -25,6 +25,7 @@ public:
    * @return auto bandwidth (Hz)
    */
   auto bandwidth() const { return d_bandwidth; }
+
   /**
    * @brief Set the waveform bandwidth
    *
@@ -32,11 +33,13 @@ public:
    * @return auto
    */
   auto bandwidth(double bandwidth) { d_bandwidth = bandwidth; }
+
   /**
    * @brief Construct a new Linear FM waveform object.
    *
    */
   LinearFMWaveform();
+
   /**
    * @brief Construct a new Linear FM waveform object.
    *
@@ -47,6 +50,7 @@ public:
    */
   LinearFMWaveform(double bandwidth, double pulse_width, double prf,
                    double samp_rate);
+
   /**
    * @brief Construct a new Linear FM Waveform object
    *
@@ -55,8 +59,9 @@ public:
    * @param prf Vector of pulse repetition frequency values (Hz)
    * @param samp_rate Sample rate (samples/s)
    */
-  LinearFMWaveform(double bandwidth, double pulse_width,
-                   Eigen::ArrayXd prf, double samp_rate);
+  LinearFMWaveform(double bandwidth, double pulse_width, Eigen::ArrayXd prf,
+                   double samp_rate);
+
   /**
    * @brief Destroy the Linear FM Waveform object
    *
@@ -69,7 +74,7 @@ protected:
    *
    * @return std::vector<std::complex<double>> The pulse data
    */
-  Eigen::ArrayXcd sample(double t1 = -1, double t2 = -1) override;
+  Eigen::ArrayXcd sample() override;
 };
 } // namespace plasma
 #endif /* BD5E6A09_B96F_4379_84DF_C755B8C14BF8 */

@@ -4,7 +4,7 @@ add_executable(
   test_linear_fm_waveform.cc
   test_pcfm_waveform.cc
   test_phase_coded_waveform.cc
-  test_pulse_doppler.cc
+  # test_pulse_doppler.cc
   test_square_waveform.cc
 )
 

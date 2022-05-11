@@ -122,11 +122,11 @@ enable_testing()
 add_subdirectory(include/plasma-dsp)
 add_subdirectory(lib)
 add_subdirectory(test)
-if (${ENABLE_MATPLOT})
-  add_subdirectory(examples)
-else()
-  message(STATUS "Matplot++ support disabled, example folder will not be built.")
-endif()
+# if (${ENABLE_MATPLOT})
+#   add_subdirectory(examples)
+# else()
+#   message(STATUS "Matplot++ support disabled, example folder will not be built.")
+# endif()
 
 ########################################################################
 # Install cmake search helper for this library

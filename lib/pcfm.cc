@@ -4,23 +4,16 @@
 
 namespace plasma {
 
-// PCFMWaveform::PCFMWaveform() {
-//   d_code = std::vector<double>();
-//   d_filter = std::vector<double>();
-// }
-
 PCFMWaveform::PCFMWaveform(const Eigen::ArrayXd &code,
                            const Eigen::ArrayXd &filter, double samp_rate,
-                           double prf) {
+                           double prf)
+    : Waveform(samp_rate),
+      PulsedWaveform(filter.size() * code.size() / samp_rate, prf) {
   d_code = code;
   d_filter = filter;
-  d_samp_rate = samp_rate;
-  d_prf = Eigen::ArrayXd(1);
-  d_prf(0) = prf;
 }
 
-Eigen::ArrayXcd PCFMWaveform::sample(double t1, double t2) {
-  // TODO: Actually do something with the time inputs
+Eigen::ArrayXcd PCFMWaveform::sample() {
   Eigen::ArrayXd difference = ComputePhaseChange();
   Eigen::ArrayXd impulse_train = oversample(difference, d_filter.size());
   // Apply the shaping filter
@@ -44,8 +37,7 @@ inline Eigen::ArrayXd PCFMWaveform::ComputePhaseChange() {
 inline Eigen::ArrayXd PCFMWaveform::oversample(const Eigen::ArrayXd &in,
                                                size_t factor) {
   Eigen::ArrayXd out = Eigen::ArrayXd::Zero(in.size() * factor);
-  for (size_t i = 0; i < in.size(); i++)
-    out(i * factor) = in(i);
+  out(Eigen::seqN(0, in.size(), factor)) = in;
   return out;
 }
 

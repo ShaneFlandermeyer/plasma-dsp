@@ -3,7 +3,6 @@
 #include <gtest/gtest.h>
 
 #include "fmcw_waveform.h"
-#include "matplot/matplot.h"
 
 class FMCWWaveformTest : public testing::Test {
 protected:
@@ -12,23 +11,20 @@ protected:
 /**
  * @brief Test an upsweep waveform with a random bandwidth and sweep duration
  */
-TEST_F(FMCWWaveformTest, RandomUpsweep) {
+TEST_F(FMCWWaveformTest, FMCWUpsweep) {
 
   // Randomize waveform parameters and create the waveform object, then generate
   // the actual waveform
-  std::default_random_engine engine(std::random_device{}());
-  std::uniform_int_distribution uniform(1, 10);
-  double sweep_time = uniform(engine) * 1e-4;
-  // double sweep_bandwidth = uniform(engine) * 1e5;
+  double sweep_time = 100e-6;
   double sweep_bandwidth = 10e6;
   double samp_rate = 2 * sweep_bandwidth;
   plasma::FMCWWaveform waveform(sweep_time, sweep_bandwidth, samp_rate,
                                 plasma::FMCWWaveform::SweepInterval::SYMMETRIC,
                                 plasma::FMCWWaveform::SweepDirection::UP);
-  Eigen::ArrayXcd actual = waveform.waveform();
+  Eigen::ArrayXcd actual = waveform.step();
 
   // Generate the expected waveform
-  size_t num_samps_expected = round(sweep_time * samp_rate);
+  size_t num_samps_expected = static_cast<size_t>(sweep_time * samp_rate);
   Eigen::ArrayXcd expected = Eigen::ArrayXcd::Zero(num_samps_expected);
   double ts = 1 / samp_rate;
   double t;
@@ -38,18 +34,6 @@ TEST_F(FMCWWaveformTest, RandomUpsweep) {
                            (-sweep_bandwidth / 2 * t +
                             sweep_bandwidth / (2 * sweep_time) * pow(t, 2)));
   }
-
-  // std::vector<double> ev(expected.real().data(),
-  //                        expected.real().data() + expected.size());
-  // std::vector<double> av(actual.real().data(),
-  //                         actual.real().data() + actual.size());
-  // matplot::figure();
-  // matplot::plot(ev);
-  // // matplot::hold(true);
-  // matplot::figure();
-  // matplot::plot(av);
-  // matplot::show();
-
   // Check the pulse length
   ASSERT_EQ(actual.size(), expected.size());
   

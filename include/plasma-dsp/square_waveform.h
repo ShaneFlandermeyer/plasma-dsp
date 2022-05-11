@@ -1,6 +1,8 @@
 #ifndef B13D1A87_AACE_484D_9498_899C106CD35A
 #define B13D1A87_AACE_484D_9498_899C106CD35A
+
 #include "pulsed_waveform.h"
+
 namespace plasma {
 /**
  * @brief A square (constant-amplitude) pulsed waveform.
@@ -8,11 +10,13 @@ namespace plasma {
  */
 class SquareWaveform : public PulsedWaveform {
  public:
+
   /**
    * @brief Construct a new Square Waveform object
    *
    */
   SquareWaveform();
+
   /**
    * @brief Construct a new Square Waveform object
    *
@@ -21,6 +25,7 @@ class SquareWaveform : public PulsedWaveform {
    * @param samp_rate Sample Rate (samples/second)
    */
   SquareWaveform(double pulse_width, double prf, double samp_rate);
+
   /**
    * @brief Construct a new Square Waveform object
    *
@@ -29,6 +34,7 @@ class SquareWaveform : public PulsedWaveform {
    * @param samp_rate Sample Rate (samples/second)
    */
   SquareWaveform(double pulse_width, Eigen::ArrayXd prf, double samp_rate);
+  
   /**
    * @brief Destroy the Square Waveform object
    *
@@ -36,12 +42,13 @@ class SquareWaveform : public PulsedWaveform {
   ~SquareWaveform();
 
  protected:
+
   /**
    * @brief Generate a single pulse of the waveform.
    *
-   * @return std::vector<std::complex<double>> Nonzero pulse samples
+   * @return Eigen::ArrayXcd Nonzero pulse samples
    */
-  Eigen::ArrayXcd sample(double t1, double t2) override;
+  Eigen::ArrayXcd sample() override;
 };
 }  // namespace plasma
 #endif /* B13D1A87_AACE_484D_9498_899C106CD35A */

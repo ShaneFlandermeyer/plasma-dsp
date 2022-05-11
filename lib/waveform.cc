@@ -18,12 +18,6 @@ void Waveform::FrequencyShift(Eigen::ArrayXcd &waveform, double offset) {
     waveform[i] *= exp(freq * (double)i);
 }
 
-Eigen::ArrayXcd Waveform::waveform() {
-  Eigen::ArrayXcd samples = sample();
-  FrequencyShift(samples, d_freq_offset);
-  return samples;
-}
-
 Eigen::ArrayXcd Waveform::MatchedFilter() { return conj(sample().reverse()); }
 
 } // namespace plasma
