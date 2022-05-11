@@ -1,20 +1,19 @@
 # plasma-dsp
 
-A free and open-source C++ signal processing library primarily for generating
-and analyzing RF waveforms.
+A free and open-source C++ library for RF (mostly radar) signal processing.
 
 ## Modules and Features
 
 ### Waveforms
 
-- Frequency modulated continuous wave (LFM)
+- Frequency modulated continuous wave (FMCW)
   - Linear upsweep
   - Linear downsweep
 - Linear frequency modulated (LFM)
 - Phase codes
   - Barker
   - Frank
-- Polyphase-coded frequency modulated (PCFM)
+- Polyphase coded frequency modulated (PCFM)
 - Square wave
 
 ### Windows
@@ -26,16 +25,22 @@ and analyzing RF waveforms.
 
 ### Signal Processing
 
+- 1D Constant False Alarm Rate (CFAR) detector
+  - Cell averaging (CA)
+- 2D CFAR detector
+  - Cell averaging (CA)
 - Convolution
 - Finite impulse response (FIR) filters
 - FFT/IFFT
 - fftshift/ifftshift
-- Spectrogram
+- Matched filtering
+- Range-doppler maps
+- Spectrograms
 
 ## Dependencies
 
 - C++20
-- [Eigen](https://eigen.tuxfamily.org/)
+- [Eigen](https://gitlab.com/libeigen/eigen/-/tree/3.4)
 - [FFTW3](https://www.fftw.org/)
 - [Matplot++](https://alandefreitas.github.io/matplotplusplus/)
 
@@ -64,9 +69,3 @@ To uninstall, run the following from the build folder
 ```bash
 sudo make uninstall
 ```
-
-## Wishlist
-
-- Pulse-doppler processing
-  - Range-doppler maps
-  - CFAR

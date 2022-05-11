@@ -2,14 +2,16 @@
 list(
   APPEND
   PLASMA_SOURCES
-  barkercode.cc
-  fmcwwaveform.cc
-  linearfmwaveform.cc
+  cfar1d.cc
+  cfar2d.cc
+  fmcw_waveform.cc
+  linear_fm_waveform.cc
   pcfm.cc
-  phasecode.cc
-  phasecodedwaveform.cc
-  pulsedwaveform.cc
-  squarewaveform.cc
+  phase_code.cc
+  phase_coded_waveform.cc
+  pulse_doppler.cc
+  pulsed_waveform.cc
+  square_waveform.cc
   waveform.cc
   window.cc)
 set(PLASMA_SOURCES
@@ -21,8 +23,14 @@ add_library(plasma-dsp SHARED ${PLASMA_SOURCES})
 target_include_directories(
   plasma-dsp PRIVATE
   PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/plasma-dsp>
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/plasma-dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
-target_link_libraries(plasma-dsp Eigen3::Eigen fftw3)
+target_link_libraries(plasma-dsp PUBLIC Eigen3::Eigen fftw3)
+
+if(OpenMP_CXX_FOUND)
+  target_compile_definitions(plasma-dsp PUBLIC USE_OPENMP)
+  target_link_libraries(plasma-dsp PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 # Install the shared library file
 install(TARGETS plasma-dsp

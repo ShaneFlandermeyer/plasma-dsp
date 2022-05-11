@@ -1,0 +1,14 @@
+Language: Cpp
+BasedOnStyle: LLVM
+
+IncludeCategories:
+  - Regex: '^".*"$'
+    Priority: 1
+    SortPriority: 1
+  - Regex: "^<[a-z]*>$"
+    Priority: 99
+    SortPriority: 99
+  - Regex: ".*"
+    Priority: 100
+    SortPriority: 100
+SortIncludes: true

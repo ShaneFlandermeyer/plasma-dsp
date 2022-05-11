@@ -1,20 +1,30 @@
 # List of headers
 list(APPEND
   PLASMA_HEADERS
-  barkercode.h
+  cfar1d.h
+  cfar2d.h
   constants.h
-  fmcwwaveform.h
-  linearfmwaveform.h
+  detector.h
+  fmcw_waveform.h
+  linear_fm_waveform.h
+  matrix_utils.h
   pcfm.h
-  phasecode.h
-  phasecodedwaveform.h
-  pulsedwaveform.h
-  signal-processing.h
+  phase_code.h
+  phase_coded_waveform.h
+  pulse_doppler.h
+  pulsed_waveform.h
+  range-doppler.h
+  signal_processing.h
   spectrogram.h
-  squarewaveform.h
+  square_waveform.h
   waveform.h
   window.h
-  vector-utils.h
+  vector_utils.h
+)
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/include/plasma-dsp/eigen_config.h.in"
+  "${PROJECT_BINARY_DIR}/include/plasma-dsp/eigen_config.h"
 )
 
 # System-wide installation
