@@ -20,27 +20,6 @@ protected:
 
 public:
   /**
-   * @brief Generate a single pulse of the waveform.
-   *
-   * @return std::vector<std::complex<double>> The pulse data
-   */
-  Eigen::ArrayXcd sample() override;
-  /**
-   * @brief Get the waveform bandwidth.
-   *
-   * @return auto bandwidth (Hz)
-   */
-  auto bandwidth() const { return d_bandwidth; }
-
-  /**
-   * @brief Set the waveform bandwidth
-   *
-   * @param bandwidth
-   * @return auto
-   */
-  auto bandwidth(double bandwidth) { d_bandwidth = bandwidth; }
-
-  /**
    * @brief Construct a new Linear FM waveform object.
    *
    */
@@ -74,7 +53,27 @@ public:
    */
   ~LinearFMWaveform() = default;
 
-protected:
+  /**
+   * @brief Get the waveform bandwidth.
+   *
+   * @return auto bandwidth (Hz)
+   */
+  auto bandwidth() const { return d_bandwidth; }
+
+  /**
+   * @brief Set the waveform bandwidth
+   *
+   * @param bandwidth
+   * @return auto
+   */
+  auto bandwidth(double bandwidth) { d_bandwidth = bandwidth; }
+
+  /**
+   * @brief Generate a single pulse of the waveform.
+   *
+   * @return Eigen::ArrayXcd The pulse data
+   */
+  Eigen::ArrayXcd sample() override;
 };
 } // namespace plasma
 #endif /* BD5E6A09_B96F_4379_84DF_C755B8C14BF8 */

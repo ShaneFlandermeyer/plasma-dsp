@@ -39,6 +39,7 @@ public:
    *
    */
   PCFMWaveform() = default;
+
   /**
    * @brief Construct a new PCFMWaveform object
    *
@@ -59,7 +60,7 @@ public:
   /**
    * @brief Generate the non-zero samples for a single pulse
    *
-   * @return std::vector<std::complex<double>>
+   * @return Eigen::ArrayXcd Nonzero pulse samples
    */
   Eigen::ArrayXcd sample() override;
 

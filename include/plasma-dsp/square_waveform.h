@@ -10,14 +10,7 @@ namespace plasma {
  */
 class SquareWaveform : public PulsedWaveform {
 public:
-  /**
-   * @brief Generate a single pulse of the waveform.
-   *
-   * @return Eigen::ArrayXcd Nonzero pulse samples
-   */
-  Eigen::ArrayXcd sample() override;
-
-  /**
+    /**
    * @brief Construct a new Square Waveform object
    *
    */
@@ -46,6 +39,13 @@ public:
    *
    */
   ~SquareWaveform();
+
+  /**
+   * @brief Generate a single pulse of the waveform.
+   *
+   * @return Eigen::ArrayXcd Nonzero pulse samples
+   */
+  Eigen::ArrayXcd sample() override;
 };
 } // namespace plasma
 #endif /* B13D1A87_AACE_484D_9498_899C106CD35A */

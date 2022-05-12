@@ -36,9 +36,36 @@ protected:
 
 public:
   /**
+   * @brief Construct a new Phase Coded Waveform object
+   *
+   */
+  PhaseCodedWaveform();
+
+  /**
+   * @brief Construct a new Phase Coded Waveform object
+   *
+   * @param code Code values
+   * @param chip_width chip duration (seconds)
+   * @param prf Pulse repetition frequency (Hz)
+   * @param samp_rate Sample rate (Hz)
+   */
+  PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width, double prf,
+                     double samp_rate);
+
+  /**
+   * @brief Construct a new Phase Coded Waveform object
+   *
+   * @param code Code values
+   * @param chip_width chip duration (seconds)
+   * @param prf Pulse repetition frequency (Hz)
+   * @param samp_rate Sample rate (Hz)
+   */
+  PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width, Eigen::ArrayXd prf,
+                     double samp_rate);
+  /**
    * @brief Generate a single pulse of the waveform.
    *
-   * @return std::vector<std::complex<double>> The pulse data
+   * @return Eigen::ArrayXcd The pulse data
    */
   virtual Eigen::ArrayXcd sample() override;
 
@@ -83,34 +110,6 @@ public:
    * @param chip_width New chip width
    */
   void chip_width(double chip_width) { d_chip_width = chip_width; };
-
-  /**
-   * @brief Construct a new Phase Coded Waveform object
-   *
-   */
-  PhaseCodedWaveform();
-
-  /**
-   * @brief Construct a new Phase Coded Waveform object
-   *
-   * @param code Code values
-   * @param chip_width chip duration (seconds)
-   * @param prf Pulse repetition frequency (Hz)
-   * @param samp_rate Sample rate (Hz)
-   */
-  PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width, double prf,
-                     double samp_rate);
-
-  /**
-   * @brief Construct a new Phase Coded Waveform object
-   *
-   * @param code Code values
-   * @param chip_width chip duration (seconds)
-   * @param prf Pulse repetition frequency (Hz)
-   * @param samp_rate Sample rate (Hz)
-   */
-  PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width, Eigen::ArrayXd prf,
-                     double samp_rate);
 };
 } // namespace plasma
 #endif /* F76EB5C6_3C7E_46B6_AC56_C303873CDA4A */

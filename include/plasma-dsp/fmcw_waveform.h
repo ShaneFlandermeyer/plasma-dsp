@@ -15,34 +15,7 @@ namespace plasma {
 class FMCWWaveform : public Waveform {
 
 public:
-  /**
-   * @brief Generate samples of the complex baseband waveform
-   *
-   * @return Eigen::ArrayXcd
-   */
-  Eigen::ArrayXcd sample() override;
-  /**
-   * @brief Return a single sweep of the FMCW waveform
-   *
-   * @return Eigen::ArrayXcd
-   */
-  Eigen::ArrayXcd step() override;
-
-  /**
-   * @brief Dechirp the FMCW signal
-   *
-   * @details This function demodulates the input FMCW signal by mixing it with
-   * the transmitted reference signal. For a discrete-time signal, this mixing
-   * operation is defined as y[n] = ref[n] * conj(x[n]), and produces a
-   * narrowband beat signal
-   *
-   * @param in Input signal
-   * @param ref Reference signal
-   * @return std::vector<std::complex<double>> dechirped beat signal
-   */
-  Eigen::ArrayXcd demod(Eigen::ArrayXcd &in);
-
-  /**
+    /**
    * @brief Location of FM Sweep interval
    *
    */
@@ -92,6 +65,33 @@ public:
   FMCWWaveform(double sweep_time, double sweep_bandwidth, double samp_rate,
                SweepInterval interval = SYMMETRIC,
                SweepDirection direction = UP);
+
+  /**
+   * @brief Generate samples of the complex baseband waveform
+   *
+   * @return Eigen::ArrayXcd
+   */
+  Eigen::ArrayXcd sample() override;
+  /**
+   * @brief Return a single sweep of the FMCW waveform
+   *
+   * @return Eigen::ArrayXcd
+   */
+  Eigen::ArrayXcd step() override;
+
+  /**
+   * @brief Dechirp the FMCW signal
+   *
+   * @details This function demodulates the input FMCW signal by mixing it with
+   * the transmitted reference signal. For a discrete-time signal, this mixing
+   * operation is defined as y[n] = ref[n] * conj(x[n]), and produces a
+   * narrowband beat signal
+   *
+   * @param in Input signal
+   * @param ref Reference signal
+   * @return Eigen::ArrayXcd dechirped beat signal
+   */
+  Eigen::ArrayXcd demod(Eigen::ArrayXcd &in);
 
   /**
    * @brief Get the sweep time (s)
