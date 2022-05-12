@@ -57,6 +57,13 @@ public:
   ~PCFMWaveform() = default;
 
   /**
+   * @brief Generate the non-zero samples for a single pulse
+   *
+   * @return std::vector<std::complex<double>>
+   */
+  Eigen::ArrayXcd sample() override;
+
+  /**
    * @brief Get the phase code
    *
    * @return auto Phase code vector
@@ -87,13 +94,6 @@ public:
   auto ShapingFilter(Eigen::ArrayXd filt) { d_filter = filt; }
 
 protected:
-  /**
-   * @brief Generate the non-zero samples for a single pulse
-   *
-   * @return std::vector<std::complex<double>>
-   */
-  Eigen::ArrayXcd sample() override;
-
 private:
   // Compute the phase change between successive phase code chips
   Eigen::ArrayXd ComputePhaseChange();

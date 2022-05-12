@@ -32,16 +32,23 @@ public:
    */
   Waveform(double samp_rate);
 
-  // /**
-  //  * @brief Generate the nonzero samples of the waveform.
-  //  *
-  //  * If the frequency shift parameter is zero, this is the complex baseband
-  //  * representation of the waveform. Otherwise, this returns a waveform centered
-  //  * at the frequency offset.
-  //  *
-  //  * @return Eigen::ArrayXcd
-  //  */
+  /**
+   * @brief Generate the nonzero samples of the waveform.
+   *
+   * If the frequency shift parameter is zero, this is the complex baseband
+   * representation of the waveform. Otherwise, this returns a waveform centered
+   * at the frequency offset.
+   *
+   * @return Eigen::ArrayXcd
+   */
   virtual Eigen::ArrayXcd step() = 0;
+
+  /**
+   * @brief Generate the non-zero portion of the waveform at complex baseband
+   *
+   * @return Eigen::ArrayXcd
+   */
+  virtual Eigen::ArrayXcd sample() = 0;
 
   /**
    * @brief Generate the matched filter for the waveform.
@@ -82,13 +89,6 @@ public:
   void freq_offset(double freq_offset) { d_freq_offset = freq_offset; }
 
 protected:
-  /**
-   * @brief Generate the non-zero portion of the waveform at complex baseband
-   *
-   * @return Eigen::ArrayXcd
-   */
-  virtual Eigen::ArrayXcd sample() = 0;
-
   /**
    * @brief Apply a frequency shift to the input waveform
    *

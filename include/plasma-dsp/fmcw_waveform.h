@@ -15,11 +15,16 @@ namespace plasma {
 class FMCWWaveform : public Waveform {
 
 public:
-  
+  /**
+   * @brief Generate samples of the complex baseband waveform
+   *
+   * @return Eigen::ArrayXcd
+   */
+  Eigen::ArrayXcd sample() override;
   /**
    * @brief Return a single sweep of the FMCW waveform
-   * 
-   * @return Eigen::ArrayXcd 
+   *
+   * @return Eigen::ArrayXcd
    */
   Eigen::ArrayXcd step() override;
 
@@ -119,13 +124,6 @@ public:
   }
 
 protected:
-  /**
-   * @brief Generate samples of the complex baseband waveform
-   *
-   * @return Eigen::ArrayXcd
-   */
-  Eigen::ArrayXcd sample() override;
-
   /**
    * @brief Sweep duration (s)
    *
