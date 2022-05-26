@@ -3,7 +3,6 @@
 #include <random>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <matplot/matplot.h>
 
 class PhaseCodedWaveformTest : public testing::Test {
 protected:
