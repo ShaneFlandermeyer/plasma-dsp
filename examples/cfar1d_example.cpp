@@ -13,11 +13,12 @@
 
 #include <random>
 #include <Eigen/Dense>
-#include <matplot/matplot.h>
+#include <iostream>
+// #include <matplot/matplot.h>
 
 using namespace plasma;
-using namespace matplot;
 using namespace Eigen;
+
 int main() {
 
   //! CFAR parameters
@@ -65,11 +66,5 @@ int main() {
 
   std::cout << "Number of Detections: " << det.num_detections << std::endl;
 
-  plot(xvec);
-  hold(true);
-  plot(threshvec);
-  plot(indices, detvec, "o");
-  hold(false);
-  show();
   return 0;
 }

@@ -23,8 +23,8 @@ list(APPEND
 )
 
 configure_file(
-  "${PROJECT_SOURCE_DIR}/include/plasma-dsp/eigen_config.h.in"
-  "${PROJECT_BINARY_DIR}/include/plasma-dsp/eigen_config.h"
+  "${PROJECT_SOURCE_DIR}/include/plasma_dsp/eigen_config.h.in"
+  "${PROJECT_BINARY_DIR}/include/plasma_dsp/eigen_config.h"
 )
 
 # System-wide installation

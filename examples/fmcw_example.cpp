@@ -7,7 +7,6 @@
  * Technology](https://www.mathworks.com/help/radar/ug/automotive-adaptive-cruise-control-using-fmcw-technology.html)
  */
 
-#include <matplot/matplot.h>
 #include <unsupported/Eigen/FFT>
 
 #include <iostream>
@@ -61,19 +60,10 @@ int main() {
 
   fft.fwd(sig_fft, dechirped_vec);
 
-  figure();
   auto freq_axis = linspace(-fs / 2, fs / 2, dechirped.size());
-  plot(freq_axis,db(abs(fftshift(sig_fft))));
   // auto sigf = std::vector<std::complex<float>>(sig.size());
   // std::transform(sig.begin(),sig.end(),sigf.begin(),[](auto x){return
   // (std::complex<float>)x;}); write_binary(path,sigf);
-
-  // figure();
-  // image(spectrogram(sig, hamming(32), 32, 16), true);
-  // xlabel("Time (s)");
-  // ylabel("Frequency (MHz)");
-  // gca()->y_axis().reverse(false);
-  show();
 
   return 0;
 }

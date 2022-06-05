@@ -1,8 +1,6 @@
 #include "linear_fm_waveform.h"
 #include "pulse_doppler.h"
-#include <matplot/matplot.h>
 
-using namespace matplot;
 using namespace plasma;
 using namespace Eigen;
 
@@ -39,7 +37,6 @@ int main() {
   range_doppler_map = fftshift(fft(range_pulse_map, 1), 1);
 
   // Convert the Eigen matrix to a vector of vectors
-  figure();
   std::vector<std::vector<double>> xv(
       range_doppler_map.rows(), std::vector<double>(range_doppler_map.cols()));
   for (size_t i = 0; i < xv.size(); i++) {
@@ -54,9 +51,5 @@ int main() {
   double max_range = physconst::c / 2 * (ts*(num_range_bins-1) - Tp + ti);
   double min_doppler = -prf / 2;
   double max_doppler = prf / 2 - 1 / (double)num_pulses;
-  imagesc(min_doppler, max_doppler, min_range, max_range, xv);
-
-  show();
-
   return 0;
 }

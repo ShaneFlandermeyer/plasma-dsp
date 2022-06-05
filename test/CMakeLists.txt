@@ -12,7 +12,7 @@ target_link_libraries(
   waveform-test
   gtest_main
   gmock
-  plasma-dsp
+  plasma_dsp
 )
 
 # Matplot++ is handy for debugging. Link to it if the user wants it anyways

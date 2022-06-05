@@ -16,11 +16,9 @@
 #include <random>
 #include <vector>
 #include <Eigen/Dense>
-#include <matplot/matplot.h>
 #include <pulse_doppler.h>
 
 using namespace plasma;
-using namespace matplot;
 using namespace Eigen;
 
 std::vector<double> read_file(std::string filename) {
@@ -56,10 +54,7 @@ int main() {
   std::cout << "CFAR took " << duration.count() << "  milliseconds"
             << std::endl;
   std::cout << "Number of Detections: " << det.num_detections << std::endl;
-  // cfar.detect(x,6,852);
 
-  // Figures
-  figure();
 
   // Range doppler map
   x = 10 * log10(x);
@@ -79,11 +74,5 @@ int main() {
                                     det.indices.col(1).data() +
                                         det.indices.col(1).size());
 
-  imagesc(rd_map);
-  hold(true);
-  plot(detection_col, detection_row, "r+");
-  hold(false);
-  gca()->y_axis().reverse(false);
-  show();
   return 0;
 }

@@ -1,4 +1,4 @@
-# plasma-dsp
+# plasma_dsp
 
 A free and open-source C++ library for RF (mostly radar) signal processing.
 
@@ -51,7 +51,7 @@ When the tool is more mature, I might make the Matplot++ dependency optional.
 The easiest way to use this tool is to obtain the source code from git
 
 ```bash
-git clone https://github.com/ShaneFlandermeyer/plasma-dsp.git
+git clone https://github.com/ShaneFlandermeyer/plasma_dsp.git
 ```
 
 To install the tool system-wide (currently only possible on Linux), run the
