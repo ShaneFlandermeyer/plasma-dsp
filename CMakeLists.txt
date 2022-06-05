@@ -110,6 +110,6 @@ add_subdirectory(test)
 ########################################################################
 # Install cmake search helper for this library
 ########################################################################
-install(FILES cmake/plasma_dsp_config.cmake
+install(FILES cmake/plasma_dsp-config.cmake
     DESTINATION ${PLASMA_CMAKE_DIR}
 )
