@@ -47,23 +47,23 @@ set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma_dsp)
 ########################################################################
 # Find build dependencies
 ########################################################################
-find_package(Eigen3 3.4 NO_MODULE)
-if (TARGET Eigen3::Eigen)
-  message(STATUS "Using Eigen v3.4 from system")
-else()
-  message(STATUS "Building Eigen v3.4 from submodule...")
-  CPMAddPackage(
-  NAME Eigen
-  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-  GIT_TAG origin/3.4
-  # Eigen's CMakelists are not intended for library use
-  DOWNLOAD_ONLY YES 
-  )
-  if(Eigen_ADDED)
-    add_library(Eigen3::Eigen INTERFACE IMPORTED)
-    target_include_directories(Eigen3::Eigen INTERFACE ${Eigen_SOURCE_DIR})
-  endif()
-endif()
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+# if (TARGET Eigen3::Eigen)
+#   message(STATUS "Using Eigen v3.4 from system")
+# else()
+#   message(STATUS "Building Eigen v3.4 from submodule...")
+#   CPMAddPackage(
+#   NAME Eigen
+#   GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+#   GIT_TAG origin/3.4
+#   # Eigen's CMakelists are not intended for library use
+#   DOWNLOAD_ONLY YES 
+#   )
+#   if(Eigen_ADDED)
+#     add_library(Eigen3::Eigen INTERFACE IMPORTED)
+#     target_include_directories(Eigen3::Eigen INTERFACE ${Eigen_SOURCE_DIR})
+#   endif()
+# endif()
 
 if (${ENABLE_OPENMP})
   find_package(OpenMP REQUIRED)

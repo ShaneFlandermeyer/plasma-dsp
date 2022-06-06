@@ -11,10 +11,10 @@ list(APPEND
   pcfm.h
   phase_code.h
   phase_coded_waveform.h
+  processing.h
   pulse_doppler.h
   pulsed_waveform.h
   range-doppler.h
-  signal_processing.h
   spectrogram.h
   square_waveform.h
   waveform.h

@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "pulsed_waveform.h"
-#include "signal_processing.h"
+#include "processing.h"
 #include <Eigen/Dense>
 #include <unsupported/Eigen/FFT>
 

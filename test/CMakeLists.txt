@@ -16,12 +16,12 @@ target_link_libraries(
 )
 
 # Matplot++ is handy for debugging. Link to it if the user wants it anyways
-if(${Matplot++_FOUND})
-  target_link_libraries(
-    waveform-test
-    Matplot++::matplot
-  )
-endif()
+# if(${Matplot++_FOUND})
+#   target_link_libraries(
+#     waveform-test
+#     Matplot++::matplot
+#   )
+# endif()
 
 include(GoogleTest)
 gtest_discover_tests(waveform-test)
