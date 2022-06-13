@@ -9,14 +9,14 @@ list(
   pcfm.cc
   phase_code.cc
   phase_coded_waveform.cc
+  processing.cc
   pulse_doppler.cc
   pulsed_waveform.cc
   square_waveform.cc
   waveform.cc
   window.cc)
-set(PLASMA_SOURCES
-    "${PLASMA_SOURCES}"
-    PARENT_SCOPE)
+
+set(PLASMA_SOURCES "${PLASMA_SOURCES}" PARENT_SCOPE)
 # Create the waveform library
 add_library(plasma_dsp SHARED ${PLASMA_SOURCES})
 # Specify the library include dirs
