@@ -98,7 +98,6 @@ template <typename T> inline std::vector<T> ifftshift(std::vector<T> in) {
   return out;
 }
 
-
 /**
  * @brief Compute the 1D convolution of two real input vectors using the FFT
  *
@@ -109,7 +108,7 @@ template <typename T> inline std::vector<T> ifftshift(std::vector<T> in) {
  * length(in1)+length(in2)-1
  */
 template <typename T>
-inline std::vector<T> conv(std::vector<T> in1, std::vector<T> in2) {
+std::vector<T> conv(std::vector<T> in1, std::vector<T> in2) {
   std::vector<std::complex<T>> product;
   // Convolution length
   size_t N = in1.size() + in2.size() - 1;
@@ -119,22 +118,32 @@ inline std::vector<T> conv(std::vector<T> in1, std::vector<T> in2) {
   std::transform(fin1.begin(), fin1.end(), fin2.begin(),
                  std::back_inserter(product),
                  std::multiplies<std::complex<T>>());
-  std::vector<T> result = ifft<T>(product, N);
-  return result;
+  return ifft<T>(product, N);
 }
 
 template <typename T>
-inline std::vector<std::complex<T>> conv(std::vector<std::complex<T>> in1, std::vector<std::complex<T>> in2) {
+std::vector<std::complex<T>> conv(std::vector<std::complex<T>> in1,
+                                  std::vector<std::complex<T>> in2) {
   // Convolution length
   size_t N = in1.size() + in2.size() - 1;
   // Multiply the inputs in the frequency domain
   std::vector<std::complex<T>> fin1 = fft(in1, N);
   std::vector<std::complex<T>> fin2 = fft(in2, N);
-  std::vector<std::complex<T>> product(N);
-  for (size_t i = 0; i < N; i++) {
-    product[i] = fin1[i] * fin2[i];
-  }
+  std::vector<std::complex<T>> product;
+  std::transform(fin1.begin(), fin1.end(), fin2.begin(),
+                 std::back_inserter(product),
+                 std::multiplies<std::complex<T>>());
   return ifft<std::complex<T>>(product, N);
 }
+
+template <typename T>
+Eigen::ArrayX<T> conv(Eigen::ArrayX<T> &in1, Eigen::ArrayX<T> &in2) {
+  std::vector<T> result = conv(
+      std::vector<T>(in1.data(), in1.data() + in1.size()),
+      std::vector<T>(in2.data(), in2.data() + in2.size()));
+  return Eigen::Map<Eigen::ArrayX<T>, Eigen::Unaligned>(result.data(),
+                                                       result.size());
+}
+
 } // namespace plasma
 #endif /* A5C31B48_9A55_4209_8ECA_2F954DCC8005 */
