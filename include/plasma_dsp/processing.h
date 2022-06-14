@@ -2,14 +2,17 @@
 #define A5C31B48_9A55_4209_8ECA_2F954DCC8005
 
 #include <fftw3.h>
-
-#include <algorithm>
-#include <complex>
-#include <vector>
-#include <Eigen/Dense>
-#include <unsupported/Eigen/FFT>
+// #include <fftw3f.h>
 
 #include "vector_utils.h"
+#include <algorithm>
+#include <chrono>
+#include <complex>
+#include <iostream>
+#include <thread>
+#include <vector>
+#include <Eigen/Dense>
+#include <eigen3/unsupported/Eigen/FFT>
 
 namespace plasma {
 
@@ -20,7 +23,7 @@ namespace plasma {
  * @return std::vector<std::complex<double>> DFT of the input
  */
 std::vector<std::complex<double>>
-fft(const std::vector<std::complex<double>> &x, int N = -1);
+fft(const std::vector<std::complex<double>> &x, int N = -1, size_t num_threads = 1);
 
 /**
  * @brief Matlab-like syntax for computing a complex forward FFT with FFTW3F
@@ -28,8 +31,8 @@ fft(const std::vector<std::complex<double>> &x, int N = -1);
  * @param in Input data vector of complex floats
  * @return std::vector<std::complex<float>> DFT of the input
  */
-std::vector<std::complex<float>> fft(std::vector<std::complex<float>> &in,
-                                     int N = -1);
+std::vector<std::complex<float>>
+fft(std::vector<std::complex<float>> &in, int N = -1, size_t num_threads = 1);
 
 /**
  * @brief Matlab-like syntax for computing a real forward FFT with FFTW3
@@ -138,11 +141,11 @@ std::vector<std::complex<T>> conv(std::vector<std::complex<T>> in1,
 
 template <typename T>
 Eigen::ArrayX<T> conv(Eigen::ArrayX<T> &in1, Eigen::ArrayX<T> &in2) {
-  std::vector<T> result = conv(
-      std::vector<T>(in1.data(), in1.data() + in1.size()),
-      std::vector<T>(in2.data(), in2.data() + in2.size()));
+  std::vector<T> result =
+      conv(std::vector<T>(in1.data(), in1.data() + in1.size()),
+           std::vector<T>(in2.data(), in2.data() + in2.size()));
   return Eigen::Map<Eigen::ArrayX<T>, Eigen::Unaligned>(result.data(),
-                                                       result.size());
+                                                        result.size());
 }
 
 } // namespace plasma

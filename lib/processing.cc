@@ -1,38 +1,62 @@
 #include "processing.h"
 
+
+
 namespace plasma {
 
+size_t nextpow2(size_t n) {
+  size_t p = 1;
+  while (p < n)
+    p *= 2;
+  return p;
+}
+
 std::vector<std::complex<double>> fft(std::vector<std::complex<double>> &in,
-                                      int N) {
+                                      int N, size_t num_threads) {
   if (N == -1)
     N = in.size();
-  in.resize(N);
-  auto out = std::vector<std::complex<double>>(N);
-  fftw_plan p = fftw_plan_dft_1d(N, reinterpret_cast<fftw_complex *>(in.data()),
-                                 reinterpret_cast<fftw_complex *>(out.data()),
-                                 FFTW_FORWARD, FFTW_ESTIMATE);
+
+  fftw_complex *out = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N);
+  fftw_init_threads();
+  fftw_plan_with_nthreads(num_threads);
+  fftw_plan p =
+      fftw_plan_dft_1d(N, reinterpret_cast<fftw_complex *>(in.data()), out,
+                        FFTW_FORWARD, FFTW_ESTIMATE);
+  auto start = std::chrono::high_resolution_clock::now();
   fftw_execute(p);
+  auto stop = std::chrono::high_resolution_clock::now();
+  std::cout << std::chrono::duration<double>(stop - start).count() << " s"
+            << std::endl;
   fftw_destroy_plan(p);
-  for (auto &x : out)
-    x /= N;
-  return out;
+  fftw_cleanup_threads();
+
+  return std::vector<std::complex<double>>(
+      reinterpret_cast<std::complex<double> *>(out),
+      reinterpret_cast<std::complex<double> *>(out) + N);
 }
 
 std::vector<std::complex<float>> fft(std::vector<std::complex<float>> &in,
-                                     int N) {
+                                     int N, size_t num_threads) {
   if (N == -1)
     N = in.size();
-  in.resize(N);
-  auto out = std::vector<std::complex<float>>(N);
+
+  fftwf_complex *out = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * N);
+  fftwf_init_threads();
+  fftwf_plan_with_nthreads(num_threads);
   fftwf_plan p =
-      fftwf_plan_dft_1d(N, reinterpret_cast<fftwf_complex *>(in.data()),
-                        reinterpret_cast<fftwf_complex *>(out.data()),
+      fftwf_plan_dft_1d(N, reinterpret_cast<fftwf_complex *>(in.data()), out,
                         FFTW_FORWARD, FFTW_ESTIMATE);
+  auto start = std::chrono::high_resolution_clock::now();
   fftwf_execute(p);
+  auto stop = std::chrono::high_resolution_clock::now();
+  std::cout << std::chrono::duration<double>(stop - start).count() << " s"
+            << std::endl;
   fftwf_destroy_plan(p);
-  for (auto &x : out)
-    x /= N;
-  return out;
+  fftwf_cleanup_threads();
+
+  return std::vector<std::complex<float>>(
+      reinterpret_cast<std::complex<float> *>(out),
+      reinterpret_cast<std::complex<float> *>(out) + N);
 }
 
 template <>
@@ -105,6 +129,5 @@ ifft<std::complex<float>>(std::vector<std::complex<float>> in, int N) {
     x *= N;
   return out;
 }
-
 
 } // namespace plasma
