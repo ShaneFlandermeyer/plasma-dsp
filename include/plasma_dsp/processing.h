@@ -17,44 +17,44 @@
 namespace plasma {
 
 /**
- * @brief Matlab-like syntax for computing a complex forward FFT with FFTW3
- *
- * @param in Input data vector of complex doubles
- * @return std::vector<std::complex<double>> DFT of the input
+ * @brief Compute the nfft-point FFT of the complex float data pointed to by in.
+ * 
+ * @param in Pointer to input data
+ * @param nfft Number of FFT points to compute
+ * @param num_threads Number of threads to use in the computation
+ * default: 1
+ * @return std::complex<float>* Pointer to the frequency-domain data
  */
-std::vector<std::complex<double>>
-fft(const std::vector<std::complex<double>> &x, int N = -1, size_t num_threads = 1);
+std::complex<float> *fft(std::complex<float> *in, int nfft,
+                         size_t num_threads = 1);
 
 /**
- * @brief Matlab-like syntax for computing a complex forward FFT with FFTW3F
- *
- * @param in Input data vector of complex floats
- * @return std::vector<std::complex<float>> DFT of the input
+ * @brief Compute the nfft-point FFT of the complex double data pointed to by in.
+ * 
+ * @param in Pointer to input data
+ * @param nfft Number of FFT points to compute
+ * @param num_threads Number of threads to use in the computation
+ * default: 1
+ * @return std::complex<double>* Pointer to the frequency-domain data
  */
-std::vector<std::complex<float>>
-fft(std::vector<std::complex<float>> &in, int N = -1, size_t num_threads = 1);
+std::complex<double> *fft(std::complex<double> *in, int nfft,
+                          size_t num_threads = 1);
 
 /**
- * @brief Matlab-like syntax for computing a real forward FFT with FFTW3
- *
- * @tparam T Input type
+ * @brief Compute the nfft-point FFT of the complex input data
+ * 
+ * @tparam T Precision of complex input data
  * @param in Input data vector
- * @return std::vector<std::complex<double>> DFT of the input
+ * @param nfft Number of FFT points to compute
+ * @param num_threads Number of threads to use in the computation
+ * default: 1
+ * @return std::vector<std::complex<T>> Output data vector
  */
 template <typename T>
-inline std::vector<std::complex<double>> fft(std::vector<T> &in, int N = -1) {
-  if (N == -1)
-    N = in.size();
-  auto out = std::vector<std::complex<double>>(N);
-  in.resize(N);
-  fftw_plan p = fftw_plan_dft_r2c_1d(
-      N, reinterpret_cast<double *>(in.data()),
-      reinterpret_cast<fftw_complex *>(out.data()), FFTW_ESTIMATE);
-  fftw_execute(p);
-  fftw_destroy_plan(p);
-  for (auto &x : out)
-    x /= N;
-  return out;
+inline std::vector<std::complex<T>> fft(std::vector<std::complex<T>> &in, int nfft,
+                                 size_t num_threads = 1) {
+  std::complex<T> *out = fft(in.data(), nfft, num_threads);
+  return std::vector<std::complex<T>>(out, out + nfft);
 }
 
 /**
@@ -139,14 +139,28 @@ std::vector<std::complex<T>> conv(std::vector<std::complex<T>> in1,
   return ifft<std::complex<T>>(product, N);
 }
 
-template <typename T>
-Eigen::ArrayX<T> conv(Eigen::ArrayX<T> &in1, Eigen::ArrayX<T> &in2) {
-  std::vector<T> result =
-      conv(std::vector<T>(in1.data(), in1.data() + in1.size()),
-           std::vector<T>(in2.data(), in2.data() + in2.size()));
-  return Eigen::Map<Eigen::ArrayX<T>, Eigen::Unaligned>(result.data(),
-                                                        result.size());
-}
+// template <typename T>
+// Eigen::ArrayX<T> conv(Eigen::ArrayX<T> &in1, Eigen::ArrayX<T> &in2) {
+//   fftwf_complex *fin;
+//   // if (N == -1)
+//   //   N = in.size();
+//   // in.resize(N);
+//   auto out = std::vector<float>(N);
+//   // Create plan and compute IFFT
+//   fftwf_plan p = fftwf_plan_dft_c2r_1d(
+//       N, reinterpret_cast<fftwf_complex *>(in.data()),
+//       reinterpret_cast<float *>(out.data()), FFTW_ESTIMATE);
+//   fftwf_execute(p);
+//   fftwf_destroy_plan(p);
+//   for (auto &x : out)
+//     x *= N;
+//   return out;
+// std::vector<T> result =
+//     conv(std::vector<T>(in1.data(), in1.data() + in1.size()),
+//          std::vector<T>(in2.data(), in2.data() + in2.size()));
+// return Eigen::Map<Eigen::ArrayX<T>, Eigen::Unaligned>(result.data(),
+//                                                       result.size());
+// }
 
 } // namespace plasma
 #endif /* A5C31B48_9A55_4209_8ECA_2F954DCC8005 */

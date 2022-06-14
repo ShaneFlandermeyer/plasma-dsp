@@ -1,7 +1,5 @@
 #include "processing.h"
 
-
-
 namespace plasma {
 
 size_t nextpow2(size_t n) {
@@ -9,6 +7,36 @@ size_t nextpow2(size_t n) {
   while (p < n)
     p *= 2;
   return p;
+}
+
+std::complex<float> *fft(std::complex<float> *in, int N, size_t num_threads) {
+  fftwf_complex *out = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * N);
+  fftwf_init_threads();
+  fftwf_plan_with_nthreads(num_threads);
+  fftwf_plan p = fftwf_plan_dft_1d(N, reinterpret_cast<fftwf_complex *>(in),
+                                   out, FFTW_FORWARD, FFTW_ESTIMATE);
+  fftwf_execute(p);
+  fftwf_destroy_plan(p);
+  fftwf_cleanup_threads();
+  return reinterpret_cast<std::complex<float> *>(out);
+}
+
+std::complex<double> *fft(std::complex<double> *in, int N, size_t num_threads) {
+  fftw_complex *out = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N);
+  fftw_init_threads();
+  fftw_plan_with_nthreads(num_threads);
+  fftw_plan p = fftw_plan_dft_1d(N, reinterpret_cast<fftw_complex *>(in), out,
+                                 FFTW_FORWARD, FFTW_ESTIMATE);
+  fftw_execute(p);
+  fftw_destroy_plan(p);
+  fftw_cleanup_threads();
+  return reinterpret_cast<std::complex<double> *>(out);
+}
+
+std::vector<std::complex<float>> fft(std::vector<std::complex<float>> &in,
+                                     int N, size_t num_threads) {
+  std::complex<float> *out = fft(in.data(), N, num_threads);
+  return std::vector<std::complex<float>>(out, out + N);
 }
 
 std::vector<std::complex<double>> fft(std::vector<std::complex<double>> &in,
@@ -19,14 +47,9 @@ std::vector<std::complex<double>> fft(std::vector<std::complex<double>> &in,
   fftw_complex *out = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N);
   fftw_init_threads();
   fftw_plan_with_nthreads(num_threads);
-  fftw_plan p =
-      fftw_plan_dft_1d(N, reinterpret_cast<fftw_complex *>(in.data()), out,
-                        FFTW_FORWARD, FFTW_ESTIMATE);
-  auto start = std::chrono::high_resolution_clock::now();
+  fftw_plan p = fftw_plan_dft_1d(N, reinterpret_cast<fftw_complex *>(in.data()),
+                                 out, FFTW_FORWARD, FFTW_ESTIMATE);
   fftw_execute(p);
-  auto stop = std::chrono::high_resolution_clock::now();
-  std::cout << std::chrono::duration<double>(stop - start).count() << " s"
-            << std::endl;
   fftw_destroy_plan(p);
   fftw_cleanup_threads();
 
@@ -35,29 +58,22 @@ std::vector<std::complex<double>> fft(std::vector<std::complex<double>> &in,
       reinterpret_cast<std::complex<double> *>(out) + N);
 }
 
-std::vector<std::complex<float>> fft(std::vector<std::complex<float>> &in,
-                                     int N, size_t num_threads) {
-  if (N == -1)
-    N = in.size();
+// Eigen::ArrayXcf fft(Eigen::ArrayXcf &in, int N, size_t num_threads) {
+//   if (N == -1)
+//     N = in.size();
+//   fftwf_complex *out = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) *
+//   N); fftwf_init_threads(); fftwf_plan_with_nthreads(num_threads); fftwf_plan
+//   p =
+//       fftwf_plan_dft_1d(N, reinterpret_cast<fftwf_complex *>(in.data()),
+//                         reinterpret_cast<fftwf_complex *>(in.data()),
+//                         FFTW_FORWARD, FFTW_ESTIMATE);
+//   fftwf_execute(p);
 
-  fftwf_complex *out = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * N);
-  fftwf_init_threads();
-  fftwf_plan_with_nthreads(num_threads);
-  fftwf_plan p =
-      fftwf_plan_dft_1d(N, reinterpret_cast<fftwf_complex *>(in.data()), out,
-                        FFTW_FORWARD, FFTW_ESTIMATE);
-  auto start = std::chrono::high_resolution_clock::now();
-  fftwf_execute(p);
-  auto stop = std::chrono::high_resolution_clock::now();
-  std::cout << std::chrono::duration<double>(stop - start).count() << " s"
-            << std::endl;
-  fftwf_destroy_plan(p);
-  fftwf_cleanup_threads();
-
-  return std::vector<std::complex<float>>(
-      reinterpret_cast<std::complex<float> *>(out),
-      reinterpret_cast<std::complex<float> *>(out) + N);
-}
+//   fftwf_destroy_plan(p);
+//   fftwf_cleanup_threads();
+//   return Eigen::Map<Eigen::ArrayXcf, Eigen::>(
+//       reinterpret_cast<std::complex<float> *>(out), N);
+// }
 
 template <>
 std::vector<double> ifft<double>(std::vector<std::complex<double>> in, int N) {
