@@ -5,6 +5,7 @@ list(APPEND
   cfar2d.h
   constants.h
   detector.h
+  fft.h
   fmcw_waveform.h
   linear_fm_waveform.h
   matrix_utils.h
