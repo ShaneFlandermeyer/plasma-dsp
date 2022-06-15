@@ -9,7 +9,7 @@ list(
   pcfm.cc
   phase_code.cc
   phase_coded_waveform.cc
-  processing.cc
+  # processing.cc
   pulse_doppler.cc
   pulsed_waveform.cc
   square_waveform.cc
