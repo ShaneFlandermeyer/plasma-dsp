@@ -27,7 +27,9 @@ target_include_directories(
   PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/plasma_dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
 target_link_libraries(plasma_dsp PUBLIC Eigen3::Eigen fftw3 fftw3f fftw3_threads fftw3f_threads)
-
+target_compile_options(plasma_dsp PUBLIC
+    ${CMAKE_CXX_FLAGS}
+  )
 if(OpenMP_CXX_FOUND)
   target_compile_definitions(plasma_dsp PUBLIC USE_OPENMP)
   target_link_libraries(plasma_dsp PUBLIC OpenMP::OpenMP_CXX)
