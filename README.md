@@ -35,6 +35,7 @@ of waveforms that can be generated is given below:
 
 ### Signal Processing
 
+- FFT/IFFT
 - 1D Constant False Alarm Rate (CFAR) detector
   - Cell averaging (CA)
 - 2D CFAR detector
