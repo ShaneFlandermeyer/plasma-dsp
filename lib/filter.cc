@@ -34,7 +34,7 @@ conv(const std::vector<std::complex<float>> &x1,
 }
 
 Eigen::ArrayXXcf conv(const Eigen::ArrayXXcf &x, const Eigen::ArrayXcf &h,
-                     int num_threads) {
+                      int num_threads) {
   // Create copies of the inputs, padded to the convolution size
   size_t nconv = x.rows() + h.size() - 1;
   Eigen::ArrayXXcf x_padded = Eigen::ArrayXXcf::Zero(nconv, x.cols());
@@ -45,10 +45,8 @@ Eigen::ArrayXXcf conv(const Eigen::ArrayXXcf &x, const Eigen::ArrayXcf &h,
   // Define the FFT objects to be used for all computations
   FFT<std::complex<float>, true> fft(nconv, num_threads);
   FFT<std::complex<float>, false> ifft(nconv, num_threads);
-
+  Eigen::ArrayXXcf out(nconv, x.cols());
   for (size_t i = 0; i < x.cols(); i++) {
-    auto start = high_resolution_clock::now();
-
     Eigen::ArrayXcf X =
         Eigen::Map<Eigen::ArrayXcf>(fft.execute(x_padded.col(i).data()), nconv);
     Eigen::ArrayXcf H =
@@ -57,11 +55,7 @@ Eigen::ArrayXXcf conv(const Eigen::ArrayXXcf &x, const Eigen::ArrayXcf &h,
     Eigen::ArrayXcf prod = X * H;
 
     // IFFT
-    ifft.input(prod.data());
-    ifft.execute();
-    auto stop = high_resolution_clock::now();
-    auto dt = duration<double>(stop - start);
-    std::cout << dt.count() << std::endl;
+    out.col(i) = Eigen::Map<Eigen::ArrayXcf>(ifft.execute(prod.data()), nconv);
   }
 
   // return ;
