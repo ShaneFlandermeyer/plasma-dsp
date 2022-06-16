@@ -5,13 +5,14 @@ list(APPEND
   cfar2d.h
   constants.h
   detector.h
+  fft.h
   fmcw_waveform.h
   linear_fm_waveform.h
   matrix_utils.h
   pcfm.h
   phase_code.h
   phase_coded_waveform.h
-  processing.h
+  # processing.h
   pulse_doppler.h
   pulsed_waveform.h
   range-doppler.h

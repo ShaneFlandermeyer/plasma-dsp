@@ -32,6 +32,22 @@ include(BuildType)
 include(CPM)
 include(FetchContent)
 
+include(CheckCXXCompilerFlag)
+
+check_cxx_compiler_flag("-march=native" _march_native_works)
+check_cxx_compiler_flag("-xHost" _xhost_works)
+
+# set(_CXX_FLAGS)
+if(_march_native_works)
+  message(STATUS "Using processor's vector instructions (-march=native compiler flag set)")
+  set(CMAKE_CXX_FLAGS "-march=native")
+elseif(_xhost_works)
+  message(STATUS "Using processor's vector instructions (-xHost compiler flag set)")
+  set(CMAKE_CXX_FLAGS "-xHost")
+else()
+  message(STATUS "No suitable compiler flag found for vectorization")
+endif()
+
 ########################################################################
 # Install directories
 ########################################################################
@@ -47,23 +63,24 @@ set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma_dsp)
 ########################################################################
 # Find build dependencies
 ########################################################################
-find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-# if (TARGET Eigen3::Eigen)
-#   message(STATUS "Using Eigen v3.4 from system")
-# else()
-#   message(STATUS "Building Eigen v3.4 from submodule...")
-#   CPMAddPackage(
-#   NAME Eigen
-#   GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-#   GIT_TAG origin/3.4
-#   # Eigen's CMakelists are not intended for library use
-#   DOWNLOAD_ONLY YES 
-#   )
-#   if(Eigen_ADDED)
-#     add_library(Eigen3::Eigen INTERFACE IMPORTED)
-#     target_include_directories(Eigen3::Eigen INTERFACE ${Eigen_SOURCE_DIR})
-#   endif()
-# endif()
+find_package(Eigen3 3.4 NO_MODULE)
+if (TARGET Eigen3::Eigen)
+  message(STATUS "Using Eigen v3.4 from system")
+else()
+  message(STATUS "Building Eigen v3.4 from submodule...")
+  CPMAddPackage(
+  NAME Eigen
+  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+  GIT_TAG origin/3.4
+  # Eigen's CMakelists are not intended for library use
+  DOWNLOAD_ONLY YES 
+  )
+  if(Eigen_ADDED)
+    add_library(Eigen3::Eigen INTERFACE IMPORTED)
+    target_include_directories(Eigen3::Eigen INTERFACE ${Eigen_SOURCE_DIR})
+    
+  endif()
+endif()
 
 if (${ENABLE_OPENMP})
   find_package(OpenMP REQUIRED)
@@ -102,7 +119,7 @@ add_subdirectory(include/plasma_dsp)
 add_subdirectory(lib)
 add_subdirectory(test)
 # if (${ENABLE_MATPLOT})
-#   add_subdirectory(examples)
+  add_subdirectory(examples)
 # else()
 #   message(STATUS "Matplot++ support disabled, example folder will not be built.")
 # endif()
