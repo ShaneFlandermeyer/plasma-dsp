@@ -97,12 +97,18 @@ public:
   }
 
   /**
-   * @brief Get a pointer to the output array
+   * @brief Return a pointer to a COPY of the output array
    *
    * @return fft_output<T, forward>::type*
    */
-  fft_output<T, forward>::type *output() { return d_output.data(); }
-  
+  fft_output<T, forward>::type *output() {
+    typename fft_output<T, forward>::type *out =
+        new typename fft_output<T, forward>::type[d_size];
+    memcpy(out, d_output.data(),
+           sizeof(typename fft_output<T, forward>::type) * d_size);
+    return d_output.data();
+  }
+
   int input_length() const { return d_input.size(); }
   int output_length() const { return d_output.size(); }
 
@@ -111,6 +117,13 @@ public:
    * output.
    */
   void execute();
+
+  fft_output<T, forward>::type *execute(typename fft_input<T, forward>::type *input) {
+    memcpy(d_input.data(), input,
+           sizeof(typename fft_input<T, forward>::type) * d_size);
+    execute();
+    return output();
+  }
 };
 
 // /**
