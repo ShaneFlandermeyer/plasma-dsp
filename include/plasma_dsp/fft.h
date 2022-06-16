@@ -102,7 +102,7 @@ public:
    * @return fft_output<T, forward>::type*
    */
   fft_output<T, forward>::type *output() { return d_output.data(); }
-
+  
   int input_length() const { return d_input.size(); }
   int output_length() const { return d_output.size(); }
 
