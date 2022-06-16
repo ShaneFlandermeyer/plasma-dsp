@@ -31,30 +31,77 @@ template <> struct fft_output<float, true> {
  *
  * @tparam T The input data type if a forward FFT is performed, and the output
  * type if a reverse FFT is performed
- * @tparam forward
+ * @tparam forward If true, the object computes a forward FFT. If false, it
+ * computes an IFFT
  */
 
 template <class T, bool forward> class FFT {
+  /**
+   * @brief Number of threads to use in the computation
+   *
+   */
   size_t d_num_threads;
+
+  /**
+   * @brief FFT size
+   *
+   */
   size_t d_size;
+
+  /**
+   * @brief Input array
+   *
+   */
   Eigen::ArrayX<typename fft_input<T, forward>::type> d_input;
+
+  /**
+   * @brief Output array
+   *
+   */
   Eigen::ArrayX<typename fft_output<T, forward>::type> d_output;
+
+  /**
+   * @brief FFTW plan
+   *
+   */
   void *d_plan;
+
+  /**
+   * @brief Create a plan based on the size, data type, and FFT direction
+   *
+   * @param fft_size
+   */
   void initialize_plan(size_t fft_size);
 
 public:
   FFT(size_t fft_size, size_t nthreads = 1);
-  // Copy disabled due to d_plan.
-  FFT(const FFT &) = delete;
-  FFT &operator=(const FFT &) = delete;
   virtual ~FFT();
 
-  fft_input<T, forward>::type *input() { return d_input.data(); }
-  void input(T *input) { memcpy(d_input.data(), input, sizeof(T) * d_size); }
-  fft_output<T, forward>::type *output() { return d_output.data(); }
-  void output(T *output) {
-    memcpy(output, d_output.data(), sizeof(T) * d_size);
+  /**
+   * @brief Get a pointer to the input buffer
+   *
+   * @return fft_input<T, forward>::type*
+   */
+  fft_input<typename fft_input<T, forward>::type, forward>::type *input() {
+    return d_input.data();
   }
+
+  /**
+   * @brief Set the data in the input array
+   *
+   * @param input
+   */
+  void input(typename fft_input<T, forward>::type *input) {
+    memcpy(d_input.data(), input,
+           sizeof(typename fft_input<T, forward>::type) * d_size);
+  }
+
+  /**
+   * @brief Get a pointer to the output array
+   *
+   * @return fft_output<T, forward>::type*
+   */
+  fft_output<T, forward>::type *output() { return d_output.data(); }
 
   int input_length() const { return d_input.size(); }
   int output_length() const { return d_output.size(); }
