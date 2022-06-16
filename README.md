@@ -16,9 +16,6 @@ of waveforms that can be generated is given below:
 - Linear FM (LFM)
 - FMCW
   - Linear upsweep and downsweep
-- Polyphase-coded FM
-  - 
-
 - Frequency modulated continuous wave (FMCW)
   - Linear upsweep
   - Linear downsweep
@@ -38,7 +35,6 @@ of waveforms that can be generated is given below:
 
 ### Signal Processing
 
-- FFT/IFFT
 - 1D Constant False Alarm Rate (CFAR) detector
   - Cell averaging (CA)
 - 2D CFAR detector
