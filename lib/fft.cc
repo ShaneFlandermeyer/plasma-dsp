@@ -4,7 +4,7 @@
 namespace plasma {
 template <class T> FFT<T>::~FFT() {
   fftwf_destroy_plan((fftwf_plan)d_plan);
-  fftw_cleanup_threads();
+  fftwf_cleanup_threads();
 }
 
 template <class T>

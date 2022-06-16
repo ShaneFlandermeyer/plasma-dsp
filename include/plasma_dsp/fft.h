@@ -7,6 +7,14 @@
 
 namespace plasma {
 
+/**
+ * @brief Template class for performing FFTs on floating point data.
+ *
+ * This implementation is basically a copy-paste version of the implementation
+ * in gr-fft
+ *
+ * @tparam T Input data type (float or std::complex<float>)
+ */
 template <class T> class FFT {
 private:
   size_t d_num_threads;
@@ -21,7 +29,11 @@ public:
   void execute();
 
   T *input() { return d_input.data(); }
+  void input(T *input) { memcpy(d_input.data(), input, sizeof(T) * d_size); }
   T *output() { return d_output.data(); }
+  void output(T *output) {
+    memcpy(output, d_output.data(), sizeof(T) * d_size);
+  }
 };
 
 } // namespace plasma
