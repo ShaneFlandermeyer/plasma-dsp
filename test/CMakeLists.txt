@@ -8,12 +8,24 @@ add_executable(
   test_square_waveform.cc
 )
 
+# add_executable(
+#   fft-test
+#   test_fft.cc
+
+# )
+
 target_link_libraries(
   waveform-test
   gtest_main
   gmock
   plasma_dsp
 )
+
+# target_link_libraries(fft-test
+#   gtest_main
+#   gmock
+#   plasma_dsp
+# )
 
 # Matplot++ is handy for debugging. Link to it if the user wants it anyways
 # if(${Matplot++_FOUND})

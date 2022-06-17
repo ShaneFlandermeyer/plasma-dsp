@@ -21,3 +21,6 @@
 add_executable(fft_test fft_test.cpp)
 target_link_libraries(fft_test PUBLIC plasma_dsp)
 target_include_directories(fft_test PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+add_executable(pulse_doppler pulse_doppler_processing.cc)
+target_link_libraries(pulse_doppler PUBLIC plasma_dsp)

@@ -5,6 +5,7 @@ list(
   cfar1d.cc
   cfar2d.cc
   fft.cc
+  filter.cc
   fmcw_waveform.cc
   linear_fm_waveform.cc
   pcfm.cc
