@@ -3,6 +3,14 @@
 
 using namespace std::chrono;
 namespace plasma {
+
+size_t nextpow2(size_t n) {
+  size_t m = 1;
+  while (m < n) {
+    m *= 2;
+  }
+  return m;
+}
 std::vector<std::complex<float>>
 conv(const std::vector<std::complex<float>> &x1,
      const std::vector<std::complex<float>> &x2, int num_threads) {
@@ -37,6 +45,7 @@ Eigen::ArrayXXcf conv(const Eigen::ArrayXXcf &x, const Eigen::ArrayXcf &h,
                       int num_threads) {
   // Create copies of the inputs, padded to the convolution size
   size_t nconv = x.rows() + h.size() - 1;
+  nconv = nextpow2(nconv);
   Eigen::ArrayXXcf x_padded = Eigen::ArrayXXcf::Zero(nconv, x.cols());
   Eigen::ArrayXcf h_padded = Eigen::ArrayXcf::Zero(nconv);
   x_padded.block(0, 0, x.rows(), x.cols()) = x;
@@ -45,17 +54,26 @@ Eigen::ArrayXXcf conv(const Eigen::ArrayXXcf &x, const Eigen::ArrayXcf &h,
   // Define the FFT objects to be used for all computations
   FFT<std::complex<float>, true> fft(nconv, num_threads);
   FFT<std::complex<float>, false> ifft(nconv, num_threads);
-  Eigen::ArrayXXcf out(nconv, x.cols());
+  Eigen::ArrayXXcf out(x.rows() + h.size() - 1, x.cols());
   Eigen::ArrayXcf X, H, prod;
+  std::cout << "Fast-time/slow-time matrix size: " << x.rows() << "x"
+            << x.cols() << std::endl;
+  auto start = high_resolution_clock::now();
   for (size_t i = 0; i < x.cols(); i++) {
-    X = Eigen::Map<Eigen::ArrayXcf>(fft.execute(x_padded.col(i).data()), nconv);
-    H = Eigen::Map<Eigen::ArrayXcf>(fft.execute(h_padded.data()), nconv);
+    X = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
+        fft.execute(x_padded.col(i).data()), nconv);
+    H = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
+        fft.execute(h_padded.data()), nconv);
     // Element wise multiply
     prod = X * H;
 
     // IFFT
-    out.col(i) = Eigen::Map<Eigen::ArrayXcf>(ifft.execute(prod.data()), nconv);
+    out.col(i) = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
+        ifft.execute(prod.data()), x.rows() + h.size() - 1);
   }
+  auto stop = high_resolution_clock::now();
+  auto dt = duration<double>(stop - start).count();
+  std::cout << "Time taken: " << dt << " seconds" << std::endl;
   return out;
 }
 } // namespace plasma

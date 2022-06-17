@@ -6,6 +6,7 @@ list(APPEND
   constants.h
   detector.h
   fft.h
+  file.h
   filter.h
   fmcw_waveform.h
   linear_fm_waveform.h
