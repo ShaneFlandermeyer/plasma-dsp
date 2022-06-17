@@ -26,6 +26,7 @@ std::vector<T> read(const std::string &filename, size_t offset = 0,
   infile.close();
   return data;
 }
+
 } // namespace plasma
 
 #endif /* AE8E5373_5A3D_4171_84AA_E93906C328FD */

@@ -1,7 +1,4 @@
 #include "filter.h"
-#include <chrono>
-
-using namespace std::chrono;
 namespace plasma {
 
 size_t nextpow2(size_t n) {
@@ -56,9 +53,6 @@ Eigen::ArrayXXcf conv(const Eigen::ArrayXXcf &x, const Eigen::ArrayXcf &h,
   FFT<std::complex<float>, false> ifft(nconv, num_threads);
   Eigen::ArrayXXcf out(x.rows() + h.size() - 1, x.cols());
   Eigen::ArrayXcf X, H, prod;
-  std::cout << "Fast-time/slow-time matrix size: " << x.rows() << "x"
-            << x.cols() << std::endl;
-  auto start = high_resolution_clock::now();
   for (size_t i = 0; i < x.cols(); i++) {
     X = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
         fft.execute(x_padded.col(i).data()), nconv);
@@ -71,9 +65,6 @@ Eigen::ArrayXXcf conv(const Eigen::ArrayXXcf &x, const Eigen::ArrayXcf &h,
     out.col(i) = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
         ifft.execute(prod.data()), x.rows() + h.size() - 1);
   }
-  auto stop = high_resolution_clock::now();
-  auto dt = duration<double>(stop - start).count();
-  std::cout << "Time taken: " << dt << " seconds" << std::endl;
   return out;
 }
 } // namespace plasma
