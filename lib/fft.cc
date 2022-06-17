@@ -40,6 +40,16 @@ FFT<double, forward>::FFT(size_t fft_size, size_t num_threads)
 
 template <class T, bool forward> void FFT<T, forward>::execute() {
   fftwf_execute((fftwf_plan)d_plan);
+  if (not forward) {
+    d_output /= d_size;
+  }
+}
+
+template <bool forward> void FFT<double, forward>::execute() {
+  fftw_execute((fftw_plan)d_plan);
+  if (not forward) {
+    d_output /= d_size;
+  }
 }
 
 template <class T, bool forward>
@@ -58,10 +68,6 @@ fft_output<double, forward>::type *FFT<double, forward>::execute(
          sizeof(typename fft_input<double, forward>::type) * d_size);
   execute();
   return output();
-}
-
-template <bool forward> void FFT<double, forward>::execute() {
-  fftw_execute((fftw_plan)d_plan);
 }
 
 template <>

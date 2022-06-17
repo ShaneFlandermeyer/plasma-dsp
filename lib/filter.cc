@@ -46,19 +46,16 @@ Eigen::ArrayXXcf conv(const Eigen::ArrayXXcf &x, const Eigen::ArrayXcf &h,
   FFT<std::complex<float>, true> fft(nconv, num_threads);
   FFT<std::complex<float>, false> ifft(nconv, num_threads);
   Eigen::ArrayXXcf out(nconv, x.cols());
+  Eigen::ArrayXcf X, H, prod;
   for (size_t i = 0; i < x.cols(); i++) {
-    Eigen::ArrayXcf X =
-        Eigen::Map<Eigen::ArrayXcf>(fft.execute(x_padded.col(i).data()), nconv);
-    Eigen::ArrayXcf H =
-        Eigen::Map<Eigen::ArrayXcf>(fft.execute(h_padded.data()), nconv);
+    X = Eigen::Map<Eigen::ArrayXcf>(fft.execute(x_padded.col(i).data()), nconv);
+    H = Eigen::Map<Eigen::ArrayXcf>(fft.execute(h_padded.data()), nconv);
     // Element wise multiply
-    Eigen::ArrayXcf prod = X * H;
+    prod = X * H;
 
     // IFFT
     out.col(i) = Eigen::Map<Eigen::ArrayXcf>(ifft.execute(prod.data()), nconv);
   }
-
-  // return ;
-  return Eigen::Map<Eigen::ArrayXcf>(ifft.output(), nconv);
+  return out;
 }
 } // namespace plasma
