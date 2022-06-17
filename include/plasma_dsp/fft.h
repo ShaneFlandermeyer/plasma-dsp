@@ -90,7 +90,7 @@ public:
    *
    * @return fft_input<T, forward>::type*
    */
-  fft_input<typename fft_input<T, forward>::type, forward>::type *input() {
+  typename fft_input<typename fft_input<T, forward>::type, forward>::type *input() {
     return d_input.data();
   }
 
@@ -109,7 +109,7 @@ public:
    *
    * @return fft_output<T, forward>::type*
    */
-  fft_output<T, forward>::type *output();
+  typename fft_output<T, forward>::type *output();
 
   int input_length() const { return d_input.size(); }
   int output_length() const { return d_output.size(); }
@@ -120,7 +120,7 @@ public:
    */
   void execute();
 
-  fft_output<T, forward>::type *
+  typename fft_output<T, forward>::type *
   execute(typename fft_input<T, forward>::type *input);
 };
 
@@ -203,7 +203,7 @@ public:
    *
    * @return fft_output<T, forward>::type*
    */
-  fft_output<double, forward>::type *output();
+  typename fft_output<double, forward>::type *output();
 
   int input_length() const { return d_input.size(); }
   int output_length() const { return d_output.size(); }
@@ -214,7 +214,7 @@ public:
    */
   void execute();
 
-  fft_output<double, forward>::type *
+  typename fft_output<double, forward>::type *
   execute(typename fft_input<double, forward>::type *input);
 };
 
