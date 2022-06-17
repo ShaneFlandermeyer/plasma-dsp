@@ -8,11 +8,11 @@
 namespace plasma {
 template <typename T>
 std::vector<T> read(const std::string &filename, size_t offset = 0,
-                    int nitems = -1) {
+                    int nitems = 0) {
   std::ifstream infile(filename, std::ios::in | std::ios::binary);
   infile.seekg(0, std::ios::end);
   size_t nbytes;
-  if (nitems == -1) {
+  if (nitems == 0) {
     nbytes = infile.tellg();
     nitems = nbytes / sizeof(T);
   } else {
