@@ -3,6 +3,7 @@ list(APPEND
   PLASMA_HEADERS
   cfar1d.h
   cfar2d.h
+  circ_shift.h
   constants.h
   detector.h
   fft.h

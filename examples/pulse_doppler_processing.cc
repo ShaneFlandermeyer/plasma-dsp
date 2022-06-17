@@ -1,3 +1,4 @@
+#include "circ_shift.h"
 #include "file.h"
 #include "filter.h"
 #include "linear_fm_waveform.h"
@@ -33,7 +34,8 @@ int main() {
   std::cout << "Range/slow-time matrix size: " << range_pulse_map.rows() << "x"
             << range_pulse_map.cols() << std::endl;
 
-  Eigen::ArrayXXcf range_dopp_map(range_pulse_map.rows(), range_pulse_map.cols());
+  Eigen::ArrayXXcf range_dopp_map(range_pulse_map.rows(),
+                                  range_pulse_map.cols());
   plasma::FFT<std::complex<float>, true> fft(range_pulse_map.cols(),
                                              num_thread);
   for (size_t i = 0; i < range_pulse_map.rows(); i++) {
@@ -41,6 +43,7 @@ int main() {
     range_dopp_map.row(i) = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
         fft.execute(row.data()), row.size());
   }
+  Eigen::ArrayXXcf rdm = plasma::fftshift(range_dopp_map,1);
 
   // Write any data we can't process to a file
   std::ofstream out("/home/shane/pdu_file_sink_conv.dat");
@@ -49,7 +52,7 @@ int main() {
   out.close();
   std::ofstream out2("/home/shane/rdm.dat");
 
-  out2.write((char *)range_dopp_map.data(),
-             range_dopp_map.size() * sizeof(std::complex<float>));
+  out2.write((char *)rdm.data(),
+             rdm.size() * sizeof(std::complex<float>));
   out2.close();
 }

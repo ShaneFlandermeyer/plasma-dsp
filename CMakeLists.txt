@@ -48,6 +48,10 @@ else()
   message(STATUS "No suitable compiler flag found for vectorization")
 endif()
 
+# Hide warning from circ_shift function
+set(CMAKE_CXX_FLAGS "-Wno-deprecated-enum-enum-conversion ${CMAKE_CXX_FLAGS}")
+message(STATUS ${CMAKE_CXX_FLAGS})
+
 ########################################################################
 # Install directories
 ########################################################################
