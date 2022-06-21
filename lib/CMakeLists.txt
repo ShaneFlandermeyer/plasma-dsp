@@ -8,11 +8,9 @@ list(
   filter.cc
   fmcw_waveform.cc
   linear_fm_waveform.cc
-  pcfm.cc
+  # pcfm.cc
   phase_code.cc
   phase_coded_waveform.cc
-  # processing.cc
-  pulse_doppler.cc
   pulsed_waveform.cc
   square_waveform.cc
   waveform.cc
@@ -27,7 +25,9 @@ target_include_directories(
   PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/plasma_dsp>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/plasma_dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
-target_link_libraries(plasma_dsp PUBLIC Eigen3::Eigen fftw3 fftw3f fftw3_threads fftw3f_threads)
+target_link_libraries(plasma_dsp PUBLIC
+  ${CONAN_LIBS})
+
 target_compile_options(plasma_dsp PUBLIC
     ${CMAKE_CXX_FLAGS}
   )
@@ -40,7 +40,9 @@ endif()
 install(TARGETS plasma_dsp
   EXPORT plasma_dsp
   DESTINATION ${PLASMA_LIB_DIR})
-# Install the cmake config file
+# Install .cmake files
 install(EXPORT plasma_dsp
   DESTINATION ${PLASMA_CMAKE_DIR})
-
+# Install shared dependency libraries
+install(DIRECTORY ${CONAN_LIB_DIRS}/
+  DESTINATION ${PLASMA_LIB_DIR})

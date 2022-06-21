@@ -25,32 +25,15 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 add_compile_definitions(EIGEN_FFTW_DEFAULT)
-option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+# option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 # Include custom cmake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(BuildType)
-include(CPM)
 include(FetchContent)
-
-include(CheckCXXCompilerFlag)
-
-check_cxx_compiler_flag("-march=native" _march_native_works)
-check_cxx_compiler_flag("-xHost" _xhost_works)
-
-# set(_CXX_FLAGS)
-if(_march_native_works)
-  message(STATUS "Using processor's vector instructions (-march=native compiler flag set)")
-  set(CMAKE_CXX_FLAGS "-march=native")
-elseif(_xhost_works)
-  message(STATUS "Using processor's vector instructions (-xHost compiler flag set)")
-  set(CMAKE_CXX_FLAGS "-xHost")
-else()
-  message(STATUS "No suitable compiler flag found for vectorization")
-endif()
 
 # Hide warning from circ_shift function
 set(CMAKE_CXX_FLAGS "-Wno-deprecated-enum-enum-conversion ${CMAKE_CXX_FLAGS}")
-message(STATUS ${CMAKE_CXX_FLAGS})
+# message(STATUS ${CMAKE_CXX_FLAGS})
 
 ########################################################################
 # Install directories
@@ -63,32 +46,13 @@ endif()
 set(PLASMA_INCLUDE_DIR include/${CMAKE_PROJECT_NAME})
 set(PLASMA_LIB_DIR     lib)
 set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma_dsp)
-
+set(PLASMA_EXAMPLE_DIR bin)
 ########################################################################
 # Find build dependencies
 ########################################################################
-find_package(Eigen3 3.4 NO_MODULE)
-if (TARGET Eigen3::Eigen)
-  message(STATUS "Using Eigen v3.4 from system")
-else()
-  message(STATUS "Building Eigen v3.4 from submodule...")
-  CPMAddPackage(
-  NAME Eigen
-  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-  GIT_TAG origin/3.4
-  # Eigen's CMakelists are not intended for library use
-  DOWNLOAD_ONLY YES 
-  )
-  if(Eigen_ADDED)
-    add_library(Eigen3::Eigen INTERFACE IMPORTED)
-    target_include_directories(Eigen3::Eigen INTERFACE ${Eigen_SOURCE_DIR})
-    
-  endif()
-endif()
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
-if (${ENABLE_OPENMP})
-  find_package(OpenMP REQUIRED)
-endif()
 
 ########################################################################
 # Create uninstall target
@@ -121,12 +85,8 @@ enable_testing()
 # ##############################################################################
 add_subdirectory(include/plasma_dsp)
 add_subdirectory(lib)
+add_subdirectory(examples)
 add_subdirectory(test)
-# if (${ENABLE_MATPLOT})
-  add_subdirectory(examples)
-# else()
-#   message(STATUS "Matplot++ support disabled, example folder will not be built.")
-# endif()
 
 ########################################################################
 # Install cmake search helper for this library
