@@ -17,10 +17,10 @@ namespace plasma {
 class PhaseCodedWaveform : virtual public PulsedWaveform {
 protected:
   /**
-   * @brief Number of phase chips in the waveform
+   * @brief Vector of phase code values
    *
    */
-  size_t d_num_chips;
+  Eigen::ArrayXd d_code;
 
   /**
    * @brief Chip duration (seconds)
@@ -29,10 +29,10 @@ protected:
   double d_chip_width;
 
   /**
-   * @brief Vector of phase code values
+   * @brief Number of phase chips in the waveform
    *
    */
-  Eigen::ArrayXd d_code;
+  size_t d_num_chips;
 
 public:
   /**
@@ -49,7 +49,7 @@ public:
    * @param prf Pulse repetition frequency (Hz)
    * @param samp_rate Sample rate (Hz)
    */
-  PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width, double prf,
+  PhaseCodedWaveform(const Eigen::ArrayXd &code, double chip_width, double prf,
                      double samp_rate);
 
   /**
