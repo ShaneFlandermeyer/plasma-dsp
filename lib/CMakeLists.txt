@@ -27,14 +27,9 @@ target_include_directories(
   PUBLIC $<INSTALL_INTERFACE:include>)
 target_link_libraries(plasma_dsp PUBLIC
   ${CONAN_LIBS})
-
-target_compile_options(plasma_dsp PUBLIC
-    ${CMAKE_CXX_FLAGS}
-  )
-if(OpenMP_CXX_FOUND)
-  target_compile_definitions(plasma_dsp PUBLIC USE_OPENMP)
-  target_link_libraries(plasma_dsp PUBLIC OpenMP::OpenMP_CXX)
-endif()
+# target_compile_options(plasma_dsp PUBLIC
+#     ${CMAKE_CXX_FLAGS}
+#   )
 
 # Install the shared library file
 install(TARGETS plasma_dsp

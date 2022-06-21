@@ -1,10 +1,6 @@
 #ifndef A775376E_2D30_4128_8EC3_7F3F35F6FD7A
 #define A775376E_2D30_4128_8EC3_7F3F35F6FD7A
 
-#ifdef USE_OPENMP
-#include "omp.h"
-#endif
-
 #include "detector.h"
 #include <Eigen/Dense>
 
