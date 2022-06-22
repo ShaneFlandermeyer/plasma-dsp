@@ -2,16 +2,17 @@ cmake_minimum_required(VERSION 3.16)
 project(
   plasma_dsp
   VERSION 0.1
-  LANGUAGES CXX)
+  LANGUAGES CXX
+)
 
 # Require out-of-source builds
-file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
-if(EXISTS "${LOC_PATH}")
-  message(
-    FATAL_ERROR
-      "You cannot build in a source directory (or any directory with a CMakeLists.txt file). Please make a build subdirectory. Feel free to remove CMakeCache.txt and CMakeFiles."
-  )
-endif()
+# file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
+# if(EXISTS "${LOC_PATH}")
+#   message(
+#     FATAL_ERROR
+#       "You cannot build in a source directory (or any directory with a CMakeLists.txt file). Please make a build subdirectory. Feel free to remove CMakeCache.txt and CMakeFiles."
+#   )
+# endif()
 
 # ##############################################################################
 # Build options
@@ -27,7 +28,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_compile_definitions(EIGEN_FFTW_DEFAULT)
 # Include custom cmake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(BuildType)
+# include(BuildType)
 include(FetchContent)
 
 
@@ -48,7 +49,6 @@ set(PLASMA_EXAMPLE_DIR bin)
 ########################################################################
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
-
 
 ########################################################################
 # Create uninstall target

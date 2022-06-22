@@ -16,13 +16,12 @@ list(
   waveform.cc
   window.cc)
 
-set(PLASMA_SOURCES "${PLASMA_SOURCES}" PARENT_SCOPE)
+# set(PLASMA_SOURCES "${PLASMA_SOURCES}" PARENT_SCOPE)
 # Create the waveform library
-add_library(plasma_dsp 
-  ${PLASMA_SOURCES})
+add_library(plasma_dsp ${PLASMA_SOURCES})
 # Specify the library include dirs
 target_include_directories(
-  plasma_dsp PRIVATE
+  plasma_dsp 
   PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/plasma_dsp>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/plasma_dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
