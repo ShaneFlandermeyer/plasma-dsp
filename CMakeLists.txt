@@ -32,7 +32,7 @@ include(BuildType)
 include(FetchContent)
 
 # Hide warning from circ_shift function
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+# set(CMAKE_CXX_FLAGS "-march=native ${CMAKE_CXX_FLAGS}")
 # message(STATUS ${CMAKE_CXX_FLAGS})
 
 ########################################################################

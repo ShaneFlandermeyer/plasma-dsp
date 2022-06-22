@@ -1,72 +1,45 @@
-#include "matrix_utils.h"
+// #include "matrix_utils.h"
+#include "constants.h"
+#include "filter.h"
 #include "pcfm.h"
 #include <random>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <unsupported/Eigen/FFT>
 
+using namespace Eigen;
 class PCFMWaveformTest : public testing::Test {
 protected:
 };
 
 TEST_F(PCFMWaveformTest, RandomSinglePRF) {
-  // Choose a random bandwidth, pulse width, and PRF, then use it to instantiate
-  // the waveform object
-  std::default_random_engine engine(std::random_device{}());
-  double prf = 1e3;
-  size_t num_chips = 100;
+  // Example phase code
+  size_t N = 5;
+  size_t over = 4;
+  ArrayXd code = ArrayXd::LinSpaced(N, 1, N);
+
+  // Generate the expected waveform
+  // Compute the differences that are not wrapped around pi
+  Eigen::ArrayXd difference(code.size());
+  std::adjacent_difference(code.begin(), code.end(), difference.begin());
+  // Wrap each element to [-pi, pi]
+  for (size_t i = 0; i < difference.size(); i++)
+    if (std::abs(difference(i)) > M_PI)
+      difference(i) -= 2 * M_PI * difference.sign()(i);
+  // Construct the shaping filter
+  ArrayXd g = ArrayXd::Ones(over);
+  ArrayXd g1 = g / g.sum();
+  // Convolve with the zero-padded impulse train
+  ArrayXd train = ArrayXd::Zero(over * N);
+  train(seq(0, train.size() - 1, over)) = difference;
+  ArrayXd chi1 = plasma::filter(g1, train);
+  ArrayXd phi1(chi1.size());
+  std::partial_sum(chi1.begin(), chi1.end(), phi1.begin());
+  ArrayXcd expected = exp(plasma::Im * phi1);
+
+  // Generate the actual waveform
   double samp_rate = 1e6;
-
-  // Expected result
-  // Generate the oversampled phase change vector
-  size_t num_samps_chip = 3;
-  size_t num_samps_code = num_samps_chip * num_chips;
-  size_t num_samps_pulse = round(samp_rate / prf);
-  std::uniform_real_distribution<> code_values(-M_PI, M_PI);
-  Eigen::VectorXd code(num_chips);
-  Eigen::ArrayXd difference(num_chips);
-  Eigen::VectorXd oversampled_diff = Eigen::VectorXd::Zero(num_samps_code);
-  for (size_t i = 0; i < num_chips; i++) {
-    code(i) = code_values(engine);
-    if (i == 0) {
-      difference(i) = code(i);
-      oversampled_diff(i * num_samps_chip) = difference(i);
-    } else {
-      difference(i) = code(i) - code(i - 1);
-      // Wrap to [-pi, pi]
-      if (std::abs(difference(i)) > M_PI)
-        difference(i) -= 2 * M_PI * difference.sign()(i);
-      oversampled_diff(i * num_samps_chip) = difference(i);
-    }
-  }
-  
-  // Create the shaping filter (zero padded to the size of the oversampled
-  // difference vector)
-  Eigen::VectorXd filter = Eigen::VectorXd::Zero(num_samps_code);
-  filter.head(num_samps_chip) =
-      Eigen::VectorXd::Ones(num_samps_chip) * num_samps_chip;
-
-  // Apply the shaping filter in frequency
-  Eigen::FFT<double> fft;
-  Eigen::VectorXcd filter_fft, impulse_train_fft;
-  filter_fft = fft.fwd(filter);
-  impulse_train_fft = fft.fwd(oversampled_diff);
-  Eigen::VectorXd frequency =
-      fft.inv(filter_fft.cwiseProduct(impulse_train_fft).eval());
-
-  // Integrate frequency back to phase
-  Eigen::ArrayXd phase(num_samps_code);
-  std::partial_sum(frequency.begin(), frequency.end(), phase.begin());
-
-  // Zero pad the waveform to the size of the PRF
-  Eigen::ArrayXcd expected = plasma::vcat(
-      exp(plasma::Im * phase).eval(),
-      Eigen::ArrayXcd::Zero(num_samps_pulse - num_samps_code).eval());
-
-  // Generate the waveform from the obnect
-  plasma::PCFMWaveform waveform(code, filter.head(num_samps_chip), samp_rate,
-                                prf);
-  Eigen::ArrayXcd actual = waveform.step();
+  plasma::PCFMWaveform pcfm(code, g1, samp_rate, 0);
+  ArrayXcd actual = pcfm.sample();
 
   // Check the pulse length
   ASSERT_EQ(actual.size(), expected.size());

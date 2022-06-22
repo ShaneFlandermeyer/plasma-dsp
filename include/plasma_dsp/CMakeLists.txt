@@ -12,7 +12,7 @@ list(APPEND
   fmcw_waveform.h
   linear_fm_waveform.h
   matrix_utils.h
-  # pcfm.h
+  pcfm.h
   phase_code.h
   phase_coded_waveform.h
   pulsed_waveform.h

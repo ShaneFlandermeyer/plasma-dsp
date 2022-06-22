@@ -5,10 +5,9 @@
 #include <vector>
 
 #include "pulsed_waveform.h"
-// #include "processing.h"
+#include "filter.h"
 #include "fft.h"
 #include <Eigen/Dense>
-// #include <unsupported/Eigen/FFT>
 
 namespace plasma {
 
@@ -85,7 +84,7 @@ public:
    *
    * @return Shaping filter taps
    */
-  auto ShapingFilter() const { return d_filter; }
+  auto filter() const { return d_filter; }
 
   /**
    * @brief Set the shaping filter
@@ -93,7 +92,7 @@ public:
    * @param filt Desired shaping filter
    * @return auto The vector of filter taps
    */
-  auto ShapingFilter(Eigen::ArrayXd filt) { d_filter = filt; }
+  auto filter(Eigen::ArrayXd filt) { d_filter = filt; }
 
 protected:
 private:
@@ -102,7 +101,7 @@ private:
 
   Eigen::ArrayXd oversample(const Eigen::ArrayXd &in, size_t factor);
 
-  Eigen::ArrayXd filter(const Eigen::ArrayXd &in, const Eigen::ArrayXd &filter);
+  // Eigen::ArrayXd filter(const Eigen::ArrayXd &in, const Eigen::ArrayXd &filter);
 
   Eigen::ArrayXd cumsum(const Eigen::ArrayXd &in);
 };

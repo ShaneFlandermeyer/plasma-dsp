@@ -8,6 +8,7 @@ size_t nextpow2(size_t n) {
   }
   return m;
 }
+
 std::vector<std::complex<float>>
 conv(const std::vector<std::complex<float>> &x1,
      const std::vector<std::complex<float>> &x2, int num_threads) {
@@ -66,5 +67,48 @@ Eigen::ArrayXXcf conv(const Eigen::ArrayXXcf &x, const Eigen::ArrayXcf &h,
         ifft.execute(prod.data()), x.rows() + h.size() - 1);
   }
   return out;
+}
+
+Eigen::ArrayXd filter(const Eigen::ArrayXd &h, const Eigen::ArrayXd &x,
+                      int num_threads) {
+  // Create copies of the inputs, padded to the convolution size
+  size_t nconv = x.size() + h.size() - 1;
+  nconv = nextpow2(nconv);
+  Eigen::ArrayXf x_padded = Eigen::ArrayXf::Zero(nconv);
+  Eigen::ArrayXf h_padded = Eigen::ArrayXf::Zero(nconv);
+  x_padded(Eigen::seqN(0, x.size())) = x.cast<float>();
+  h_padded(Eigen::seqN(0, h.size())) = h.cast<float>();
+
+  // Define the FFT objects to be used for all computations
+  FFT<float, true> fft(nconv, num_threads);
+  FFT<float, false> ifft(nconv, num_threads);
+  Eigen::ArrayXf out(nconv);
+  Eigen::ArrayXcf X = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
+      fft.execute(x_padded.data()), nconv);
+  Eigen::ArrayXcf H = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
+      fft.execute(h_padded.data()), nconv);
+  // Element wise multiply
+  Eigen::ArrayXcf prod = X * H;
+
+  // IFFT
+  out = Eigen::Map<Eigen::ArrayXf, Eigen::Aligned>(ifft.execute(prod.data()),
+                                                    x.size());
+  return out.cast<double>();
+  // FFT<float, true> fft(in.size(), num_threads);
+  // FFT<float, false> ifft(in.size(), num_threads);
+
+  // Eigen::ArrayXf pad_filter = Eigen::ArrayXf::Zero(in.size());
+  // size_t filter_size = std::min(in.size(), filter.size());
+  // pad_filter.head(filter_size) = filter.head(filter_size).cast<float>();
+  // Eigen::ArrayXf in_float = in.cast<float>();
+
+  // Eigen::ArrayXcf filter_fft = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
+  //     fft.execute(pad_filter.data()), filter_size);
+  // Eigen::ArrayXcf in_fft = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
+  //     fft.execute(in_float.data()), filter_size);
+  // Eigen::ArrayXcf prod = in_fft * filter_fft;
+  // Eigen::ArrayXf out = Eigen::Map<Eigen::ArrayXf, Eigen::Aligned>(
+  //     ifft.execute(prod.data()), filter_size);
+  // return out.cast<double>();
 }
 } // namespace plasma
