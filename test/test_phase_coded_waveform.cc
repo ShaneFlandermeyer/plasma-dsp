@@ -16,7 +16,6 @@ TEST_F(PhaseCodedWaveformTest, SinglePRF) {
   size_t num_chips = 100;
   double chip_width = 1e-6;
   double samp_rate = 2 / chip_width;
-  
 
   // Generate a random phase code of length num_chips. These values are
   // completely arbitrary.
@@ -25,6 +24,7 @@ TEST_F(PhaseCodedWaveformTest, SinglePRF) {
   for (size_t i = 0; i < num_chips; i++) {
     code(i) = code_values(engine);
   }
+
   plasma::PhaseCodedWaveform waveform(code, chip_width, prf, samp_rate);
 
   // Expected result
@@ -46,7 +46,9 @@ TEST_F(PhaseCodedWaveformTest, SinglePRF) {
 
   // Check that the values are the same
   EXPECT_THAT(actual.real(),
-              testing::Pointwise(testing::FloatNear(1e-10), expected.real()));
+              testing::Pointwise(testing::FloatNear(1e-10),
+              expected.real()));
   EXPECT_THAT(actual.imag(),
-              testing::Pointwise(testing::FloatNear(1e-10), expected.imag()));
+              testing::Pointwise(testing::FloatNear(1e-10),
+              expected.imag()));
 }

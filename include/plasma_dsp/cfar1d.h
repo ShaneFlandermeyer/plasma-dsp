@@ -2,10 +2,7 @@
 #define C04C5908_3B07_4B80_AAF8_B45F5F45F490
 
 #include "detector.h"
-
-#ifdef USE_OPENMP
-#include "omp.h"
-#endif
+#include <iostream>
 
 
 namespace plasma {

@@ -20,13 +20,11 @@ PhaseCodedWaveform::PhaseCodedWaveform() {
   d_chip_width = 0;
 }
 
-PhaseCodedWaveform::PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width,
-                                       double prf, double samp_rate)
-    : Waveform(samp_rate), PulsedWaveform(code.size() * chip_width, prf) {
-  d_num_chips = code.size();
-  d_chip_width = chip_width;
-  d_code = code;
-
+PhaseCodedWaveform::PhaseCodedWaveform(const Eigen::ArrayXd &code,
+                                       double chip_width, double prf,
+                                       double samp_rate)
+    : PulsedWaveform(code.size() * chip_width, prf), Waveform(samp_rate),
+      d_code(code), d_chip_width(chip_width), d_num_chips(code.size()) {
   // Check that the number of samples per chip is an integer
   auto temp = d_samp_rate * chip_width;
   if (std::abs(temp - std::round(temp)) > 1e-10) {
@@ -37,11 +35,8 @@ PhaseCodedWaveform::PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width,
 
 PhaseCodedWaveform::PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width,
                                        Eigen::ArrayXd prf, double samp_rate)
-    : Waveform(samp_rate), PulsedWaveform(code.size() * chip_width, prf) {
-  d_num_chips = code.size();
-  d_chip_width = chip_width;
-  d_code = code;
-
+    : PulsedWaveform(code.size() * chip_width, prf), Waveform(samp_rate),
+      d_code(code), d_chip_width(chip_width), d_num_chips(code.size()) {
   // Check that the number of samples per chip is an integer
   auto temp = d_samp_rate * chip_width;
   if (std::abs(temp - std::round(temp)) > 1e-10) {

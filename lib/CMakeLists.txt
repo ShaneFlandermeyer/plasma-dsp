@@ -11,36 +11,31 @@ list(
   pcfm.cc
   phase_code.cc
   phase_coded_waveform.cc
-  # processing.cc
-  pulse_doppler.cc
   pulsed_waveform.cc
   square_waveform.cc
   waveform.cc
   window.cc)
 
-set(PLASMA_SOURCES "${PLASMA_SOURCES}" PARENT_SCOPE)
+# set(PLASMA_SOURCES "${PLASMA_SOURCES}" PARENT_SCOPE)
 # Create the waveform library
-add_library(plasma_dsp SHARED ${PLASMA_SOURCES})
+add_library(plasma_dsp ${PLASMA_SOURCES})
 # Specify the library include dirs
 target_include_directories(
-  plasma_dsp PRIVATE
+  plasma_dsp 
   PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/plasma_dsp>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/plasma_dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
-target_link_libraries(plasma_dsp PUBLIC Eigen3::Eigen fftw3 fftw3f fftw3_threads fftw3f_threads)
-target_compile_options(plasma_dsp PUBLIC
-    ${CMAKE_CXX_FLAGS}
-  )
-if(OpenMP_CXX_FOUND)
-  target_compile_definitions(plasma_dsp PUBLIC USE_OPENMP)
-  target_link_libraries(plasma_dsp PUBLIC OpenMP::OpenMP_CXX)
-endif()
+target_link_libraries(plasma_dsp 
+  PUBLIC ${CONAN_LIBS_EIGEN}
+  PRIVATE ${CONAN_LIBS_FFTW})
 
 # Install the shared library file
 install(TARGETS plasma_dsp
   EXPORT plasma_dsp
   DESTINATION ${PLASMA_LIB_DIR})
-# Install the cmake config file
+# Install .cmake files
 install(EXPORT plasma_dsp
   DESTINATION ${PLASMA_CMAKE_DIR})
-
+# Install shared dependency libraries
+install(DIRECTORY ${CONAN_LIB_DIRS}/
+  DESTINATION ${PLASMA_LIB_DIR})

@@ -8,18 +8,22 @@ PCFMWaveform::PCFMWaveform(const Eigen::ArrayXd &code,
                            const Eigen::ArrayXd &filter, double samp_rate,
                            double prf)
     : Waveform(samp_rate),
-      PulsedWaveform(filter.size() * code.size() / samp_rate, prf) {
-  d_code = code;
-  d_filter = filter;
-}
+      PulsedWaveform(filter.size() * code.size() / samp_rate, prf),
+      d_code(code), d_filter(filter) {}
 
 Eigen::ArrayXcd PCFMWaveform::sample() {
+  // From the input phase code, the first order derivative phase
+  // difference code (bounded between [-pi,pi]) is computed. This code is then
+  // "oversampled" to prepare it for the shaping filter by appending N zeros
+  // after every code value, where N is the number of samples in the filter.
+  // After applying the filter, the smoothed first order phase derivative is
+  // integrated back to phase and applied to a complex exponential to get the
+  // final waveform samples
   Eigen::ArrayXd difference = ComputePhaseChange();
-  Eigen::ArrayXd impulse_train = oversample(difference, d_filter.size());
-  // Apply the shaping filter
-  Eigen::ArrayXd chi = filter(impulse_train, d_filter);
-  Eigen::ArrayXd phase = cumsum(chi);
-  Eigen::ArrayXcd out = exp(Im * phase);
+  Eigen::ArrayXd train = oversample(difference, d_filter.size());
+  Eigen::ArrayXd freq = plasma::filter(d_filter, train);
+  Eigen::ArrayXd phase = cumsum(freq);
+  Eigen::ArrayXcd out = exp(plasma::Im * phase);
   return out;
 }
 
@@ -39,21 +43,6 @@ inline Eigen::ArrayXd PCFMWaveform::oversample(const Eigen::ArrayXd &in,
   Eigen::ArrayXd out = Eigen::ArrayXd::Zero(in.size() * factor);
   out(Eigen::seqN(0, in.size(), factor)) = in;
   return out;
-}
-
-inline Eigen::ArrayXd PCFMWaveform::filter(const Eigen::ArrayXd &in,
-                                           const Eigen::ArrayXd &filter) {
-
-  // Pad the filter to the size of the input
-  Eigen::ArrayXd pad_filter = Eigen::ArrayXd::Zero(in.size());
-  size_t filter_size = std::min(in.size(), filter.size());
-  pad_filter.head(filter_size) = filter.head(filter_size);
-  // Apply the filter via an FFT
-  Eigen::FFT<double> fft;
-  Eigen::VectorXcd in_fft = fft.fwd(in.matrix().eval());
-  Eigen::VectorXcd filter_fft = fft.fwd(pad_filter.matrix().eval());
-  Eigen::VectorXd out = fft.inv(in_fft.cwiseProduct(filter_fft).eval());
-  return out.array();
 }
 
 inline Eigen::ArrayXd PCFMWaveform::cumsum(const Eigen::ArrayXd &in) {

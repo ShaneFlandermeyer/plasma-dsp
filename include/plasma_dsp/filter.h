@@ -18,5 +18,16 @@ conv(const std::vector<std::complex<float>> &x1,
  */
 Eigen::ArrayXXcf conv(const Eigen::ArrayXXcf &x, const Eigen::ArrayXcf &h,
                      int num_threads = 1);
+
+/**
+ * @brief 1D digital filter
+ * 
+ * @param h Rational transfer function taps
+ * @param x Input data
+ * @param num_threads Number of threads to use for FFT computations
+ * @return Eigen::ArrayXd Filtered output data
+ */
+Eigen::ArrayXd filter(const Eigen::ArrayXd &h, const Eigen::ArrayXd& x, int num_threads = 1);
+
 } // namespace plasma
 #endif /* C38162B4_ECB4_482E_A4C9_25AF8B55C058 */
