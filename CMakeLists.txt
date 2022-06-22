@@ -16,7 +16,7 @@ endif()
 # ##############################################################################
 # Build options
 # ##############################################################################
-
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 # ##############################################################################
 # Configure Compiler
@@ -25,15 +25,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 add_compile_definitions(EIGEN_FFTW_DEFAULT)
-# option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 # Include custom cmake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(BuildType)
 include(FetchContent)
 
-# Hide warning from circ_shift function
-# set(CMAKE_CXX_FLAGS "-march=native ${CMAKE_CXX_FLAGS}")
-# message(STATUS ${CMAKE_CXX_FLAGS})
 
 ########################################################################
 # Install directories

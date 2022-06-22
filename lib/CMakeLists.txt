@@ -18,18 +18,17 @@ list(
 
 set(PLASMA_SOURCES "${PLASMA_SOURCES}" PARENT_SCOPE)
 # Create the waveform library
-add_library(plasma_dsp SHARED ${PLASMA_SOURCES})
+add_library(plasma_dsp 
+  ${PLASMA_SOURCES})
 # Specify the library include dirs
 target_include_directories(
   plasma_dsp PRIVATE
   PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/plasma_dsp>
   PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/plasma_dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
-target_link_libraries(plasma_dsp PUBLIC
-  ${CONAN_LIBS})
-# target_compile_options(plasma_dsp PUBLIC
-#     ${CMAKE_CXX_FLAGS}
-#   )
+target_link_libraries(plasma_dsp 
+  PUBLIC ${CONAN_LIBS_EIGEN}
+  PRIVATE ${CONAN_LIBS_FFTW})
 
 # Install the shared library file
 install(TARGETS plasma_dsp
