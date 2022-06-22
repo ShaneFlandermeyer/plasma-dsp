@@ -1,7 +1,5 @@
 #ifndef ECB27E48_2453_4D30_917A_F02981F9C37C
 #define ECB27E48_2453_4D30_917A_F02981F9C37C
-#ifndef C97710C5_A884_4B26_9DB4_B7ABCD30F8A1
-#define C97710C5_A884_4B26_9DB4_B7ABCD30F8A1
 
 #include <Eigen/Dense>
 
@@ -43,8 +41,6 @@ T vcat(const Eigen::EigenBase<T> &A, const Eigen::EigenBase<T> &B) {
 }
 
 } // namespace plasma
-
-#endif /* C97710C5_A884_4B26_9DB4_B7ABCD30F8A1 */
 
 
 #endif /* ECB27E48_2453_4D30_917A_F02981F9C37C */

@@ -4,6 +4,7 @@
 #include <complex>
 #include <iostream>
 #include <Eigen/Dense>
+#include "fftshift.h"
 
 namespace plasma {
 /*!

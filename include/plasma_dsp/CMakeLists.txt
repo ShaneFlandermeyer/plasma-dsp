@@ -3,10 +3,10 @@ list(APPEND
   PLASMA_HEADERS
   cfar1d.h
   cfar2d.h
-  circ_shift.h
   constants.h
   detector.h
   fft.h
+  fftshift.h
   file.h
   filter.h
   fmcw_waveform.h
@@ -16,7 +16,6 @@ list(APPEND
   phase_code.h
   phase_coded_waveform.h
   pulsed_waveform.h
-  range-doppler.h
   spectrogram.h
   square_waveform.h
   waveform.h

@@ -1,4 +1,4 @@
-#include "circ_shift.h"
+#include "fftshift.h"
 #include "file.h"
 #include "filter.h"
 #include "linear_fm_waveform.h"
@@ -43,7 +43,7 @@ int main() {
     range_dopp_map.row(i) = Eigen::Map<Eigen::ArrayXcf, Eigen::Aligned>(
         fft.execute(row.data()), row.size());
   }
-  Eigen::ArrayXXcf rdm = plasma::fftshift(range_dopp_map,1);
+  Eigen::ArrayXXcf rdm = range_dopp_map;
 
   // Write any data we can't process to a file
   std::ofstream out("/home/shane/pdu_file_sink_conv.dat");
