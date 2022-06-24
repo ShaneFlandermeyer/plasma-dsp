@@ -31,7 +31,7 @@ template <class T, bool forward> void FFT<T, forward>::execute() {
 
 
 template <class T, bool forward>
-fft_output<T, forward>::type *
+typename fft_output<T, forward>::type *
 FFT<T, forward>::execute(typename fft_input<T, forward>::type *input) {
   memcpy(d_input.data(), input,
          sizeof(typename fft_input<T, forward>::type) * d_size);
@@ -69,7 +69,7 @@ template <> void FFT<float, false>::initialize_plan(size_t fft_size) {
 }
 
 template <typename T, bool forward>
-fft_output<T, forward>::type *FFT<T, forward>::output() {
+typename fft_output<T, forward>::type *FFT<T, forward>::output() {
   typename fft_output<T, forward>::type *out =
       new typename fft_output<T, forward>::type[d_size];
   memcpy(out, d_output.data(),

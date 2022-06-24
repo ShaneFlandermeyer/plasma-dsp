@@ -44,20 +44,12 @@ of waveforms that can be generated is given below:
 
 ## Dependencies
 
-- C++20
-- [Eigen v3.4](https://gitlab.com/libeigen/eigen/-/tree/3.4)
-- [FFTW3](https://www.fftw.org/)
-- [OpenMP](https://www.openmp.org/)
-
-On an Ubuntu 22.04 system, these dependencies can be installed by running the
-following command as root:
+All other dependencies in this project are currently managed through
+[conan](https://conan.io/), which can be installed through pip
 
 ```bash
-apt install libeigen3-dev fftw-dev libomp-dev
+pip install conan
 ```
-
-**NOTE:** I am working on removing the C++20 dependency. It is currently used to
-generate the PCFM waveforms.
 
 ## Installation
 
@@ -67,11 +59,23 @@ The easiest way to use this tool is to obtain the source code from git
 git clone https://github.com/ShaneFlandermeyer/plasma_dsp.git
 ```
 
-To install the tool system-wide (currently only possible on Linux), run the
-following commands from the project's base directory
+There are two ways that Plasma DSP can be installed: as a Conan package and as a
+traditional system-wide install. The following command installs it as a Conan
+package, which is necessary for the companion
+[gr-plasma](git@github.com:ShaneFlandermeyer/gr-plasma.git) GNU Radio module.
 
 ```bash
-cmake -S . -B build
+conan create . -s compiler.libcxx=libstdc++11
+```
+
+To install the tool system-wide (for non-conan projects), run the commands below
+from the top-level CMake directory:
+
+```bash
+mkdir -p build
+cd build
+conan install ..
+cmake ..
 make
 sudo make install
 sudo ldconfig
