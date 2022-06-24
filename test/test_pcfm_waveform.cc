@@ -46,7 +46,7 @@ TEST_F(PCFMWaveformTest, RandomSinglePRF) {
 
   // Check that the values are the same
   EXPECT_THAT(actual.real(),
-              testing::Pointwise(testing::FloatNear(1e-10), expected.real()));
+              testing::Pointwise(testing::FloatNear(1e-8), expected.real()));
   EXPECT_THAT(actual.imag(),
-              testing::Pointwise(testing::FloatNear(1e-10), expected.imag()));
+              testing::Pointwise(testing::FloatNear(1e-8), expected.imag()));
 }

@@ -62,26 +62,14 @@ add_custom_target(uninstall
     ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
     )
 
-########################################################################
-# Set up Google Test
-########################################################################
-# Declare gtest dependency and download it from git
-# include(FetchContent)
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.11.0
-) 
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-enable_testing()
-
 # ##############################################################################
 # Add subdirectories
 # ##############################################################################
 add_subdirectory(include/plasma_dsp)
 add_subdirectory(lib)
 add_subdirectory(examples)
+
+enable_testing()
 add_subdirectory(test)
 
 ########################################################################
