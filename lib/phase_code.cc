@@ -35,8 +35,9 @@ std::vector<double> barker(int n) {
     throw std::invalid_argument("Invalid barker code length: " +
                                 std::to_string(n));
   }
-  std::transform(code.begin(), code.end(), code.begin(),
-                 [](auto &c) { return c * M_PI; });
+  for (auto &c : code) {
+    c *= M_PI;
+  }
   return code;
 }
 

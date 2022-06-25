@@ -5,15 +5,6 @@ project(
   LANGUAGES CXX
 )
 
-# Require out-of-source builds
-# file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
-# if(EXISTS "${LOC_PATH}")
-#   message(
-#     FATAL_ERROR
-#       "You cannot build in a source directory (or any directory with a CMakeLists.txt file). Please make a build subdirectory. Feel free to remove CMakeCache.txt and CMakeFiles."
-#   )
-# endif()
-
 # ##############################################################################
 # Build options
 # ##############################################################################
@@ -22,14 +13,13 @@ option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 # ##############################################################################
 # Configure Compiler
 # ##############################################################################
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 add_compile_definitions(EIGEN_FFTW_DEFAULT)
 # Include custom cmake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # include(BuildType)
-include(FetchContent)
 
 
 ########################################################################
@@ -62,26 +52,14 @@ add_custom_target(uninstall
     ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
     )
 
-########################################################################
-# Set up Google Test
-########################################################################
-# Declare gtest dependency and download it from git
-# include(FetchContent)
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.11.0
-) 
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-enable_testing()
-
 # ##############################################################################
 # Add subdirectories
 # ##############################################################################
 add_subdirectory(include/plasma_dsp)
 add_subdirectory(lib)
 add_subdirectory(examples)
+
+enable_testing()
 add_subdirectory(test)
 
 ########################################################################
