@@ -62,16 +62,27 @@ std::vector<double> frank(int M) {
   return code;
 }
 
-std::vector<double> PhaseCode::generate_code(CodeType type, int n) {
+std::vector<double> p4(int M) {
+  std::vector<double> phi(M);
+  for (int m = 0; m < M; m++) {
+    phi[m] = 2 * M_PI / M * (m - 1) * (m - 1 - M) / 2;
+  }
+  return phi;
+}
+
+std::vector<double> PhaseCode::generate_code(Code code_type, int n) {
   if (n < 0)
     throw std::invalid_argument("Code length must be positive");
   std::vector<double> code;
-  switch (type) {
+  switch (code_type) {
   case BARKER:
     code = barker(n);
     break;
   case FRANK:
     code = frank(n);
+    break;
+  case P4:
+    code = p4(n);
     break;
   default:
     throw std::invalid_argument("Invalid phase code type");

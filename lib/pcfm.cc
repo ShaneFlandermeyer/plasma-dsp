@@ -35,6 +35,8 @@ inline Eigen::ArrayXd PCFMWaveform::ComputePhaseChange() {
   for (size_t i = 0; i < difference.size(); i++)
     if (std::abs(difference(i)) > M_PI)
       difference(i) -= 2 * M_PI * difference.sign()(i);
+  // This is just a convention - set the 
+  difference(0) = difference(1);
   return difference;
 }
 
