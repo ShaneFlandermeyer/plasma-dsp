@@ -30,7 +30,7 @@ TEST_F(PCFMWaveformTest, RandomSinglePRF) {
   ArrayXd g1 = g / g.sum();
   // Convolve with the zero-padded impulse train
   ArrayXd train = ArrayXd::Zero(over * N);
-  train(seq(0, train.size() - 1, over)) = difference;
+  train(seq(0, train.size() - 1, over)) = difference / over;
   ArrayXd chi1 = plasma::filter(g1, train);
   ArrayXd phi1(chi1.size());
   std::partial_sum(chi1.begin(), chi1.end(), phi1.begin());

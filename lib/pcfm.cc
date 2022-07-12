@@ -9,7 +9,7 @@ PCFMWaveform::PCFMWaveform(const Eigen::ArrayXd &code,
                            double prf)
     : Waveform(samp_rate),
       PulsedWaveform(filter.size() * code.size() / samp_rate, prf),
-      d_code(code), d_filter(filter) {}
+      d_code(code), d_filter(filter / filter.size()) {}
 
 Eigen::ArrayXcd PCFMWaveform::sample() {
   // From the input phase code, the first order derivative phase
@@ -35,8 +35,8 @@ inline Eigen::ArrayXd PCFMWaveform::ComputePhaseChange() {
   for (size_t i = 0; i < difference.size(); i++)
     if (std::abs(difference(i)) > M_PI)
       difference(i) -= 2 * M_PI * difference.sign()(i);
-  // This is just a convention - set the 
-  difference(0) = difference(1);
+  // By convention, the first element in the difference array is set to 1 so
+  // that it has the same number of elements as the input phase code
   return difference;
 }
 
