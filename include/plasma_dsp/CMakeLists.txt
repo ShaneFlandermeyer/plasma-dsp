@@ -1,26 +1,26 @@
 # List of headers
 list(APPEND
   PLASMA_HEADERS
-  cfar1d.h
-  cfar2d.h
-  constants.h
-  detector.h
-  fft.h
-  fftshift.h
-  file.h
-  filter.h
-  fmcw_waveform.h
-  linear_fm_waveform.h
-  matrix_utils.h
-  pcfm.h
-  phase_code.h
-  phase_coded_waveform.h
+  # cfar1d.h
+  # cfar2d.h
+  # constants.h
+  # detector.h
+  # fft.h
+  # fftshift.h
+  # file.h
+  # filter.h
+  # fmcw_waveform.h
+  # linear_fm_waveform.h
+  # matrix_utils.h
+  # pcfm.h
+  # phase_code.h
+  # phase_coded_waveform.h
   pulsed_waveform.h
-  spectrogram.h
+  # spectrogram.h
   square_waveform.h
   waveform.h
-  window.h
-  vector_utils.h
+  # window.h
+  # vector_utils.h
 )
 
 configure_file(

@@ -39,7 +39,7 @@ set(PLASMA_EXAMPLE_DIR bin)
 ########################################################################
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
-
+find_package(ArrayFire REQUIRED)
 ########################################################################
 # Create uninstall target
 ########################################################################

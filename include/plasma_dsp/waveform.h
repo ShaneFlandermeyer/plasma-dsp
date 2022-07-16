@@ -4,8 +4,7 @@
 #include <algorithm>
 #include <complex>
 #include <vector>
-#include <Eigen/Dense>
-
+#include <arrayfire.h>
 #include "constants.h"
 #include "vector_utils.h"
 
@@ -41,14 +40,14 @@ public:
    *
    * @return Eigen::ArrayXcd
    */
-  virtual Eigen::ArrayXcd step() = 0;
+  virtual af::array step() = 0;
 
   /**
    * @brief Generate the non-zero portion of the waveform at complex baseband
    *
    * @return Eigen::ArrayXcd
    */
-  virtual Eigen::ArrayXcd sample() = 0;
+  virtual af::array sample() = 0;
 
   /**
    * @brief Generate the matched filter for the waveform.
@@ -58,7 +57,7 @@ public:
    *
    * @return Eigen::ArrayXcd Matched filter vector
    */
-  Eigen::ArrayXcd MatchedFilter();
+  af::array MatchedFilter();
 
   /**
    * @brief Get the sample rate
@@ -68,34 +67,14 @@ public:
   double samp_rate() const { return d_samp_rate; }
 
   /**
-   * @brief Get the frequency offset (Hz)
-   *
-   * @return double Frequency offset (Hz)
-   */
-  double freq_offset() const { return d_freq_offset; }
-
-  /**
    * @brief Set the sample rate
    *
    * @param samp_rate
    */
   void samp_rate(double samp_rate) { d_samp_rate = samp_rate; }
 
-  /**
-   * @brief Set the frequency offset (Hz)
-   *
-   * @param freq_offset
-   */
-  void freq_offset(double freq_offset) { d_freq_offset = freq_offset; }
 
 protected:
-  /**
-   * @brief Apply a frequency shift to the input waveform
-   *
-   * @param waveform Complex baseband waveform samples
-   * @param offset Frequency offset (Hz)
-   */
-  void FrequencyShift(Eigen::ArrayXcd &waveform, double offset);
 
   /**
    * @brief Sample rate (waveform/second)

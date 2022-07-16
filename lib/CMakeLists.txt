@@ -2,19 +2,20 @@
 list(
   APPEND
   PLASMA_SOURCES
-  cfar1d.cc
-  cfar2d.cc
-  fft.cc
-  filter.cc
-  fmcw_waveform.cc
-  linear_fm_waveform.cc
-  pcfm.cc
-  phase_code.cc
-  phase_coded_waveform.cc
+  # cfar1d.cc
+  # cfar2d.cc
+  # fft.cc
+  # filter.cc
+  # fmcw_waveform.cc
+  # linear_fm_waveform.cc
+  # pcfm.cc
+  # phase_code.cc
+  # phase_coded_waveform.cc
   pulsed_waveform.cc
   square_waveform.cc
   waveform.cc
-  window.cc)
+  # window.cc
+)
 
 # set(PLASMA_SOURCES "${PLASMA_SOURCES}" PARENT_SCOPE)
 # Create the waveform library
@@ -26,7 +27,7 @@ target_include_directories(
   PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/plasma_dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
 target_link_libraries(plasma_dsp 
-  PUBLIC ${CONAN_LIBS_EIGEN}
+  PUBLIC ${CONAN_LIBS_EIGEN} ArrayFire::af
   PRIVATE ${CONAN_LIBS_FFTW})
 
 # Install the shared library file

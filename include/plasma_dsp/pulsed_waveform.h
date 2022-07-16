@@ -30,21 +30,21 @@ public:
    * @param pulse_width Pulse width (s)
    * @param prf Pulse repetition frequency (Hz)
    */
-  PulsedWaveform(double pulse_width, Eigen::ArrayXd prf);
-  
+  PulsedWaveform(double pulse_width, af::array prf);
+
   /**
    * @brief Generate the full PRF schedule defined by the waveform object.
    *
-   * @return Eigen::ArrayXcd A PRI of data
+   * @return af::array A PRI of data
    */
-  Eigen::ArrayXcd step() override;
+  af::array step() override;
 
   /**
    * @brief Get the PRF schedule.
    *
-   * @return Eigen::ArrayXd An array of PRFs
+   * @return af::array An array of PRFs
    */
-  Eigen::ArrayXd prf() const { return d_prf; }
+  af::array prf() const { return d_prf; }
 
   /**
    * @brief Get the pulse width.
@@ -58,17 +58,14 @@ public:
    *
    * @param prf Desired PRF
    */
-  void prf(double prf) {
-    d_prf = Eigen::ArrayXd(1);
-    d_prf = prf;
-  }
+  void prf(double prf) { d_prf = prf; }
 
   /**
    * @brief Set the PRF as a vector
    *
    * @param prf Desired PRF
    */
-  auto prf(const Eigen::ArrayXd &prf) { d_prf = prf; }
+  auto prf(const af::array &prf) { d_prf = prf; }
 
   /**
    * @brief Set the pulse width
@@ -82,7 +79,7 @@ protected:
    * @brief Pulse repetition frequency (Hz)
    *
    */
-  Eigen::ArrayXd d_prf;
+  af::array d_prf;
 
   /**
    * @brief Pulse width (seconds)
