@@ -10,7 +10,7 @@ list(APPEND
   # file.h
   # filter.h
   # fmcw_waveform.h
-  # linear_fm_waveform.h
+  linear_fm_waveform.h
   # matrix_utils.h
   # pcfm.h
   # phase_code.h

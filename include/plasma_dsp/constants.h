@@ -2,8 +2,15 @@
 #define CB168327_F6DD_4F1E_839B_3A90B7B9993C
 
 #include <complex>
+#include <arrayfire.h>
+
+namespace af {
+const cdouble Im{0, 1};
+}
 
 namespace plasma {
+
+
 
 // Imaginary number J
 const std::complex<double> Im(0, 1);
@@ -28,7 +35,7 @@ enum DbUnit {
 };
 
 namespace physconst {
-  const double c = 299792458;
+const double c = 299792458;
 }
 
 } // namespace plasma

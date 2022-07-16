@@ -27,7 +27,7 @@ af::array PulsedWaveform::step() {
   double pri = 1 / d_prf;
   size_t num_samps_pri = round(d_samp_rate * pri);
   size_t num_samps_pulse = round(d_samp_rate * d_pulse_width);
-  af::array wave = af::constant(0, num_samps_pri, c32);
+  af::array wave = af::constant(0, num_samps_pri, c64);
   wave(af::seq(num_samps_pulse)) = sample();
   // Update the PRF for the next pulse
   d_prf_counter = (d_prf_counter + 1) % d_prf_schedule.size();

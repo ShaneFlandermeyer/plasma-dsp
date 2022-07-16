@@ -1,18 +1,16 @@
 #include "linear_fm_waveform.h"
-
+#include <iostream>
 namespace plasma {
 
-Eigen::ArrayXcd LinearFMWaveform::sample() {
+af::array LinearFMWaveform::sample() {
   // Sample interval
   double ts = 1 / d_samp_rate;
-  size_t num_samps = round(d_samp_rate * d_pulse_width);
-  Eigen::ArrayXd t =
-      Eigen::ArrayXd::LinSpaced(num_samps, 0, num_samps - 1) * ts;
-  Eigen::ArrayXcd out = exp(
-      Im * (2 * M_PI) *
-      (-bandwidth() / 2 * t + bandwidth() / (2 * pulse_width()) * pow(t, 2)));
-
-  return out;
+  size_t num_samp = round(d_samp_rate * d_pulse_width);
+  af::array t = af::range(af::dim4(num_samp), -1, f64) * ts;
+  af::array phase =
+      af::Im * M_PI *
+      (-bandwidth() * t + bandwidth() / (pulse_width()) * af::pow(t, 2));
+  return af::exp(phase);
 }
 
 LinearFMWaveform::LinearFMWaveform() : PulsedWaveform() { d_bandwidth = 0; }
@@ -24,7 +22,7 @@ LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulse_width,
 }
 
 LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulse_width,
-                                   Eigen::ArrayXd prf, double samp_rate)
+                                   std::vector<double> prf, double samp_rate)
     : Waveform(samp_rate), PulsedWaveform(pulse_width, prf) {
   d_bandwidth = bandwidth;
 }

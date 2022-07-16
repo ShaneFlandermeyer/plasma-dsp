@@ -20,10 +20,10 @@ TEST_F(SquareWaveformTest, SinglePRF) {
   plasma::SquareWaveform waveform(pulse_width, prf, samp_rate);
 
   // Expected result
-  size_t num_samps_pri = round(samp_rate / prf);
-  size_t num_samps_pulse = round(pulse_width * samp_rate);
-  af::array expected = af::constant(0, num_samps_pri);
-  expected(af::seq(num_samps_pulse)) = 1;
+  size_t num_samp_pri = round(samp_rate / prf);
+  size_t num_samp_pulse = round(pulse_width * samp_rate);
+  af::array expected = af::constant(0, num_samp_pri);
+  expected(af::seq(num_samp_pulse)) = 1;
 
   // Actual result from the object
   af::array actual = waveform.step();
@@ -32,8 +32,7 @@ TEST_F(SquareWaveformTest, SinglePRF) {
   ASSERT_EQ(actual.elements(), expected.elements());
 
   // Check that the values are the same
-  bool result = af::allTrue(actual == expected).scalar<char>();
-  EXPECT_TRUE(result);
+  EXPECT_TRUE(af::allTrue(actual == expected).scalar<char>());
 }
 
 /**
@@ -49,10 +48,10 @@ TEST_F(SquareWaveformTest, MultiPRF) {
 
   // Check the first PRF
   for (auto &prf : prf_schedule) {
-    size_t num_samps_pri = round(samp_rate / prf);
-    size_t num_samps_pulse = round(pulse_width * samp_rate);
-    af::array expected = af::constant(0, num_samps_pri);
-    expected(af::seq(num_samps_pulse)) = 1;
+    size_t num_samp_pri = round(samp_rate / prf);
+    size_t num_samp_pulse = round(pulse_width * samp_rate);
+    af::array expected = af::constant(0, num_samp_pri);
+    expected(af::seq(num_samp_pulse)) = 1;
     // Actual result from the object
     af::array actual = waveform.step();
     // Check the pulse length
