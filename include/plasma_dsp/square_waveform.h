@@ -27,12 +27,12 @@ public:
 
   /**
    * @brief Construct a new Square Waveform object
-   *
+   * 
    * @param pulse_width Pulse width (seconds)
-   * @param prf PRF (Hz)
+   * @param prf_schedule PRF schedule
    * @param samp_rate Sample Rate (samples/second)
    */
-  SquareWaveform(double pulse_width, af::array prf, double samp_rate);
+  SquareWaveform(double pulse_width, std::vector<double> prf_schedule, double samp_rate);
 
   /**
    * @brief Destroy the Square Waveform object

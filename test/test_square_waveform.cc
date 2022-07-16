@@ -42,15 +42,13 @@ TEST_F(SquareWaveformTest, SinglePRF) {
  *
  */
 TEST_F(SquareWaveformTest, MultiPRF) {
-  af::array prfs = {1e3, 2e3, 1.5e3};
-  // prfs << 1e3, 2e3, 1.5e3;
+  std::vector<double> prf_schedule {1e3, 2e3, 1.5e3};
   double pulse_width = 100e-6;
   double samp_rate = 1e6;
-  plasma::SquareWaveform waveform(pulse_width, prfs, samp_rate);
+  plasma::SquareWaveform waveform(pulse_width, prf_schedule, samp_rate);
 
   // Check the first PRF
-  for (int i = 0; i < prfs.elements(); i++) {
-    double prf = prfs(i).scalar<double>();
+  for (auto &prf : prf_schedule) {
     size_t num_samps_pri = round(samp_rate / prf);
     size_t num_samps_pulse = round(pulse_width * samp_rate);
     af::array expected = af::constant(0, num_samps_pri);

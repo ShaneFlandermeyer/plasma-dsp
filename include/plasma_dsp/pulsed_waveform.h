@@ -28,9 +28,9 @@ public:
    * @brief Construct a new Pulsed Waveform object
    *
    * @param pulse_width Pulse width (s)
-   * @param prf Pulse repetition frequency (Hz)
+   * @param prf_schedule PRF schedule (Hz)
    */
-  PulsedWaveform(double pulse_width, af::array prf);
+  PulsedWaveform(double pulse_width, std::vector<double> prf_schedule);
 
   /**
    * @brief Generate the full PRF schedule defined by the waveform object.
@@ -40,32 +40,35 @@ public:
   af::array step() override;
 
   /**
-   * @brief Get the PRF schedule.
+   * @brief Get the PRF schedule
    *
-   * @return af::array An array of PRFs
+   * @return std::vector<double>
    */
-  af::array prf() const { return d_prf; }
+  std::vector<double> prf_schedule() const { return d_prf_schedule; }
+
+  /**
+   * @brief Get the current PRF
+   *
+   * @return double
+   */
+  double prf() const { return d_prf; }
 
   /**
    * @brief Get the pulse width.
    *
-   * @return double Pulse width (seconds)
+   * @return double
    */
   double pulse_width() const { return d_pulse_width; }
 
+  void prf_schedule(const std::vector<double> schedule) {
+    d_prf_schedule = schedule;
+  }
   /**
    * @brief Set the PRF as a double
    *
    * @param prf Desired PRF
    */
   void prf(double prf) { d_prf = prf; }
-
-  /**
-   * @brief Set the PRF as a vector
-   *
-   * @param prf Desired PRF
-   */
-  auto prf(const af::array &prf) { d_prf = prf; }
 
   /**
    * @brief Set the pulse width
@@ -79,7 +82,16 @@ protected:
    * @brief Pulse repetition frequency (Hz)
    *
    */
-  af::array d_prf;
+  double d_prf;
+
+  /**
+   * @brief PRF schedule
+   *
+   * If specified, the step() method cycles through this vector to determine the
+   * PRF at each pulse
+   *
+   */
+  std::vector<double> d_prf_schedule;
 
   /**
    * @brief Pulse width (seconds)
