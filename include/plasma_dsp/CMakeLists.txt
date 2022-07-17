@@ -13,8 +13,8 @@ list(APPEND
   linear_fm_waveform.h
   # matrix_utils.h
   # pcfm.h
-  # phase_code.h
-  # phase_coded_waveform.h
+  phase_code.h
+  phase_coded_waveform.h
   pulsed_waveform.h
   # spectrogram.h
   square_waveform.h

@@ -9,8 +9,8 @@ list(
   # fmcw_waveform.cc
   linear_fm_waveform.cc
   # pcfm.cc
-  # phase_code.cc
-  # phase_coded_waveform.cc
+  phase_code.cc
+  phase_coded_waveform.cc
   pulsed_waveform.cc
   square_waveform.cc
   waveform.cc
