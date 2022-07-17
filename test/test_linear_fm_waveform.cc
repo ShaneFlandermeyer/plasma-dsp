@@ -23,10 +23,9 @@ TEST_F(LinearFMWaveformTest, SinglePRF) {
   plasma::LinearFMWaveform waveform(bandwidth, pulse_width, prf, samp_rate);
 
   // Generate the expected result
-  size_t num_samp_pri = static_cast<size_t>(samp_rate / prf);
   size_t num_samp_pulse = static_cast<size_t>(pulse_width * samp_rate);
 
-  std::vector<std::complex<double>> expected(num_samp_pri, 0);
+  std::vector<std::complex<double>> expected(num_samp_pulse, 0);
   double ts = 1 / samp_rate;
   double t;
   for (size_t i = 0; i < num_samp_pulse; i++) {
@@ -38,14 +37,14 @@ TEST_F(LinearFMWaveformTest, SinglePRF) {
   // Actual result from the object
   std::shared_ptr<std::complex<double>> actual_data(
       reinterpret_cast<std::complex<double> *>(
-          waveform.step().as(c64).host<af::cdouble>()));
+          waveform.sample().as(c64).host<af::cdouble>()));
   std::vector<std::complex<double>> actual(actual_data.get(),
-                             actual_data.get() + num_samp_pri);
+                             actual_data.get() + num_samp_pulse);
   // Check the pulse length
   ASSERT_EQ(actual.size(), expected.size());
 
   // Check that the values are the same
-  for (int i = 0; i < num_samp_pri; i++) {
+  for (int i = 0; i < num_samp_pulse; i++) {
     ASSERT_NEAR(actual[i].real(), expected[i].real(), 1e-10);
     ASSERT_NEAR(actual[i].imag(), expected[i].imag(), 1e-10);
   }
