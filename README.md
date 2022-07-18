@@ -44,11 +44,25 @@ of waveforms that can be generated is given below:
 
 ## Dependencies
 
-All other dependencies in this project are currently managed through
+This project's dependencies are managed by
 [conan](https://conan.io/), which can be installed through pip
 
 ```bash
 pip install conan
+```
+
+Most of the heavy signal processing lifting is handled by
+[ArrayFire](https://arrayfire.com/), which can be installed through apt by
+running the following
+
+```bash
+wget https://repo.arrayfire.com/GPG-PUB-KEY-ARRAYFIRE-2020.PUB
+gpg --no-default-keyring --keyring ./temp-keyring.gpg --import GPG-PUB-KEY-ARRAYFIRE-2020.PUB
+gpg --no-default-keyring --keyring ./temp-keyring.gpg --export --output arrayfire.gpg
+rm temp-keyring.gpg
+sudo mkdir -p /etc/apt/keyrings/
+sudo mv arrayfire.gpg /etc/apt/keyrings/arrayfire.gpg
+echo "deb [signed-by=/etc/apt/keyrings/arrayfire.gpg, arch=amd64] https://repo.arrayfire.com/debian all main" > sudo /etc/apt/sources.list.d/arrayfire.list
 ```
 
 ## Installation

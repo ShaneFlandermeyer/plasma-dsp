@@ -32,11 +32,10 @@ set(PLASMA_INCLUDE_DIR include/${CMAKE_PROJECT_NAME})
 set(PLASMA_LIB_DIR     lib)
 set(PLASMA_CMAKE_DIR   ${CMAKE_MODULES_DIR}/plasma_dsp)
 set(PLASMA_EXAMPLE_DIR bin)
+
 ########################################################################
 # Find build dependencies
-########################################################################
-# include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-# conan_basic_setup()
+######################################################################
 find_package(ArrayFire REQUIRED)
 find_package(GTest REQUIRED)
 ########################################################################
