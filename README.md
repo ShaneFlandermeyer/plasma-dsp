@@ -62,8 +62,12 @@ gpg --no-default-keyring --keyring ./temp-keyring.gpg --export --output arrayfir
 rm temp-keyring.gpg
 sudo mkdir -p /etc/apt/keyrings/
 sudo mv arrayfire.gpg /etc/apt/keyrings/arrayfire.gpg
-echo "deb [signed-by=/etc/apt/keyrings/arrayfire.gpg, arch=amd64] https://repo.arrayfire.com/debian all main" > sudo /etc/apt/sources.list.d/arrayfire.list
+echo "deb [signed-by=/etc/apt/keyrings/arrayfire.gpg, arch=amd64] https://repo.arrayfire.com/debian all main" | sudo tee -a /etc/apt/sources.list.d/arrayfire.list
+sudo apt update
+sudo apt install arrayfire
 ```
+
+If this process fails, you can choose an installation method from the [official repository](https://github.com/arrayfire/arrayfire/wiki/Getting-ArrayFire)
 
 ## Installation
 
