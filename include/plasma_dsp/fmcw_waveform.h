@@ -69,15 +69,15 @@ public:
   /**
    * @brief Generate samples of the complex baseband waveform
    *
-   * @return Eigen::ArrayXcd
+   * @return af::array
    */
-  Eigen::ArrayXcd sample() override;
+  af::array sample() override;
   /**
    * @brief Return a single sweep of the FMCW waveform
    *
-   * @return Eigen::ArrayXcd
+   * @return af::array
    */
-  Eigen::ArrayXcd step() override;
+  af::array step() override;
 
   /**
    * @brief Dechirp the FMCW signal
@@ -91,21 +91,21 @@ public:
    * @param ref Reference signal
    * @return Eigen::ArrayXcd dechirped beat signal
    */
-  Eigen::ArrayXcd demod(Eigen::ArrayXcd &in);
+  af::array demod(const af::array &in);
 
   /**
    * @brief Get the sweep time (s)
    *
-   * @return auto
+   * @return double
    */
-  auto sweep_time() const { return d_sweep_time; }
+  double sweep_time() const { return d_sweep_time; }
 
   /**
    * @brief Get the sweep bandwidth (Hz)
    *
-   * @return auto Sweep bandwidth
+   * @return double
    */
-  auto sweep_bandwidth() const { return d_sweep_bandwidth; }
+  double sweep_bandwidth() const { return d_sweep_bandwidth; }
 
   /**
    * @brief Set the sweep time (s)

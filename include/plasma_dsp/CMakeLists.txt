@@ -7,7 +7,7 @@ list(APPEND
   # detector.h
   # fftshift.h
   file.h
-  # fmcw_waveform.h
+  fmcw_waveform.h
   linear_fm_waveform.h
   pcfm.h
   phase_code.h

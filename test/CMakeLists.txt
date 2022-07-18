@@ -1,7 +1,7 @@
 
 add_executable(
   waveform-test
-  # test_fmcw_waveform.cc
+  test_fmcw_waveform.cc
   test_linear_fm_waveform.cc
   test_pcfm_waveform.cc
   test_phase_coded_waveform.cc
