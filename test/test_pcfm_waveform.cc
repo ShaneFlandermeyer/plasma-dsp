@@ -1,12 +1,9 @@
-// #include "matrix_utils.h"
 #include "constants.h"
-#include "filter.h"
 #include "pcfm.h"
 #include <random>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-using namespace Eigen;
 class PCFMWaveformTest : public testing::Test {
 protected:
 };

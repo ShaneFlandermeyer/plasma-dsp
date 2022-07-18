@@ -4,8 +4,6 @@ list(
   PLASMA_SOURCES
   # cfar1d.cc
   # cfar2d.cc
-  # fft.cc
-  # filter.cc
   # fmcw_waveform.cc
   linear_fm_waveform.cc
   pcfm.cc
@@ -17,7 +15,6 @@ list(
   # window.cc
 )
 
-# set(PLASMA_SOURCES "${PLASMA_SOURCES}" PARENT_SCOPE)
 # Create the waveform library
 add_library(plasma_dsp ${PLASMA_SOURCES})
 # Specify the library include dirs

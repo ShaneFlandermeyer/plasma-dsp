@@ -1,12 +1,9 @@
 #ifndef F9D71799_6DD6_49D7_89EC_155A8D8D6228
 #define F9D71799_6DD6_49D7_89EC_155A8D8D6228
 
+#include "pulsed_waveform.h"
 #include <numeric>
 #include <vector>
-
-#include "pulsed_waveform.h"
-#include "filter.h"
-#include "fft.h"
 #include <arrayfire.h>
 
 namespace plasma {
@@ -48,8 +45,7 @@ public:
    * @param samp_rate Sample rate
    * @param prf Pulse repetition frequency (Hz)
    */
-  PCFMWaveform(af::array code, af::array filter,
-               double samp_rate, double prf);
+  PCFMWaveform(af::array code, af::array filter, double samp_rate, double prf);
 
   /**
    * @brief Destroy the PCFMWaveform object

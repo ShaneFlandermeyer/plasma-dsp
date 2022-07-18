@@ -6,7 +6,6 @@
 #include <vector>
 #include <arrayfire.h>
 #include "constants.h"
-#include "vector_utils.h"
 
 namespace plasma {
 
