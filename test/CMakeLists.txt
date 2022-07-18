@@ -10,9 +10,13 @@ add_executable(
 
 target_link_libraries(
   waveform-test
-  ${CONAN_LIBS_GTEST}
+  PRIVATE
+  ${GTest_LIBRARIES}
   plasma_dsp
 )
+
+target_include_directories(waveform-test 
+  PRIVATE ${GTest_INCLUDE_DIRS})
 
 include(GoogleTest)
 gtest_discover_tests(waveform-test)

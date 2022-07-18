@@ -16,11 +16,9 @@ option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-add_compile_definitions(EIGEN_FFTW_DEFAULT)
 # Include custom cmake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-# include(BuildType)
-
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
 ########################################################################
 # Install directories
@@ -37,9 +35,10 @@ set(PLASMA_EXAMPLE_DIR bin)
 ########################################################################
 # Find build dependencies
 ########################################################################
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+# include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+# conan_basic_setup()
 find_package(ArrayFire REQUIRED)
+find_package(GTest REQUIRED)
 ########################################################################
 # Create uninstall target
 ########################################################################

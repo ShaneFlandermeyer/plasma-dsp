@@ -37,14 +37,14 @@ public:
    * representation of the waveform. Otherwise, this returns a waveform centered
    * at the frequency offset.
    *
-   * @return Eigen::ArrayXcd
+   * @return af::array
    */
   virtual af::array step() = 0;
 
   /**
    * @brief Generate the non-zero portion of the waveform at complex baseband
    *
-   * @return Eigen::ArrayXcd
+   * @return af::array
    */
   virtual af::array sample() = 0;
 
@@ -54,7 +54,7 @@ public:
    * The matched filter is the time-reversed complex conjugate of the nonzero
    * samples of the waveform.
    *
-   * @return Eigen::ArrayXcd Matched filter vector
+   * @return af::array Matched filter vector
    */
   af::array MatchedFilter();
 

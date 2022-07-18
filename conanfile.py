@@ -16,17 +16,14 @@ class PlasmaConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = {"shared": True, "*:shared": True}
-    generators = "cmake"
+    generators = "cmake_find_package"
     exports_sources = "CMakeLists.txt", "lib/*", "include/*", "examples/*", "test/*", "cmake/*"
 
     def requirements(self):
-        self.requires("fftw/3.3.9")
-        self.requires("eigen/3.4.0")
         self.requires("gtest/1.11.0")
         
     def configure(self):
-        self.options["fftw"].precision = "single"
-        self.options["fftw"].threads = True
+        pass
 
     def build(self):
         cmake = CMake(self)

@@ -89,7 +89,7 @@ public:
    *
    * @param in Input signal
    * @param ref Reference signal
-   * @return Eigen::ArrayXcd dechirped beat signal
+   * @return af::array dechirped beat signal
    */
   af::array demod(const af::array &in);
 

@@ -71,7 +71,7 @@ public:
   /**
    * @brief Generate a single pulse of the waveform.
    *
-   * @return Eigen::ArrayXcd The pulse data
+   * @return af::array The pulse data
    */
   af::array sample() override;
 };

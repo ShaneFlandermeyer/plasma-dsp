@@ -10,8 +10,6 @@ const cdouble Im{0, 1};
 
 namespace plasma {
 
-
-
 // Imaginary number J
 const std::complex<double> Im(0, 1);
 

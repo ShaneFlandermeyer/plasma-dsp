@@ -24,7 +24,7 @@ target_include_directories(
   PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/plasma_dsp>
   PUBLIC $<INSTALL_INTERFACE:include>)
 target_link_libraries(plasma_dsp 
-  PUBLIC ${CONAN_LIBS_EIGEN} ArrayFire::af
+  PUBLIC ArrayFire::af
   PRIVATE ${CONAN_LIBS_FFTW})
 
 # Install the shared library file
@@ -35,5 +35,5 @@ install(TARGETS plasma_dsp
 install(EXPORT plasma_dsp
   DESTINATION ${PLASMA_CMAKE_DIR})
 # Install shared dependency libraries
-install(DIRECTORY ${CONAN_LIB_DIRS}/
-  DESTINATION ${PLASMA_LIB_DIR})
+# install(DIRECTORY ${CONAN_LIB_DIRS}/
+#   DESTINATION ${PLASMA_LIB_DIR})
