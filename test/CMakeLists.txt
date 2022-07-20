@@ -16,9 +16,6 @@ target_link_libraries(
   plasma_dsp
 )
 
-# target_include_directories(waveform-test 
-#   PRIVATE ${GTest_INCLUDE_DIRS})
-
 include(GoogleTest)
 gtest_discover_tests(waveform-test)
 
