@@ -6,17 +6,18 @@ add_executable(
   test_pcfm_waveform.cc
   test_phase_coded_waveform.cc
   test_square_waveform.cc
+  # test_test.cc
 )
 
 target_link_libraries(
   waveform-test
-  PRIVATE
-  ${GTest_LIBRARIES}
+  GTest::gtest_main
+  GTest::gmock_main
   plasma_dsp
 )
 
-target_include_directories(waveform-test 
-  PRIVATE ${GTest_INCLUDE_DIRS})
+# target_include_directories(waveform-test 
+#   PRIVATE ${GTest_INCLUDE_DIRS})
 
 include(GoogleTest)
 gtest_discover_tests(waveform-test)
