@@ -20,22 +20,19 @@ TEST_F(SquareWaveformTest, SinglePRF) {
   plasma::SquareWaveform waveform(pulse_width, prf, samp_rate);
 
   // Expected result
-  size_t num_samps_pri = round(samp_rate / prf);
-  size_t num_samps_pulse = round(pulse_width * samp_rate);
-  Eigen::ArrayXcd expected = Eigen::ArrayXcd::Zero(num_samps_pri);
-  expected.head(num_samps_pulse) = 1;
+  size_t num_samp_pri = round(samp_rate / prf);
+  size_t num_samp_pulse = round(pulse_width * samp_rate);
+  af::array expected = af::constant(0, num_samp_pri);
+  expected(af::seq(num_samp_pulse)) = 1;
 
   // Actual result from the object
-  Eigen::ArrayXcd actual = waveform.step();
+  af::array actual = waveform.step();
 
   // Check the pulse length
-  ASSERT_EQ(actual.size(), expected.size());
+  ASSERT_EQ(actual.elements(), expected.elements());
 
   // Check that the values are the same
-  EXPECT_THAT(actual.real(),
-              testing::Pointwise(testing::FloatNear(1e-10), expected.real()));
-  EXPECT_THAT(actual.imag(),
-              testing::Pointwise(testing::FloatNear(1e-10), expected.imag()));
+  EXPECT_TRUE(af::allTrue(actual == expected).scalar<char>());
 }
 
 /**
@@ -44,26 +41,22 @@ TEST_F(SquareWaveformTest, SinglePRF) {
  *
  */
 TEST_F(SquareWaveformTest, MultiPRF) {
-  Eigen::ArrayXd prfs(3);
-  prfs << 1e3, 2e3, 1.5e3;
+  std::vector<double> prf_schedule {1e3, 2e3, 1.5e3};
   double pulse_width = 100e-6;
   double samp_rate = 1e6;
-  plasma::SquareWaveform waveform(pulse_width, prfs, samp_rate);
+  plasma::SquareWaveform waveform(pulse_width, prf_schedule, samp_rate);
 
   // Check the first PRF
-  for (auto &prf : prfs) {
-    size_t num_samps_pri = round(samp_rate / prf);
-    size_t num_samps_pulse = round(pulse_width * samp_rate);
-    Eigen::ArrayXcd expected = Eigen::ArrayXcd::Zero(num_samps_pri);
-    expected.head(num_samps_pulse) = 1;
+  for (auto &prf : prf_schedule) {
+    size_t num_samp_pri = round(samp_rate / prf);
+    size_t num_samp_pulse = round(pulse_width * samp_rate);
+    af::array expected = af::constant(0, num_samp_pri);
+    expected(af::seq(num_samp_pulse)) = 1;
     // Actual result from the object
-    Eigen::ArrayXcd actual = waveform.step();
+    af::array actual = waveform.step();
     // Check the pulse length
-    ASSERT_EQ(actual.size(), expected.size());
+    ASSERT_EQ(actual.elements(), expected.elements());
     // Check that the values are the same
-    EXPECT_THAT(actual.real(),
-                testing::Pointwise(testing::FloatNear(1e-10), expected.real()));
-    EXPECT_THAT(actual.imag(),
-                testing::Pointwise(testing::FloatNear(1e-10), expected.imag()));
+    EXPECT_TRUE(af::allTrue(actual == expected).scalar<char>());
   }
 }

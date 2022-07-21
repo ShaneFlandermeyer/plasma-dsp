@@ -28,47 +28,47 @@ public:
    * @brief Construct a new Pulsed Waveform object
    *
    * @param pulse_width Pulse width (s)
-   * @param prf Pulse repetition frequency (Hz)
+   * @param prf_schedule PRF schedule (Hz)
    */
-  PulsedWaveform(double pulse_width, Eigen::ArrayXd prf);
-  
+  PulsedWaveform(double pulse_width, std::vector<double> prf_schedule);
+
   /**
    * @brief Generate the full PRF schedule defined by the waveform object.
    *
-   * @return Eigen::ArrayXcd A PRI of data
+   * @return af::array A PRI of data
    */
-  Eigen::ArrayXcd step() override;
+  af::array step() override;
 
   /**
-   * @brief Get the PRF schedule.
+   * @brief Get the PRF schedule
    *
-   * @return Eigen::ArrayXd An array of PRFs
+   * @return std::vector<double>
    */
-  Eigen::ArrayXd prf() const { return d_prf; }
+  std::vector<double> prf_schedule() const { return d_prf_schedule; }
+
+  /**
+   * @brief Get the current PRF
+   *
+   * @return double
+   */
+  double prf() const { return d_prf; }
 
   /**
    * @brief Get the pulse width.
    *
-   * @return double Pulse width (seconds)
+   * @return double
    */
   double pulse_width() const { return d_pulse_width; }
 
+  void prf_schedule(const std::vector<double> schedule) {
+    d_prf_schedule = schedule;
+  }
   /**
    * @brief Set the PRF as a double
    *
    * @param prf Desired PRF
    */
-  void prf(double prf) {
-    d_prf = Eigen::ArrayXd(1);
-    d_prf = prf;
-  }
-
-  /**
-   * @brief Set the PRF as a vector
-   *
-   * @param prf Desired PRF
-   */
-  auto prf(const Eigen::ArrayXd &prf) { d_prf = prf; }
+  void prf(double prf) { d_prf = prf; }
 
   /**
    * @brief Set the pulse width
@@ -82,7 +82,16 @@ protected:
    * @brief Pulse repetition frequency (Hz)
    *
    */
-  Eigen::ArrayXd d_prf;
+  double d_prf;
+
+  /**
+   * @brief PRF schedule
+   *
+   * If specified, the step() method cycles through this vector to determine the
+   * PRF at each pulse
+   *
+   */
+  std::vector<double> d_prf_schedule;
 
   /**
    * @brief Pulse width (seconds)

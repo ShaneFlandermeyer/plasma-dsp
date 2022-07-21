@@ -2,7 +2,7 @@
 #define BD5E6A09_B96F_4379_84DF_C755B8C14BF8
 
 #include "pulsed_waveform.h"
-#include <numeric>
+// #include <numeric>
 
 namespace plasma {
 
@@ -44,7 +44,7 @@ public:
    * @param prf Vector of pulse repetition frequency values (Hz)
    * @param samp_rate Sample rate (samples/s)
    */
-  LinearFMWaveform(double bandwidth, double pulse_width, Eigen::ArrayXd prf,
+  LinearFMWaveform(double bandwidth, double pulse_width, std::vector<double> prf,
                    double samp_rate);
 
   /**
@@ -58,7 +58,7 @@ public:
    *
    * @return auto bandwidth (Hz)
    */
-  auto bandwidth() const { return d_bandwidth; }
+  double bandwidth() const { return d_bandwidth; }
 
   /**
    * @brief Set the waveform bandwidth
@@ -66,14 +66,14 @@ public:
    * @param bandwidth
    * @return auto
    */
-  auto bandwidth(double bandwidth) { d_bandwidth = bandwidth; }
+  void bandwidth(double bandwidth) { d_bandwidth = bandwidth; }
 
   /**
    * @brief Generate a single pulse of the waveform.
    *
-   * @return Eigen::ArrayXcd The pulse data
+   * @return af::array The pulse data
    */
-  Eigen::ArrayXcd sample() override;
+  af::array sample() override;
 };
 } // namespace plasma
 #endif /* BD5E6A09_B96F_4379_84DF_C755B8C14BF8 */

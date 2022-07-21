@@ -6,11 +6,13 @@ add_executable(
   test_pcfm_waveform.cc
   test_phase_coded_waveform.cc
   test_square_waveform.cc
+  # test_test.cc
 )
 
 target_link_libraries(
   waveform-test
-  ${CONAN_LIBS_GTEST}
+  GTest::gtest_main
+  GTest::gmock_main
   plasma_dsp
 )
 

@@ -5,13 +5,14 @@
 
 namespace plasma {
 
-Eigen::ArrayXcd PhaseCodedWaveform::sample() {
-  // Oversampling factor
-  size_t num_samps_chip = round(d_chip_width * d_samp_rate);
-  size_t num_samps_out = num_samps_chip * d_num_chips;
-  // Repeat each element in the phase code vector num_samps_chip times
-  Eigen::ArrayXcd out = exp(Im * d_code(Eigen::VectorXi::LinSpaced(
-                                     num_samps_out, 0, d_code.size() - 1)));
+af::array PhaseCodedWaveform::sample() {
+  // Repeat each element in the phase code vector num_samp_chip times
+  size_t num_samp_chip = round(d_chip_width * d_samp_rate);
+  af::array out(d_code.elements() * num_samp_chip, c64);
+  for (auto i = 0; i < num_samp_chip; i++) {
+    out(af::seq(i, d_code.elements() * num_samp_chip - 1, num_samp_chip)) =
+        exp(af::Im * d_code);
+  }
   return out;
 }
 
@@ -20,11 +21,12 @@ PhaseCodedWaveform::PhaseCodedWaveform() {
   d_chip_width = 0;
 }
 
-PhaseCodedWaveform::PhaseCodedWaveform(const Eigen::ArrayXd &code,
-                                       double chip_width, double prf,
-                                       double samp_rate)
-    : PulsedWaveform(code.size() * chip_width, prf), Waveform(samp_rate),
-      d_code(code), d_chip_width(chip_width), d_num_chips(code.size()) {
+PhaseCodedWaveform::PhaseCodedWaveform(const af::array &code, double chip_width,
+                                       double prf, double samp_rate)
+    : PulsedWaveform(code.elements() * chip_width, prf), Waveform(samp_rate),
+      d_code(code.as(f64)), d_chip_width(chip_width),
+      d_num_chips(code.elements()) {
+
   // Check that the number of samples per chip is an integer
   auto temp = d_samp_rate * chip_width;
   if (std::abs(temp - std::round(temp)) > 1e-10) {
@@ -33,10 +35,12 @@ PhaseCodedWaveform::PhaseCodedWaveform(const Eigen::ArrayXd &code,
   }
 }
 
-PhaseCodedWaveform::PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width,
-                                       Eigen::ArrayXd prf, double samp_rate)
-    : PulsedWaveform(code.size() * chip_width, prf), Waveform(samp_rate),
-      d_code(code), d_chip_width(chip_width), d_num_chips(code.size()) {
+PhaseCodedWaveform::PhaseCodedWaveform(af::array code, double chip_width,
+                                       std::vector<double> prf,
+                                       double samp_rate)
+    : PulsedWaveform(code.elements() * chip_width, prf), Waveform(samp_rate),
+      d_code(code, f64), d_chip_width(chip_width),
+      d_num_chips(code.elements()) {
   // Check that the number of samples per chip is an integer
   auto temp = d_samp_rate * chip_width;
   if (std::abs(temp - std::round(temp)) > 1e-10) {

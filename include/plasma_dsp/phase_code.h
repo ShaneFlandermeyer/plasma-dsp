@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <arrayfire.h>
 
 namespace plasma {
 /**
@@ -47,7 +48,7 @@ public:
    * @param n Code length
    * @return std::vector<double> Phase code vector
    */
-  static std::vector<double> generate_code(Code type, int n);
+  static af::array generate_code(Code type, int n);
 };
 } // namespace plasma
 #endif /* C8DA77F0_9C11_4535_8359_C56C62F68E47 */

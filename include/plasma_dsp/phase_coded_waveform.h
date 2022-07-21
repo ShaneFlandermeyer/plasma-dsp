@@ -1,13 +1,11 @@
 #ifndef F76EB5C6_3C7E_46B6_AC56_C303873CDA4A
 #define F76EB5C6_3C7E_46B6_AC56_C303873CDA4A
 
-#include <vector>
-
 #include "constants.h"
 #include "pulsed_waveform.h"
 #include "waveform.h"
-#include <Eigen/Core>
-#include <Eigen/Dense>
+#include <vector>
+#include <arrayfire.h>
 
 namespace plasma {
 /**
@@ -20,7 +18,7 @@ protected:
    * @brief Vector of phase code values
    *
    */
-  Eigen::ArrayXd d_code;
+  af::array d_code;
 
   /**
    * @brief Chip duration (seconds)
@@ -49,7 +47,7 @@ public:
    * @param prf Pulse repetition frequency (Hz)
    * @param samp_rate Sample rate (Hz)
    */
-  PhaseCodedWaveform(const Eigen::ArrayXd &code, double chip_width, double prf,
+  PhaseCodedWaveform(const af::array &code, double chip_width, double prf,
                      double samp_rate);
 
   /**
@@ -60,21 +58,21 @@ public:
    * @param prf Pulse repetition frequency (Hz)
    * @param samp_rate Sample rate (Hz)
    */
-  PhaseCodedWaveform(Eigen::ArrayXd code, double chip_width, Eigen::ArrayXd prf,
+  PhaseCodedWaveform(af::array code, double chip_width, std::vector<double> prf,
                      double samp_rate);
   /**
    * @brief Generate a single pulse of the waveform.
    *
-   * @return Eigen::ArrayXcd The pulse data
+   * @return af::array The pulse data
    */
-  virtual Eigen::ArrayXcd sample() override;
+  virtual af::array sample() override;
 
   /**
    * @brief Get the phase code vector
    *
    * @return auto Code values
    */
-  Eigen::ArrayXd code() const { return d_code; }
+  af::array code() const { return d_code; }
 
   /**
    * @brief Get the number of chips
@@ -95,7 +93,7 @@ public:
    *
    * @param code New code values
    */
-  void code(const Eigen::ArrayXd &code) { d_code = code; }
+  void code(const af::array &code) { d_code = code; }
 
   /**
    * @brief Set the number of chips
