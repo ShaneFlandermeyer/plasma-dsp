@@ -44,13 +44,6 @@ of waveforms that can be generated is given below:
 
 ## Dependencies
 
-This project's dependencies are managed by
-[conan](https://conan.io/), which can be installed through pip
-
-```bash
-pip install conan
-```
-
 Most of the heavy signal processing lifting is handled by
 [ArrayFire](https://arrayfire.com/), which can be installed through apt by
 running the following
@@ -67,7 +60,11 @@ sudo apt update
 sudo apt install arrayfire
 ```
 
-If this process fails, you can choose an installation method from the [official repository](https://github.com/arrayfire/arrayfire/wiki/Getting-ArrayFire)
+If this process fails, you can choose an installation method from the [official
+repository](https://github.com/arrayfire/arrayfire/wiki/Getting-ArrayFire)
+
+[GoogleTest](https://github.com/google/googletest) is also a dependency, but it
+is installed through a FetchContent call if it is not found.
 
 ## Installation
 
@@ -77,22 +74,13 @@ The easiest way to use this tool is to obtain the source code from git
 git clone https://github.com/ShaneFlandermeyer/plasma_dsp.git
 ```
 
-There are two ways that Plasma DSP can be installed: as a Conan package and as a
-traditional system-wide install. The following command installs it as a Conan
-package, which is necessary for the companion
-[gr-plasma](git@github.com:ShaneFlandermeyer/gr-plasma.git) GNU Radio module.
 
-```bash
-conan create . -s compiler.libcxx=libstdc++11
-```
-
-To install the tool system-wide (for non-conan projects), run the commands below
+To install the tool system-wide, run the commands below
 from the top-level CMake directory:
 
 ```bash
 mkdir -p build
 cd build
-conan install ..
 cmake ..
 make
 sudo make install
@@ -104,4 +92,33 @@ To uninstall, run the following from the build folder
 ```bash
 sudo make uninstall
 sudo ldconfig
+```
+
+## Python Usage
+Although no Python bindings have been explicitly written for this project,
+[cppyy](https://cppyy.readthedocs.io/en/latest/index.html) has been tested and
+works for all objects. Below is a minimal working example for generating a
+waveform, converting the data to a numpy array, and plotting
+
+```python
+import cppyy
+import cppyy.gbl.std as std
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load the library and any headers you want to use in Python
+cppyy.load_library('libplasma_dsp')
+cppyy.include('plasma_dsp/linear_fm_waveform.h')
+
+
+# Generate the waveform data
+waveform = cppyy.gbl.plasma.LinearFMWaveform(10e6, 10e-6, 10e3, 20e6)
+samps = waveform.sample()
+x = std.vector[std.complex['double']](samps.elements())
+samps.host(x.data())
+x = np.array(list(x),dtype=np.complex128)
+
+# Plot for verification
+plt.plot(np.real(x))
+plt.show()
 ```

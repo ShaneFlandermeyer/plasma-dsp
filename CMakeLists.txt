@@ -37,7 +37,6 @@ set(PLASMA_EXAMPLE_DIR bin)
 # Find build dependencies
 ######################################################################
 find_package(ArrayFire REQUIRED)
-# find_package(GTest REQUIRED)
 
 include(FetchContent)
 FetchContent_Declare(
