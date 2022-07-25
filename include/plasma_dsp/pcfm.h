@@ -45,7 +45,7 @@ public:
    * @param samp_rate Sample rate
    * @param prf Pulse repetition frequency (Hz)
    */
-  PCFMWaveform(af::array code, af::array filter, double samp_rate, double prf);
+  PCFMWaveform(af::array code, af::array filter, double samp_rate, double prf = 0);
 
   /**
    * @brief Destroy the PCFMWaveform object

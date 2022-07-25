@@ -16,13 +16,13 @@ af::array LinearFMWaveform::sample() {
 LinearFMWaveform::LinearFMWaveform() : PulsedWaveform() { d_bandwidth = 0; }
 
 LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulse_width,
-                                   double prf, double samp_rate)
+                                   double samp_rate, double prf)
     : Waveform(samp_rate), PulsedWaveform(pulse_width, prf) {
   d_bandwidth = bandwidth;
 }
 
 LinearFMWaveform::LinearFMWaveform(double bandwidth, double pulse_width,
-                                   std::vector<double> prf, double samp_rate)
+                                   double samp_rate, std::vector<double> prf)
     : Waveform(samp_rate), PulsedWaveform(pulse_width, prf) {
   d_bandwidth = bandwidth;
 }

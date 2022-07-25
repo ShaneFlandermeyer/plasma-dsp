@@ -33,8 +33,8 @@ public:
    * @param prf Pulse repetition frequency (Hz)
    * @param samp_rate Sample rate (samples/s)
    */
-  LinearFMWaveform(double bandwidth, double pulse_width, double prf,
-                   double samp_rate);
+  LinearFMWaveform(double bandwidth, double pulse_width, double samp_rate,
+                   double prf = 0);
 
   /**
    * @brief Construct a new Linear FM Waveform object
@@ -44,8 +44,8 @@ public:
    * @param prf Vector of pulse repetition frequency values (Hz)
    * @param samp_rate Sample rate (samples/s)
    */
-  LinearFMWaveform(double bandwidth, double pulse_width, std::vector<double> prf,
-                   double samp_rate);
+  LinearFMWaveform(double bandwidth, double pulse_width, double samp_rate,
+                   std::vector<double> prf);
 
   /**
    * @brief Destroy the Linear FM Waveform object
