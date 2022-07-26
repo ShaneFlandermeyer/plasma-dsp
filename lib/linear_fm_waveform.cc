@@ -9,7 +9,7 @@ af::array LinearFMWaveform::sample() {
   af::array t = af::range(af::dim4(num_samp), -1, f64) * ts;
   af::array phase =
       af::Im * M_PI *
-      (-bandwidth() * t + bandwidth() / (pulse_width()) * af::pow(t, 2));
+      (-bandwidth() * t + bandwidth() / pulse_width() * af::pow(t, 2));
   return af::exp(phase);
 }
 

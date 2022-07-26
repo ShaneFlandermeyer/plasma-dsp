@@ -12,7 +12,7 @@ list(
   pulsed_waveform.cc
   square_waveform.cc
   waveform.cc
-  # window.cc
+  window.cc
 )
 
 # Create the waveform library

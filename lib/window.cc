@@ -1,28 +1,22 @@
 #include "window.h"
 
-#include <cmath>
-
 namespace plasma {
 
-std::vector<double> rectangular(int n) { return std::vector<double>(n, 1.0); }
+af::array rectangular(size_t n) { return af::constant(1, n).as(f64); }
 
-std::vector<double> blackman(int n) {
-  std::vector<double> w(n);
-  for (int i = 0; i < n; i++)
-    w[i] = 0.42 - 0.5 * cos(2 * M_PI * i / n) + 0.08 * cos(4 * M_PI * i / n);
-  return w;
+af::array blackman(size_t n) {
+  af::array in = af::range(af::dim4(n), -1, f64);
+  return 0.42 - 0.5 * cos(2 * M_PI * in / n) + 0.08 * cos(4 * M_PI * in / n);
 }
 
-std::vector<double> hamming(int n) {
-  std::vector<double> w(n);
-  for (int i = 0; i < n; i++) w[i] = 0.54 - 0.46 * cos(2 * M_PI * i / (n - 1));
-  return w;
+af::array hamming(size_t n) {
+  af::array in = af::range(af::dim4(n), -1, f64);
+  return 0.54 - 0.46 * cos(2 * M_PI * in / (n - 1));
 }
 
-std::vector<double> hanning(int n) {
-  std::vector<double> w(n);
-  for (int i = 0; i < n; i++) w[i] = 0.5 - 0.5 * cos(2 * M_PI * i / (n - 1));
-  return w;
+af::array hanning(size_t n) {
+  af::array in = af::range(af::dim4(n), -1, f64);
+  return 0.5 - 0.5 * cos(2 * M_PI * in / (n - 1));
 }
 
-}  // namespace plasma
+} // namespace plasma

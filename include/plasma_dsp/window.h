@@ -12,6 +12,8 @@
 #ifndef E9175048_C018_4B5C_ACDB_4A0C0931BB61
 #define E9175048_C018_4B5C_ACDB_4A0C0931BB61
 #include <vector>
+#include <cmath>
+#include <arrayfire.h>
 
 namespace plasma {
 
@@ -19,9 +21,9 @@ namespace plasma {
  * @brief Rectangular window of length n
  *
  * @param n Window length
- * @return std::vector<float>
+ * @return af::array
  */
-std::vector<double> rectangular(int n);
+af::array rectangular(size_t n);
 
 /**
  * @brief blackman window of length n
@@ -29,7 +31,7 @@ std::vector<double> rectangular(int n);
  * @param n Window length
  * @return std::vector<double>
  */
-std::vector<double> blackman(int n);
+af::array blackman(size_t n);
 
 /**
  * @brief hamming window of length n
@@ -37,7 +39,7 @@ std::vector<double> blackman(int n);
  * @param n Window length
  * @return std::vector<double>
  */
-std::vector<double> hamming(int n);
+af::array hamming(size_t n);
 
 /**
  * @brief hanning window of length n
@@ -45,7 +47,7 @@ std::vector<double> hamming(int n);
  * @param n Window length
  * @return std::vector<double>
  */
-std::vector<double> hanning(int n);
+af::array hanning(size_t n);
 
 }  // namespace plasma
 

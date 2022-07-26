@@ -15,7 +15,7 @@ list(APPEND
   pulsed_waveform.h
   square_waveform.h
   waveform.h
-  # window.h
+  window.h
 )
 
 # System-wide installation

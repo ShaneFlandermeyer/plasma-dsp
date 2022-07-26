@@ -8,7 +8,7 @@ namespace plasma {
 af::array SquareWaveform::sample() {
   // Number of samples per pulse
   size_t num_samp_pulse = static_cast<size_t>(d_samp_rate * d_pulse_width);
-  return af::constant(1, num_samp_pulse, c32);
+  return af::constant(1, num_samp_pulse, c64);
 }
 
 SquareWaveform::SquareWaveform() : PulsedWaveform() {}
