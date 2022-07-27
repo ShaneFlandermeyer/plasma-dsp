@@ -12,10 +12,10 @@
 #ifndef E9175048_C018_4B5C_ACDB_4A0C0931BB61
 #define E9175048_C018_4B5C_ACDB_4A0C0931BB61
 #include <vector>
-#include <cmath>
 #include <arrayfire.h>
 
 namespace plasma {
+namespace window {
 
 /**
  * @brief Rectangular window of length n
@@ -23,7 +23,7 @@ namespace plasma {
  * @param n Window length
  * @return af::array
  */
-af::array rectangular(size_t n);
+af::array rectangular(int n);
 
 /**
  * @brief blackman window of length n
@@ -31,7 +31,7 @@ af::array rectangular(size_t n);
  * @param n Window length
  * @return std::vector<double>
  */
-af::array blackman(size_t n);
+af::array blackman(int n);
 
 /**
  * @brief hamming window of length n
@@ -39,7 +39,7 @@ af::array blackman(size_t n);
  * @param n Window length
  * @return std::vector<double>
  */
-af::array hamming(size_t n);
+af::array hamming(int n);
 
 /**
  * @brief hanning window of length n
@@ -47,10 +47,11 @@ af::array hamming(size_t n);
  * @param n Window length
  * @return std::vector<double>
  */
-af::array hanning(size_t n);
+af::array hanning(int n);
 
-af::array gaussian(size_t n, double alpha = 2.5);
+af::array gaussian(int n, double alpha = 2.5);
 
-}  // namespace plasma
+} // namespace window
+} // namespace plasma
 
 #endif /* E9175048_C018_4B5C_ACDB_4A0C0931BB61 */
