@@ -2,7 +2,6 @@
 #define A775376E_2D30_4128_8EC3_7F3F35F6FD7A
 
 #include "detector.h"
-#include <Eigen/Dense>
 
 namespace plasma {
 /**
@@ -35,92 +34,48 @@ public:
    * each dimension
    * @param pfa Probability of false alarm
    */
-  CFARDetector2D(size_t size_train, size_t size_guard, double pfa);
+  CFARDetector2D(size_t size_train, size_t size_guard, float pfa);
 
-  CFARDetector2D(Eigen::Array<size_t, 2, 1> size_guard,
-                 Eigen::Array<size_t, 2, 1> size_train, double pfa);
-
-  // /**
-  //  * @brief Perform CFAR detection on the specified elements of the input
-  //  data
-  //  *
-  //  *
-  //  * @param x M-by-N matrix of real-valued input data, where M is the number
-  //  of
-  //  * range bins and N is the number of time instances in the input signal.
-  //  * @param cut_row Zero-indexed row of the current cell under test (CUT)
-  //  * @param cut_row Zero-indexed column of the current cell under test (CUT)
-  //  * @return DetectionReport A struct containing
-  //  *
-  //  * - A logical matrix indicating whether a target was detected in each bin
-  //  * - The CFAR threshold at each bin
-  //  * - The matrix indices of each detection
-  //  */
-  // DetectionReport detect(const Eigen::MatrixXd &x, size_t cut_row, size_t
-  // cut_col);
+  CFARDetector2D(int *gurad_win, int *train_size, float pfa);
 
   /**
-   * @brief Perform CFAR detection on the specified matrix indices
-   *
-   * @param x Input data matrix
-   * @param indices A 2-by-D
-   * @return DetectionReport
+   * @brief Perform CFAR detections on the specified elements of the input data
+   * 
+   * @param x M-by-N matrix of real-valued input data
+   * @return af::array A bool array where a true/1 is a detection
    */
-  DetectionReport detect(const Eigen::MatrixXd &x,
-                         const Eigen::Array2Xi &indices);
-
-  /**
-   * @brief Perform CFAR detection on the entire input signal
-   *
-   * TODO: Enable tensor inputs
-   *
-   * @param x An M-by-1 matrix of real-valued input data.
-   * @return std::vector<bool>
-   */
-  DetectionReport detect(const Eigen::MatrixXd &x);
+  af::array detect(const af::array &x);
 
 private:
-  /**
-   * @brief Perform CFAR detection on the specified elements of the input data
-   *
-   *
-   * @param x M-by-N matrix of real-valued input data, where M is the number of
-   * range bins and N is the number of time instances in the input signal.
-   * @param cut_row Zero-indexed row of the current cell under test (CUT)
-   * @param cut_row Zero-indexed column of the current cell under test (CUT)
-   * @param result The detection report struct to be modified
-   */
-  void detect(const Eigen::MatrixXd &x, size_t cut_row, size_t cut_col,
-              DetectionReport &result);
 
 protected:
   /**
    * @brief The number of rows and columns of the guard band cells on each side
    * of the CUT cell, specified as nonnegative integers.
    *
-   * A 2-by-1 array where the first element specifies the guard band size along
+   * A array where the first element specifies the guard band size along
    * the row dimension (height) and the second element specifies the guard band
    * size along the column dimension (width)
    *
    */
-  Eigen::Array<size_t, 2, 1> d_guard_win_size;
+  int d_guard_win_size[2];
 
   /**
    * @brief The number of rows and columns of the training band cells on each
    * side of the CUT cell, specified as nonnegative integers.
    *
-   * A 2-by-1 array where the first element specifies the training band size
+   * A array where the first element specifies the training band size
    * along the row dimension (height) and the second element specifies the guard
    * band size along the column dimension (width)
    *
    */
-  Eigen::Array<size_t, 2, 1> d_train_win_size;
+  int d_train_win_size[2];
 
   /**
    * @brief Probability of false alarm
    *
    */
-  double d_pfa;
+  float d_pfa;
 };
 
 // /**
