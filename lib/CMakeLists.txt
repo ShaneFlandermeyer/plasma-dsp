@@ -3,7 +3,7 @@ list(
   APPEND
   PLASMA_SOURCES
   # cfar1d.cc
-  # cfar2d.cc
+  cfar2d.cc
   fmcw_waveform.cc
   linear_fm_waveform.cc
   pcfm.cc

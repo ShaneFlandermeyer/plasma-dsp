@@ -51,7 +51,7 @@ af::array CFARDetector2D::detect(const af::array &x) {
   //Calculating alpha
   float alpha = num_train_bins * (pow(d_pfa, -1 / (double)num_train_bins) - 1);
 
-  //Creating a bool array where the detetions are.
+  //Creating a bool array where the detections are.
   af::array detections = (x > power * alpha);
 
   return detections;

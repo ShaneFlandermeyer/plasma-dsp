@@ -2,7 +2,7 @@
 list(APPEND
   PLASMA_HEADERS
   # cfar1d.h
-  # cfar2d.h
+  cfar2d.h
   constants.h
   # detector.h
   # fftshift.h

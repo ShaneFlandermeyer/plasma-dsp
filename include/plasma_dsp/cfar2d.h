@@ -1,7 +1,7 @@
 #ifndef A775376E_2D30_4128_8EC3_7F3F35F6FD7A
 #define A775376E_2D30_4128_8EC3_7F3F35F6FD7A
 
-#include "detector.h"
+#include <arrayfire.h>
 
 namespace plasma {
 /**

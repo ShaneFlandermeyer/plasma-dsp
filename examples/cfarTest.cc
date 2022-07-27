@@ -1,39 +1,10 @@
 #include "plasma_dsp/file.h"
+#include "cfar2d.h"
+//#include "plasma_dsp/cfar2d.h"
 #include <fstream>
 #include <iostream>
 #include <arrayfire.h>
 #include <numeric>
-
-// class cfarTest {
-// public:
-//   cfarTest(size_t num_guard, size_t num_train, float pfa);
-//   ~cfarTest();
-
-//   void detect(af::array &x);
-
-// private:
-//   int _guard_num;
-//   int _train_num;
-//   float _pfa;
-
-//   std::vector<std::vector<int>> detections;
-
-//   void detect(af::array &x, int cut_row, int cut_col);
-// };
-
-// cfarTest::cfarTest(size_t num_guard, size_t num_train, float pfa) {
-//   _guard_num = num_guard;
-//   _train_num = num_train;
-//   _pfa = pfa;
-// }
-
-// void cfarTest::detect(af::array &x) {
-//   for (int i = 0; i < x.dims(0); ++i) {
-//     for (int j = 0; j < x.dims(1); ++j) {
-//       detect(x, i, j);
-//     }
-//   }
-// }
 
 af::array cfar(af::array rdm) {
   // Hardcode CFAR parameters
@@ -42,7 +13,7 @@ af::array cfar(af::array rdm) {
   int cfarD_guard = 2;
   int cfarD_train = 4;
 
-  float pfa = 0.001f;
+  float pfa = 0.00001f;
 
   size_t winR1 = 1 - cfarR_guard - cfarR_train;
   size_t winR2 = 1 + cfarR_guard + cfarR_train;
@@ -62,8 +33,7 @@ af::array cfar(af::array rdm) {
 
   float alpha = num_train_bins*(pow(pfa, -1 / (double)num_train_bins) - 1);
 
-  af::array detections = rdm > power * alpha;
-  // af_print(detections);
+  af::array detections = (rdm > power * alpha);
 
   return detections;
 
@@ -71,7 +41,10 @@ af::array cfar(af::array rdm) {
   // Once that works, update detectionreport class and return indices as well
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+  int device = argc > 1? atoi(argv[1]):0;
+  af::setDevice(device);
+  af::info();
   std::string filename = "/home/avery/Research  Folder/MatLab/rangeDopplerMap";
   std::vector<double> rdm = plasma::read<double>(filename);
   float copy_rdm[rdm.size()/2];
@@ -82,7 +55,10 @@ int main() {
   }
   af::array RDM(200, 1024, copy_rdm);
 
-  std::cout << af::sum<int>(cfar(RDM)) << std::endl;
+  plasma::CFARDetector2D cfarDetector(2, 4, 0.00001f);
+  std::cout << af::sum<float>(cfarDetector.detect(RDM)) << std::endl;
+
+  af::saveArray("", cfar(RDM), "/home/avery/Research  Folder/MatLab/cpp_detection");
 
   return 0;
 }
