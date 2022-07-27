@@ -53,7 +53,7 @@ DetectionReport CFARDetector2D::detect(const af::array &x) {
   float alpha = num_train_bins * (pow(d_pfa, -1 / (double)num_train_bins) - 1);
 
   //Creating a bool array where the detections are.
-  af::array detections = (x > power * alpha).as(f32);
+  af::array detections = (x > power * alpha);
 
   DetectionReport results(detections);
   ComputeDetectionIndices(results);
