@@ -49,6 +49,8 @@ af::array hamming(size_t n);
  */
 af::array hanning(size_t n);
 
+af::array gaussian(size_t n, double alpha = 2.5);
+
 }  // namespace plasma
 
 #endif /* E9175048_C018_4B5C_ACDB_4A0C0931BB61 */

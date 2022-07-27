@@ -5,10 +5,11 @@ list(APPEND
   # cfar2d.h
   constants.h
   # detector.h
-  # fftshift.h
+  fft.h
   file.h
   fmcw_waveform.h
   linear_fm_waveform.h
+  optimization.h
   pcfm.h
   phase_code.h
   phase_coded_waveform.h

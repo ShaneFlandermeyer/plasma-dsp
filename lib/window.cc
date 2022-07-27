@@ -19,4 +19,9 @@ af::array hanning(size_t n) {
   return 0.5 - 0.5 * cos(2 * M_PI * in / (n - 1));
 }
 
+af::array gaussian(size_t n, double alpha) {
+  af::array in = af::seq(-(n - 1) / 2, (n - 1) / 2);
+  return exp(-0.5 * pow(alpha * 2 * in / (n - 1), 2));
+}
+
 } // namespace plasma
