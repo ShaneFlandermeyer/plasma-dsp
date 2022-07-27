@@ -1,6 +1,7 @@
 #ifndef A775376E_2D30_4128_8EC3_7F3F35F6FD7A
 #define A775376E_2D30_4128_8EC3_7F3F35F6FD7A
 
+#include "detector.h"
 #include <arrayfire.h>
 
 namespace plasma {
@@ -34,7 +35,7 @@ public:
    * each dimension
    * @param pfa Probability of false alarm
    */
-  CFARDetector2D(size_t size_train, size_t size_guard, float pfa);
+  CFARDetector2D(size_t size_guard, size_t size_train, float pfa);
 
   CFARDetector2D(int *gurad_win, int *train_size, float pfa);
 
@@ -42,9 +43,9 @@ public:
    * @brief Perform CFAR detections on the specified elements of the input data
    * 
    * @param x M-by-N matrix of real-valued input data
-   * @return af::array A bool array where a true/1 is a detection
+   * @return af::array DetectionReport
    */
-  af::array detect(const af::array &x);
+  DetectionReport detect(const af::array &x);
 
 private:
 

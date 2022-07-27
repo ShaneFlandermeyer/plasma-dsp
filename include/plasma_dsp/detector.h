@@ -2,8 +2,8 @@
 #define D1E0965D_6969_4C06_916F_4ADE35DEF4FE
 
 // #include <complex>
-// #include <vector>
-#include <Eigen/Dense>
+#include <vector>
+#include <arrayfire.h>
 
 /**
  * @brief A struct used to store the results of a detection for a CPI
@@ -14,10 +14,11 @@ struct DetectionReport {
 
   DetectionReport() {num_detections = 0;}
 
-  DetectionReport(const Eigen::MatrixXd &x) {
-    num_detections = 0;
-    detection = Eigen::Array<bool, Eigen::Dynamic, Eigen::Dynamic>(x.rows(), x.cols());
-    threshold = Eigen::ArrayXXd(x.rows(),x.cols());
+  DetectionReport(const af::array &detections) {
+    num_detections = af::sum<int>(detections);
+    num_rows = detections.dims(0);
+    num_cols = detections.dims(1);
+    _detection = detections;
     }
 
   /**
@@ -25,38 +26,45 @@ struct DetectionReport {
    * range bin at each time instance
    *
    */
-  Eigen::Array<bool, Eigen::Dynamic, Eigen::Dynamic> detection;
+  af::array _detection;
 
   /**
    * @brief A vector of the range bin indices of each detection
    *
    */
-  Eigen::Array<size_t, Eigen::Dynamic, 2> indices;
-
-  /**
-   * @brief A vector of the computed CFAR threshold at each range bin
-   *
-   */
-  Eigen::ArrayXXd threshold;
+  std::vector< std::vector<int>> indices;
 
   /**
    * @brief Number of detections
    *
    */
   size_t num_detections;
+
+  size_t num_rows;
+
+  size_t num_cols;
 };
 
 // TODO: This is very ugly, but I haven't figured out a good way to store
 // detection indices without breaking multithreading
-inline void ComputeDetectionIndices(DetectionReport &result) {
-  result.indices =
-      Eigen::Array<size_t, Eigen::Dynamic, 2>(result.num_detections, 2);
-  size_t i_detection = 0;
-  for (size_t i = 0; i < result.detection.rows(); ++i)
-    for (size_t j = 0; j < result.detection.cols(); ++j)
-      if (result.detection(i, j))
-        result.indices.row(i_detection++) << i, j;
-}
+inline void ComputeDetectionIndices(DetectionReport &detectionArray) {
+  float *host_detections = detectionArray._detection.host<float>();
 
+  int hostIndex = 0;
+  for(int i=0; i<detectionArray.num_rows; ++i){
+    for(int j=0; j<detectionArray.num_cols; ++j){
+      if(host_detections[hostIndex] == 1.0f){
+        std::vector<int> coord;
+        coord.push_back(i);
+        coord.push_back(j);
+        detectionArray.indices.push_back(coord);
+      }
+      ++hostIndex;
+    }
+  }
+
+  af::freeHost(host_detections);
+
+}
 
 #endif /* D1E0965D_6969_4C06_916F_4ADE35DEF4FE */

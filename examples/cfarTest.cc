@@ -1,5 +1,6 @@
 #include "plasma_dsp/file.h"
 #include "cfar2d.h"
+#include "detector.h"
 //#include "plasma_dsp/cfar2d.h"
 #include <fstream>
 #include <iostream>
@@ -55,8 +56,31 @@ int main(int argc, char* argv[]) {
   }
   af::array RDM(200, 1024, copy_rdm);
 
+
+  float tempArray[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  
+  af::array _temp(9, 17, tempArray);
+
+
   plasma::CFARDetector2D cfarDetector(2, 4, 0.00001f);
-  std::cout << af::sum<float>(cfarDetector.detect(RDM)) << std::endl;
+
+  DetectionReport results = cfarDetector.detect(RDM);
+
+  std::cout << "\n" << results.indices.size() << std::endl;
+
+  for(int i=0; i<results.indices.size(); ++i){
+    std::vector<int> currentCoord = results.indices[i]; 
+    std::cout << currentCoord[0] << ", " << currentCoord[1] << std::endl;
+  }
+
 
   af::saveArray("", cfar(RDM), "/home/avery/Research  Folder/MatLab/cpp_detection");
 

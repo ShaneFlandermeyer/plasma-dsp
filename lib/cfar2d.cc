@@ -1,4 +1,5 @@
 #include "cfar2d.h"
+#include "detector.h"
 #include <arrayfire.h>
 
 namespace plasma {
@@ -25,7 +26,7 @@ CFARDetector2D::CFARDetector2D(int *guard_size, int *train_size, float pfa){
 }
 
 // ArrayFire
-af::array CFARDetector2D::detect(const af::array &x) {
+DetectionReport CFARDetector2D::detect(const af::array &x) {
 
   //Setting up the range size for the cfar_temp
   size_t winR1 = 1 - d_guard_win_size[0] - d_train_win_size[0];
@@ -52,9 +53,12 @@ af::array CFARDetector2D::detect(const af::array &x) {
   float alpha = num_train_bins * (pow(d_pfa, -1 / (double)num_train_bins) - 1);
 
   //Creating a bool array where the detections are.
-  af::array detections = (x > power * alpha);
+  af::array detections = (x > power * alpha).as(f32);
 
-  return detections;
+  DetectionReport results(detections);
+  ComputeDetectionIndices(results);
+
+  return results;
 }
 
 } // namespace plasma
