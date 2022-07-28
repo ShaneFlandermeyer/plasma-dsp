@@ -5,10 +5,12 @@ list(
   # cfar1d.cc
   cfar2d.cc
   # cfar2d.cc
+  cpm.cc
   fft.cc
   fmcw_waveform.cc
   linear_fm_waveform.cc
   optimization.cc
+  parc.cc
   pcfm.cc
   phase_code.cc
   phase_coded_waveform.cc
