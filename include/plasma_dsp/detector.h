@@ -1,7 +1,7 @@
 #ifndef D1E0965D_6969_4C06_916F_4ADE35DEF4FE
 #define D1E0965D_6969_4C06_916F_4ADE35DEF4FE
 
-// #include <complex>
+#include <array>
 #include <vector>
 #include <arrayfire.h>
 
@@ -15,54 +15,34 @@ struct DetectionReport {
   DetectionReport() { num_detections = 0; }
 
   DetectionReport(const af::array &detections) {
-    num_detections = af::sum<int>(detections);
-    num_rows = detections.dims(0);
-    num_cols = detections.dims(1);
-    _detection = detections;
+    this->detections = detections;
+    num_detections = detections.nonzeros();
+
+    // Compute the detection indices from the detection matrix
+    af::array linear_indices = af::where(detections);
+    af::array row_indices = linear_indices % detections.dims(0);
+    af::array col_indices = linear_indices / detections.dims(0);
+    indices = af::join(1, row_indices, col_indices);
   }
 
   /**
    * @brief A logical matrix indicating whether a target was detected in each
-   * range bin at each time instance.
+   * bin of 
    *
    */
-  af::array _detection;
+  af::array detections;
 
   /**
    * @brief A vector of the range bin indices of each detection.
    *
    */
-  std::vector<std::vector<int>> indices;
+  af::array indices;
 
   /**
    * @brief Number of detections.
    *
    */
   size_t num_detections;
-
-  size_t num_rows;
-
-  size_t num_cols;
 };
-
-// TODO: This is very ugly, but I haven't figured out a good way to store
-// detection indices without breaking multithreading.
-inline void ComputeDetectionIndices(DetectionReport &detectionArray) {
-  //Convert arrayfire array to host array
-  int *host_detections = detectionArray._detection.as(s32).host<int>();
-  int hostIndex = 0;
-
-  //Find where a detection is, and then save the coord, as (rows, cols), into a vector.
-  for (int icol = 0; icol < detectionArray.num_cols; icol++) {
-    for (int irow = 0; irow < detectionArray.num_rows; irow++) {
-      if (host_detections[hostIndex] == 1.0f) {
-        std::vector<int> coord {irow, icol};
-        detectionArray.indices.push_back(coord);
-      }
-      hostIndex++;
-    }
-  }
-  af::freeHost(host_detections);
-}
 
 #endif /* D1E0965D_6969_4C06_916F_4ADE35DEF4FE */
