@@ -17,7 +17,7 @@ namespace plasma {
  * @param shape Desired spectral shape
  * @return af::array 
  */
-af::array profm(const af::array &in, const af::array &shape);
+af::array profm(const af::array &in, const af::array &shape, int num_iter = 10);
 
 } // namespace plasma
 

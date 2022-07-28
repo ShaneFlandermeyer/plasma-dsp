@@ -1,11 +1,14 @@
 #include "optimization.h"
 
 namespace plasma {
-af::array profm(const af::array &in, const af::array &shape) {
-  af::array pk = exp(af::Im * arg(ifft(ifftshift(in))));
-  af::array rk = ifft(abs(shape) * exp(af::Im * arg(fftshift(fft(pk)))));
-  // TODO: Do this in a loop (until convergence criteria is achieved or a
-  // maximum number of iterations are performed)
+
+af::array profm(const af::array &in, const af::array &shape, int num_iter) {
+  af::array pk = in;
+  af::array rk(pk.elements(), pk.type());
+  for (int i = 0; i < num_iter; i++) {
+    rk = ifft(ifftshift(abs(shape) * exp(af::Im * arg(fftshift(fft(pk))))));
+    pk = exp(af::Im * arg(rk));
+  }
   return pk;
 }
 } // namespace plasma
