@@ -4,15 +4,18 @@ list(
   PLASMA_SOURCES
   # cfar1d.cc
   cfar2d.cc
+  # cfar2d.cc
+  fft.cc
   fmcw_waveform.cc
   linear_fm_waveform.cc
+  optimization.cc
   pcfm.cc
   phase_code.cc
   phase_coded_waveform.cc
   pulsed_waveform.cc
   square_waveform.cc
   waveform.cc
-  # window.cc
+  window.cc
 )
 
 # Create the waveform library

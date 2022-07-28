@@ -33,7 +33,6 @@ TEST_F(FMCWWaveformTest, SymmetricUpsweep) {
                             sweep_bandwidth / sweep_time * std::pow(t, 2)));
   }
   // Actual result from the object
-  std::cout << waveform.sample().type() << std::endl;
   std::shared_ptr<std::complex<double>> actual_data(
       reinterpret_cast<std::complex<double> *>(
           waveform.sample().host<af::cdouble>()));
