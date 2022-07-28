@@ -6,7 +6,7 @@
 
 namespace plasma {
 /**
- * @brief 2D Constant False Alarm Rate (CFAR) detector object
+ * @brief 2D Constant False Alarm Rate (CFAR) detector object.
  *
  * TODO: Currently only implements cell-averaging CFAR.
  *
@@ -14,36 +14,50 @@ namespace plasma {
 class CFARDetector2D {
 public:
   /**
-   * @brief Construct a new CFARDetector object
+   * @brief Construct a new CFARDetector object.
    *
    */
   CFARDetector2D() = default;
 
   /**
-   * @brief Construct a new CFARDetector object
+   * @brief Construct a new CFARDetector object.
    *
-   * @param cfar CFARDetector object
+   * @param cfar CFARDetector object.
    */
   CFARDetector2D(const CFARDetector2D &cfar) = default;
 
   /**
-   * @brief Construct a new CFARDetector object
+   * @brief Construct a new CFARDetector object.
    *
-   * @param size_train Number of training cells surrounding the cell under test
-   * in each dimension
-   * @param size_guard Number of guard cells surrounding the cell under test in
-   * each dimension
+   * @param size_guard Number of guard cells surrounding the cell under test
+   * in each dimension.
+   * @param size_train Number of train cells surrounding the cell under test 
+   * in each dimension.
    * @param pfa Probability of false alarm
    */
   CFARDetector2D(size_t size_guard, size_t size_train, float pfa);
 
-  CFARDetector2D(int *gurad_win, int *train_size, float pfa);
+  /**
+   * @brief Construct a new CFARDetector2D object.
+   * 
+   * @param gurad_win An array where the first element specifies the guard band size along
+   *                  the row dimension (height) and the second element specifies the gurad band
+   *                  size along the column dimension (width).
+   * 
+   * @param train_win An array where the first element specifies the training band size along
+   *                  the row dimension (height) and the second element specifies the training band
+   *                  size along the column dimension (width).
+   * 
+   * @param pfa Probability of false alarm.
+   */
+  CFARDetector2D(int *gurad_win, int *train_win, float pfa);
 
   /**
-   * @brief Perform CFAR detections on the specified elements of the input data
+   * @brief Perform CFAR detections on the specified elements of the input data.
    * 
-   * @param x M-by-N matrix of real-valued input data
-   * @return af::array DetectionReport
+   * @param x M-by-N matrix of real-valued input data.
+   * 
+   * @return  DetectionReport.
    */
   DetectionReport detect(const af::array &x);
 
@@ -56,7 +70,7 @@ protected:
    *
    * A array where the first element specifies the guard band size along
    * the row dimension (height) and the second element specifies the guard band
-   * size along the column dimension (width)
+   * size along the column dimension (width).
    *
    */
   int d_guard_win_size[2];
@@ -67,25 +81,18 @@ protected:
    *
    * A array where the first element specifies the training band size
    * along the row dimension (height) and the second element specifies the guard
-   * band size along the column dimension (width)
+   * band size along the column dimension (width).
    *
    */
   int d_train_win_size[2];
 
   /**
-   * @brief Probability of false alarm
+   * @brief Probability of false alarm.
    *
    */
   float d_pfa;
 };
 
-// /**
-//  * @brief Compute the matrix indices of each detection from a detection
-//  * report, and store them in the report struct
-//  *
-//  * @param result A DetectionReport object
-//  */
-// inline void ComputeCFARDetectionIndices(DetectionReport &result);
 } // namespace plasma
 
 #endif /* A775376E_2D30_4128_8EC3_7F3F35F6FD7A */

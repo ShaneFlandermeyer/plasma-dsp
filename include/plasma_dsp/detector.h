@@ -6,7 +6,7 @@
 #include <arrayfire.h>
 
 /**
- * @brief A struct used to store the results of a detection for a CPI
+ * @brief A struct used to store the results of a detection for a CPI.
  *
  *
  */
@@ -23,19 +23,19 @@ struct DetectionReport {
 
   /**
    * @brief A logical matrix indicating whether a target was detected in each
-   * range bin at each time instance
+   * range bin at each time instance.
    *
    */
   af::array _detection;
 
   /**
-   * @brief A vector of the range bin indices of each detection
+   * @brief A vector of the range bin indices of each detection.
    *
    */
   std::vector<std::vector<int>> indices;
 
   /**
-   * @brief Number of detections
+   * @brief Number of detections.
    *
    */
   size_t num_detections;
@@ -46,33 +46,22 @@ struct DetectionReport {
 };
 
 // TODO: This is very ugly, but I haven't figured out a good way to store
-// detection indices without breaking multithreading
+// detection indices without breaking multithreading.
 inline void ComputeDetectionIndices(DetectionReport &detectionArray) {
+  //Convert arrayfire array to host array
   int *host_detections = detectionArray._detection.as(s32).host<int>();
   int hostIndex = 0;
+
+  //Find where a detection is, and then save the coord, as (rows, cols), into a vector.
   for (int icol = 0; icol < detectionArray.num_cols; icol++) {
     for (int irow = 0; irow < detectionArray.num_rows; irow++) {
       if (host_detections[hostIndex] == 1.0f) {
         std::vector<int> coord {irow, icol};
         detectionArray.indices.push_back(coord);
-        
       }
       hostIndex++;
     }
   }
-
-  // for (int i = 0; i < detectionArray.num_rows; ++i) {
-  //   for (int j = 0; j < detectionArray.num_cols; ++j) {
-  //     if (host_detections[hostIndex] == 1.0f) {
-  //       std::vector<int> coord;
-  //       coord.push_back(i);
-  //       coord.push_back(j);
-  //       detectionArray.indices.push_back(coord);
-  //     }
-  //     ++hostIndex;
-  //   }
-  // }
-
   af::freeHost(host_detections);
 }
 
