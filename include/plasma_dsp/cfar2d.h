@@ -30,13 +30,13 @@ public:
   /**
    * @brief Construct a new CFARDetector object.
    *
-   * @param size_guard Number of guard cells surrounding the cell under test
+   * @param guard_win_size Number of guard cells surrounding the cell under test
    * in each dimension.
-   * @param size_train Number of train cells surrounding the cell under test
+   * @param train_win_size Number of train cells surrounding the cell under test
    * in each dimension.
    * @param pfa Probability of false alarm
    */
-  CFARDetector2D(size_t size_guard, size_t size_train, double pfa);
+  CFARDetector2D(size_t guard_win_size, size_t train_win_size, double pfa);
 
   /**
    * @brief Construct a new CFARDetector2D object.
