@@ -1,62 +1,48 @@
 #ifndef D1E0965D_6969_4C06_916F_4ADE35DEF4FE
 #define D1E0965D_6969_4C06_916F_4ADE35DEF4FE
 
-// #include <complex>
-// #include <vector>
-#include <Eigen/Dense>
+#include <array>
+#include <vector>
+#include <arrayfire.h>
 
 /**
- * @brief A struct used to store the results of a detection for a CPI
+ * @brief A struct used to store the results of a detection for a CPI.
  *
  *
  */
 struct DetectionReport {
 
-  DetectionReport() {num_detections = 0;}
+  DetectionReport() { num_detections = 0; }
 
-  DetectionReport(const Eigen::MatrixXd &x) {
-    num_detections = 0;
-    detection = Eigen::Array<bool, Eigen::Dynamic, Eigen::Dynamic>(x.rows(), x.cols());
-    threshold = Eigen::ArrayXXd(x.rows(),x.cols());
-    }
+  DetectionReport(const af::array &detections) {
+    this->detections = detections;
+    num_detections = detections.nonzeros();
+
+    // Compute the detection indices from the detection matrix
+    af::array linear_indices = af::where(detections);
+    af::array row_indices = linear_indices % detections.dims(0);
+    af::array col_indices = linear_indices / detections.dims(0);
+    indices = af::join(1, row_indices, col_indices);
+  }
 
   /**
    * @brief A logical matrix indicating whether a target was detected in each
-   * range bin at each time instance
+   * bin of 
    *
    */
-  Eigen::Array<bool, Eigen::Dynamic, Eigen::Dynamic> detection;
+  af::array detections;
 
   /**
-   * @brief A vector of the range bin indices of each detection
+   * @brief A vector of the range bin indices of each detection.
    *
    */
-  Eigen::Array<size_t, Eigen::Dynamic, 2> indices;
+  af::array indices;
 
   /**
-   * @brief A vector of the computed CFAR threshold at each range bin
-   *
-   */
-  Eigen::ArrayXXd threshold;
-
-  /**
-   * @brief Number of detections
+   * @brief Number of detections.
    *
    */
   size_t num_detections;
 };
-
-// TODO: This is very ugly, but I haven't figured out a good way to store
-// detection indices without breaking multithreading
-inline void ComputeDetectionIndices(DetectionReport &result) {
-  result.indices =
-      Eigen::Array<size_t, Eigen::Dynamic, 2>(result.num_detections, 2);
-  size_t i_detection = 0;
-  for (size_t i = 0; i < result.detection.rows(); ++i)
-    for (size_t j = 0; j < result.detection.cols(); ++j)
-      if (result.detection(i, j))
-        result.indices.row(i_detection++) << i, j;
-}
-
 
 #endif /* D1E0965D_6969_4C06_916F_4ADE35DEF4FE */

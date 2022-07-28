@@ -2,9 +2,9 @@
 list(APPEND
   PLASMA_HEADERS
   # cfar1d.h
-  # cfar2d.h
+  cfar2d.h
   constants.h
-  # detector.h
+  detector.h
   # fftshift.h
   file.h
   fmcw_waveform.h

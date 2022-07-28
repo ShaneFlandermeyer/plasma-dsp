@@ -1,6 +1,7 @@
 
 list(APPEND
 PLASMA_EXAMPLES
+cfar
 # dummy_target
 # pulse_doppler
 )
@@ -11,5 +12,6 @@ PLASMA_EXAMPLES
 
 # add_executable(pulse_doppler pulse_doppler_processing.cc)
 # target_link_libraries(pulse_doppler PUBLIC plasma_dsp)
-
+add_executable(cfar cfarTest.cc)
+target_link_libraries(cfar PUBLIC plasma_dsp)
 install(TARGETS ${PLASMA_EXAMPLES} DESTINATION ${PLASMA_EXAMPLE_DIR})

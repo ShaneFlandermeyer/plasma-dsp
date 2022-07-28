@@ -6,6 +6,7 @@ add_executable(
   test_pcfm_waveform.cc
   test_phase_coded_waveform.cc
   test_square_waveform.cc
+  test_cfar.cc
   # test_test.cc
 )
 
