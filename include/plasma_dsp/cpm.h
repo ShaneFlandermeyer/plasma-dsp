@@ -33,9 +33,8 @@ public:
    * @param pulse_width Pulse width in sec
    * @param samp_rate sample rate 
    * @param prf pulse repition frequency
-   * @param h modulation index
    */
-  CPMWaveform(af::array radar, af::array filter, double pulse_width, double samp_rate, double prf, double h = 1./2);
+  CPMWaveform(af::array radar, af::array filter, double pulse_width, double samp_rate, double prf);
 
   /**
    * @brief Destroy the CPMWaveform object

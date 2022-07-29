@@ -3,7 +3,7 @@
 
 namespace plasma {
 CPMWaveform::CPMWaveform(af::array comms, af::array filter, 
-    double pulse_width, double samp_rate, double prf, double h) 
+    double pulse_width, double samp_rate, double prf) 
     : Waveform(samp_rate), PulsedWaveform(pulse_width,prf) 
      {
         d_comms = comms;
@@ -18,6 +18,7 @@ CPMWaveform::CPMWaveform(af::array comms, af::array filter,
 */
 af::array CPMWaveform::sample() {
 
+  double h = 1/2;
   // "Oversample" the phase difference code by a factor equal to the shaping
   // filter length. That is, for a length-n filter, the result is an n*code_size
   // vector where each nonzero element is a code value followed by n-1 zeros

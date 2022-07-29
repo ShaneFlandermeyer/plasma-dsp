@@ -3,11 +3,14 @@
 
 namespace plasma {
 
-PARCWaveform:PARCWaveform(af::array radar, af::array comm) {}
+PARCWaveform::PARCWaveform(af::array radar, af::array comm) {
+  d_radar = radar;
+  d_comm = comm;
+}
 
 af::array PARCWaveform::sample() {
 
-    af::array parc = af::mul(radar, comm);
+    af::array parc = d_radar * d_comm;
     return parc;
 }
 

@@ -12,30 +12,28 @@ int main() {
     // Create PARC object that takes two waveform objects in its constructor
     // Find out how to read data from a file and modulate it with a CPM waveform
 
-    af::array text(u8);
-    text.as(f32); // type casting in array fire
+    // af::array text(u8);
+    // text.as(f32); // type casting in array fire
+    double pulse_width = 10e-6;
+    double prf = 3e3; // use or no use?
+    double samp_rate = 150e6;
+    double Ts = 1./samp_rate; // sampling interval
+    double bandwidth = 75e6;
 
-    // a 2x2 array of random values from -pi to pi
-    af::array vals = (2*M_PI) *af::randu(af::dim4(num_rows,num_cols),f32) - M_PI;
+    num_rows = 4;
+    num_cols = 4;
+    k = 6; // oversampling factor
+    // a 2 dimensional array of random values ranging from -pi to pi
+    af::array comms = (2*M_PI) * af::randu(af::dim4(num_rows,num_cols),f32) - M_PI;
+    af::array filter = af::constant(1, k*Ts);
 
-    af::array beta(100);
-    PARCWaveform waveform;
+    cpm = ::plasma::CPMWaveform(comms, filter, pulse_width, samp_rate, prf);
+    af::array cpm_arr = cpm.sample().as(c32);
+    //waveform.setBits(newComms);
 
-    PCFMWaveform w1(...,...);
-    CPMWaveform w2(...,...);
-
-    PARCWaveform w3(w1,w2,comms);
-
-    w3.sample();
-    w3.setBits(newComms);
-    w3.sample();
+    std::cout << "Created everything successfully!" << std::endl;
 
 
-
-
-
-
-    std::cout << "Test" << std::endl;
 
     return EXIT_SUCCESS;
     
