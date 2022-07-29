@@ -11,7 +11,7 @@ namespace plasma {
  */
 
 class PARCWaveform : public PulsedWaveform {
-protected:
+private:
 /**
    * @brief Radar waveform
    *
