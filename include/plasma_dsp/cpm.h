@@ -65,14 +65,14 @@ public:
    * 
    * @param comm The encoded communications message
    */
-  void setMsg(af::array comm) {}
+  void setMsg(af::array comm) {d_comms = comm;};
 
   /** 
    * @brief Get the shaping filter
    *
    * @return Shaping filter
    */
-  af::array filter() const { return d_filter; }
+  af::array getFilter() const { return d_filter; }
 
   /**
    * @brief Set the shaping filter
@@ -80,22 +80,14 @@ public:
    * @param filt Desired shaping filter
    * @return auto The vector of filter taps
    */
-  void filter(af::array filt) { d_filter = filt; }
+  void setFilter(af::array filt) { d_filter = filt; }
 
   /**
    * @brief Get the comms message
    *
    * @return auto comms signal
    */
-  af::array comms() const { return d_comms; }
-
-  /**
-   * @brief Set the comms message
-   *
-   * @param comms Desired comms signal
-   * @return auto
-   */
-  void comms(af::array comms) { d_comms = comms; }
+  af::array getMsg() const { return d_comms; }
 
 };
 } // namespace plasma

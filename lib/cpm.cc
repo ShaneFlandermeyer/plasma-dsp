@@ -36,13 +36,4 @@ af::array CPMWaveform::sample() {
   return out;
 }
 
-/*
-    Modifies the communication message to be encoded in the CPM waveform.
-*/
-void CPMWaveform::setMsg(af::array msg) {
-
-    d_comms = msg;
-    return;
-}
-
 } // namespace plasma
