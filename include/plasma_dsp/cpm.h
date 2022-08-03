@@ -54,7 +54,7 @@ public:
   /**
    * @brief Generates non-zero samples for one pulse
    * 
-   * @param comm The encoded communications message
+   * @param comm The encoded communications symbols
    *
    * @return af::array the pulse samples
    */
@@ -63,9 +63,9 @@ public:
   /**
    * @brief sets the comms message for a new waveform
    * 
-   * @param comm The encoded communications message
+   * @param comm The encoded communications symbols
    */
-  void setMsg(af::array comm) {d_comms = comm;};
+  void setMsg(af::array comm) { d_comms = comm; }
 
   /** 
    * @brief Get the shaping filter
@@ -88,7 +88,7 @@ public:
    * @return auto comms signal
    */
   af::array getMsg() const { return d_comms; }
-
+  
 };
 } // namespace plasma
 

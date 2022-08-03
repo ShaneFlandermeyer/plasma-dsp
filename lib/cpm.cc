@@ -17,7 +17,7 @@ CPMWaveform::CPMWaveform(af::array filter, af::array comms,
 */
 af::array CPMWaveform::sample() {
 
-  float d_h = 1./2; // modulation index 
+  float d_h = 8/(float)8; // modulation index 
   // "Oversample" tcommunications code by a factor of num_samp_symbol.
   // In other words, for a length-n comms message, the result is an num_samp_symbol*n
   // vector where each nonzero element is a comms value followed by n-1 zeros
@@ -35,5 +35,4 @@ af::array CPMWaveform::sample() {
   af::array out = exp(af::Im * phase); 
   return out;
 }
-
 } // namespace plasma

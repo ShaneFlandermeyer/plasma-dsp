@@ -18,7 +18,7 @@ af::array PARCWaveform::demod(const af::array &in) {
   auto ref = sample();
   af::array comms = af::conjg(in) * ref;
   // af::array demoded_symbols = d_comms_waveform.demod(comms);
-  return NULL;
+  return comms;
 }
 
 } // namespace plasma
