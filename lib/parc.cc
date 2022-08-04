@@ -9,9 +9,18 @@ PARCWaveform::PARCWaveform(af::array radar, af::array comm) {
 }
 
 af::array PARCWaveform::sample() {
+    int radar_size = d_radar.elements();
+    int comms_size = d_comm.elements();
 
-    af::array parc = d_radar * d_comm;
-    return parc;
+    if (radar_size == comms_size) {
+      af::array parc = d_radar * d_comm;
+      return parc;
+    }
+    else { 
+      std::cout << "ERROR: Signals of length " << radar_size << 
+        " and " << comms_size << " are not the same!\n";
+      return af::constant(0,100);
+    }
 }
 
 af::array PARCWaveform::demod(const af::array &in) {

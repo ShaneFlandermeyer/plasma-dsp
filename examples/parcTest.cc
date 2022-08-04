@@ -16,14 +16,14 @@ int main() {
     double bandwidth = 50e6;
     double pulse_width = 5e-6;
 
-    int num_samp_symbol = 8; // oversampling factor
+    int num_samp_symbol = 10; // oversampling factor
     // a 2 dimensional array of random values ranging from -pi to pi
     // length of cpm is oversampling factor * number of symbols 
     // length of lfm waveform is pulse width * sample rate
 
     std::ofstream wfile;
     wfile.open("test.txt");
-    std::string str = "Hello, world!";
+    std::string str = "I want this to be 75 elements long so I am making this super looong string.";
     wfile << str;
     wfile.close();
    
@@ -52,15 +52,13 @@ int main() {
 
     PARCWaveform parc(lfm_arr,cpm_arr);
 
-    std::cout << cpm_arr.elements() << ", " << lfm_arr.elements();
-
-    af::array parc_arr = af::constant(1,10); //parc.sample().as(c32);
+    af::array parc_arr = parc.sample().as(c32);
 
     af::Window win;
     win.grid(1,1);
-    af::array x = af::range(lfm_arr.elements());
+    af::array x = af::range(parc_arr.elements());
     do {
-        win(0,0).plot(x, af::imag(lfm_arr));
+        win(0,0).plot(x, af::imag(parc_arr));
         win.show();
 
     } while (not win.close());
