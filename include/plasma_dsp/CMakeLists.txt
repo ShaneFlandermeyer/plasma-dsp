@@ -15,6 +15,7 @@ list(APPEND
   phase_coded_waveform.h
   pulsed_waveform.h
   square_waveform.h
+  utils.h
   waveform.h
   window.h
 )
