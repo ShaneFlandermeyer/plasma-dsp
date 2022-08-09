@@ -19,24 +19,36 @@ struct DetectionReport {
     num_detections = detections.nonzeros();
 
     // Compute the detection indices from the detection matrix
-    af::array linear_indices = af::where(detections);
-    af::array row_indices = linear_indices % detections.dims(0);
-    af::array col_indices = linear_indices / detections.dims(0);
-    indices = af::join(1, row_indices, col_indices);
+    indices = af::where(detections);
+    rows = indices % detections.dims(0);
+    cols = indices / detections.dims(0);
   }
 
   /**
-   * @brief A logical matrix indicating whether a target was detected in each
-   * bin of 
+   * @brief A logical matrix indicating whether a detection was made in each
+   * matrix position
    *
    */
   af::array detections;
 
   /**
-   * @brief A vector of the range bin indices of each detection.
+   * @brief An array containing the (column-major) linear indices of the
+   * detections
    *
    */
   af::array indices;
+
+  /**
+   * @brief An array containing the row indices of the detections
+   * 
+   */
+  af::array rows;
+
+  /**
+   * @brief An array containing the column indices of the detections
+   * 
+   */
+  af::array cols;
 
   /**
    * @brief Number of detections.
