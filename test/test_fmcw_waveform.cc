@@ -11,7 +11,7 @@ protected:
 /**
  * @brief Test an upsweep waveform with a random bandwidth and sweep duration
  */
-TEST_F(FMCWWaveformTest, FMCWUpsweep) {
+TEST_F(FMCWWaveformTest, SymmetricUpsweep) {
 
   // Randomize waveform parameters and create the waveform object, then generate
   // the actual waveform
@@ -21,25 +21,29 @@ TEST_F(FMCWWaveformTest, FMCWUpsweep) {
   plasma::FMCWWaveform waveform(sweep_time, sweep_bandwidth, samp_rate,
                                 plasma::FMCWWaveform::SweepInterval::SYMMETRIC,
                                 plasma::FMCWWaveform::SweepDirection::UP);
-  Eigen::ArrayXcd actual = waveform.step();
-
   // Generate the expected waveform
-  size_t num_samps_expected = static_cast<size_t>(sweep_time * samp_rate);
-  Eigen::ArrayXcd expected = Eigen::ArrayXcd::Zero(num_samps_expected);
+  int num_samp_sweep = round(sweep_time * samp_rate);
+  std::vector<std::complex<double>> expected(num_samp_sweep);
   double ts = 1 / samp_rate;
   double t;
-  for (size_t i = 0; i < num_samps_expected; i++) {
+  for (int i = 0; i < num_samp_sweep; i++) {
     t = i * ts;
-    expected(i) = std::exp(plasma::Im * 2.0 * M_PI *
-                           (-sweep_bandwidth / 2 * t +
-                            sweep_bandwidth / (2 * sweep_time) * pow(t, 2)));
+    expected[i] = std::exp(plasma::Im * M_PI *
+                           (-sweep_bandwidth *  t +
+                            sweep_bandwidth / sweep_time * std::pow(t, 2)));
   }
+  // Actual result from the object
+  std::shared_ptr<std::complex<double>> actual_data(
+      reinterpret_cast<std::complex<double> *>(
+          waveform.sample().host<af::cdouble>()));
+  std::vector<std::complex<double>> actual(actual_data.get(),
+                                           actual_data.get() + num_samp_sweep);
   // Check the pulse length
   ASSERT_EQ(actual.size(), expected.size());
-  
+
   // Check that the values are the same
-  EXPECT_THAT(actual.real(),
-              testing::Pointwise(testing::FloatNear(1e-8), expected.real()));
-  EXPECT_THAT(actual.imag(),
-              testing::Pointwise(testing::FloatNear(1e-8), expected.imag()));
+  for (int i = 0; i < num_samp_sweep; i++) {
+    ASSERT_NEAR(actual[i].real(), expected[i].real(), 1e-8);
+    ASSERT_NEAR(actual[i].imag(), expected[i].imag(), 1e-8);
+  }
 }

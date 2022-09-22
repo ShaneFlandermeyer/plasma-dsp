@@ -12,41 +12,41 @@ FMCWWaveform::FMCWWaveform(double sweep_time, double sweep_bandwidth,
   d_sweep_direction = direction;
 }
 
-Eigen::ArrayXcd FMCWWaveform::step() {
-  Eigen::ArrayXcd samples = sample();
-  FrequencyShift(samples, d_freq_offset);
-  return samples;
-}
-
-Eigen::ArrayXcd FMCWWaveform::sample() {
-  size_t num_samps = round(d_samp_rate * d_sweep_time);
+af::array FMCWWaveform::sample() {
+  size_t num_samp_sweep = round(d_samp_rate * d_sweep_time);
   double ts = 1 / d_samp_rate;
-  Eigen::ArrayXcd out(num_samps);
-  Eigen::ArrayXd t =
-      Eigen::ArrayXd::LinSpaced(num_samps, 0, num_samps - 1) * ts;
+  af::array out(num_samp_sweep, c64);
+  af::array t = af::range(af::dim4(num_samp_sweep), -1, f64) * ts;
   // If the sweep direction is UP (1), the frequency increases over the
   // interval. If the sweep direction is DOWN (-1), the frequency decreases
   // over the interval
   double beta = d_sweep_bandwidth / d_sweep_time;
-  if (d_sweep_direction == UP) {
-    if (d_sweep_interval == POSITIVE) {
-      out = exp(Im * M_PI * beta * t.square());
-    } else {
-      out = exp(Im * M_PI * beta * t * (t - d_sweep_time));
+  if (d_sweep_direction == UP) { // Upsweep
+    if (d_sweep_interval == POSITIVE) { // Sweep from [0,B]
+      out = exp(af::Im * M_PI * beta * af::pow(t, 2));
+    } else { // Sweep from [-B/2,B/2]
+      out = exp(af::Im * M_PI * beta * t * (t - d_sweep_time));
     }
-  } else if (d_sweep_direction == DOWN) {
-    if (d_sweep_interval == POSITIVE) {
-      out = exp(Im * M_PI * beta * t * (2 * d_sweep_time - t));
-    } else {
-      out = exp(Im * M_PI * beta * t * (d_sweep_time - t));
+  } else if (d_sweep_direction == DOWN) { // Downsweep
+    if (d_sweep_interval == POSITIVE) { // Sweep from [0,B]
+      out = exp(af::Im * M_PI * beta * t * (2 * d_sweep_time - t));
+    } else { // Sweep from [-B/2,B/2]
+      out = exp(af::Im * M_PI * beta * t * (d_sweep_time - t));
     }
   }
   return out;
 }
 
-Eigen::ArrayXcd FMCWWaveform::demod(Eigen::ArrayXcd &in) {
+af::array FMCWWaveform::step() {
+  // This currently just returns a single sweep, but it will eventually be used
+  // to get an arbitrary number of sweeps
+  af::array samples = sample();
+  return samples;
+}
+
+af::array FMCWWaveform::demod(const af::array &in) {
   auto ref = sample();
-  return conj(in) * ref;
+  return af::conjg(in) * ref;
 }
 
 } // namespace plasma

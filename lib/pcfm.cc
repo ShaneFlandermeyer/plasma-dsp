@@ -4,61 +4,34 @@
 
 namespace plasma {
 
-PCFMWaveform::PCFMWaveform(const Eigen::ArrayXd &code,
-                           const Eigen::ArrayXd &filter, double samp_rate,
+PCFMWaveform::PCFMWaveform(af::array code, af::array filter, double samp_rate,
                            double prf)
     : Waveform(samp_rate),
-      PulsedWaveform(filter.size() * code.size() / samp_rate, prf) {
-  d_code = code;
-  d_filter = filter;
-}
+      PulsedWaveform(filter.elements() * code.elements() / samp_rate, prf),
+      d_code(code), d_filter(filter / af::sum<double>(filter)) {}
 
-Eigen::ArrayXcd PCFMWaveform::sample() {
-  Eigen::ArrayXd difference = ComputePhaseChange();
-  Eigen::ArrayXd impulse_train = oversample(difference, d_filter.size());
-  // Apply the shaping filter
-  Eigen::ArrayXd chi = filter(impulse_train, d_filter);
-  Eigen::ArrayXd phase = cumsum(chi);
-  Eigen::ArrayXcd out = exp(Im * phase);
-  return out;
-}
+af::array PCFMWaveform::sample() {
+  // Compute the first-order difference between values in the input phase code,
+  // then wrap the result to [-pi,pi]
+  // Each value in the resulting array can be thought of as the instantaneous
+  // frequency at that sample
+  af::array diff = diff1(d_code);
+  diff(af::abs(diff) > M_PI) -= 2 * M_PI * sign(diff(abs(diff) > M_PI));
 
-inline Eigen::ArrayXd PCFMWaveform::ComputePhaseChange() {
-  // Compute the differences that are not wrapped around pi
-  Eigen::ArrayXd difference(d_code.size());
-  std::adjacent_difference(d_code.begin(), d_code.end(), difference.begin());
-  // Wrap each element to [-pi, pi]
-  for (size_t i = 0; i < difference.size(); i++)
-    if (std::abs(difference(i)) > M_PI)
-      difference(i) -= 2 * M_PI * difference.sign()(i);
-  return difference;
-}
+  // "Oversample" the phase difference code by a factor equal to the shaping
+  // filter length. That is, for a length-n filter, the result is an n*code_size
+  // vector where each nonzero element is a code value followed by n-1 zeros
+  af::array train = af::constant(0, diff.elements() * d_filter.elements(), f64);
+  train(af::seq(0, train.elements() - 1, d_filter.elements())) = diff;
 
-inline Eigen::ArrayXd PCFMWaveform::oversample(const Eigen::ArrayXd &in,
-                                               size_t factor) {
-  Eigen::ArrayXd out = Eigen::ArrayXd::Zero(in.size() * factor);
-  out(Eigen::seqN(0, in.size(), factor)) = in;
-  return out;
-}
+  // Apply the shaping filter to the impulse train to "smooth out" the frequency
+  // response
+  af::array freq = fir(d_filter, train);
 
-inline Eigen::ArrayXd PCFMWaveform::filter(const Eigen::ArrayXd &in,
-                                           const Eigen::ArrayXd &filter) {
-
-  // Pad the filter to the size of the input
-  Eigen::ArrayXd pad_filter = Eigen::ArrayXd::Zero(in.size());
-  size_t filter_size = std::min(in.size(), filter.size());
-  pad_filter.head(filter_size) = filter.head(filter_size);
-  // Apply the filter via an FFT
-  Eigen::FFT<double> fft;
-  Eigen::VectorXcd in_fft = fft.fwd(in.matrix().eval());
-  Eigen::VectorXcd filter_fft = fft.fwd(pad_filter.matrix().eval());
-  Eigen::VectorXd out = fft.inv(in_fft.cwiseProduct(filter_fft).eval());
-  return out.array();
-}
-
-inline Eigen::ArrayXd PCFMWaveform::cumsum(const Eigen::ArrayXd &in) {
-  Eigen::ArrayXd out(in.size());
-  std::partial_sum(in.begin(), in.end(), out.begin());
+  // Integrate frequency to phase and exponentiate it to get the resulting
+  // waveform
+  af::array phase = accum(freq);
+  af::array out = exp(af::Im * phase);
   return out;
 }
 

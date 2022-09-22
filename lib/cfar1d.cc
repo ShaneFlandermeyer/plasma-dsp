@@ -24,9 +24,6 @@ DetectionReport CFARDetector::detect(const Eigen::MatrixXd &x) {
   // Initialize the DetectionReport
   DetectionReport result(x);
 
-  #ifdef USE_OPENMP
-  #pragma omp parallel for
-  #endif
   // Do CFAR
   for (size_t i = 0; i < x.rows(); ++i)
     detect(x, i, result);

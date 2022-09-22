@@ -1,25 +1,55 @@
-#include "eigen_config.h"
-#include <matplot/matplot.h>
-
-#include <Eigen/Dense>
-
-// #include "cfar.h"
-
-#include "pulse_doppler.h"
-using namespace plasma;
-using namespace matplot;
-using namespace Eigen;
-int main() {
-  // Eigen::MatrixXd x = Eigen::MatrixXd::Ones(10, 1);
-  // size_t num_samps_delay = 30;
-  // size_t nfft = 30;
-  // double fs = 1e6;
-  // double ts = 1 / fs;
-  // double t = num_samps_delay * ts;
-  // auto y = plasma::delay(x, t, nfft, fs);
-
-  // auto yv = std::vector<double>(y.data(), y.data() + y.size());
-  // matplot::plot(yv);
-  // matplot::show();
-  return 0;
+/*******************************************************
+ * Copyright (c) 2014, ArrayFire
+ * All rights reserved.
+ *
+ * This file is distributed under 3-clause BSD license.
+ * The complete license agreement can be obtained at:
+ * http://arrayfire.com/licenses/BSD-3-Clause
+ ********************************************************/
+ 
+#include <arrayfire.h>
+#include <math.h>
+#include <cstdio>
+ 
+using namespace af;
+ 
+static const int ITERATIONS  = 50;
+static const float PRECISION = 1.0f / ITERATIONS;
+ 
+int main(int, char**) {
+    try {
+        // Initialize the kernel array just once
+        af::info();
+        af::Window myWindow(800, 800, "2D Plot example: ArrayFire");
+ 
+        array Y;
+        int sign    = 1;
+        array X     = seq(-af::Pi, af::Pi, PRECISION);
+        array noise = randn(X.dims(0)) / 5.f;
+ 
+        myWindow.grid(2, 1);
+ 
+        for (double val = 0; !myWindow.close();) {
+            Y = sin(X);
+ 
+            myWindow(0, 0).plot(X, Y);
+            myWindow(1, 0).scatter(X, Y + noise, AF_MARKER_POINT);
+ 
+            myWindow.show();
+ 
+            X = X + PRECISION * float(sign);
+            val += PRECISION * float(sign);
+ 
+            if (val > af::Pi) {
+                sign = -1;
+            } else if (val < -af::Pi) {
+                sign = 1;
+            }
+        }
+ 
+    } catch (af::exception& e) {
+        fprintf(stderr, "%s\n", e.what());
+        throw;
+    }
+    return 0;
 }

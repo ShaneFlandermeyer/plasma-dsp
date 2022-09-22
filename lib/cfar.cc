@@ -27,10 +27,6 @@ std::vector<DetectionReport> CFARDetector::detect(const Eigen::MatrixXd &x,
 std::vector<DetectionReport> CFARDetector::detect(const Eigen::MatrixXd &x) {
   // Initialize the DetectionReport
   DetectionReport result(x);
-
-#ifdef USE_OPENMP
-#pragma omp parallel for
-#endif
   // Do CFAR
   for (size_t i = 0; i < x.rows(); ++i)
     detect(x, i, result);
@@ -136,9 +132,6 @@ CFARDetector2D::CFARDetector2D(Eigen::Array<size_t, 2, 1> size_guard,
 DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x,
                                        const Eigen::Array2Xi &indices) {
   DetectionReport result(x);
-#ifdef USE_OPENMP
-#pragma omp parallel for
-#endif
   for (size_t i = 0; i < indices.rows(); ++i) {
     detect(x, indices(i, 0), indices(i, 1), result);
   }
@@ -150,9 +143,6 @@ DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x,
 
 DetectionReport CFARDetector2D::detect(const Eigen::MatrixXd &x) {
   DetectionReport result(x);
-#ifdef USE_OPENMP
-#pragma omp parallel for
-#endif
   for (size_t i = 0; i < x.rows(); ++i)
     for (size_t j = 0; j < x.cols(); ++j)
       detect(x, i, j, result);
