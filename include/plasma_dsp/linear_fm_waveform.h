@@ -18,6 +18,12 @@ protected:
    */
   double d_bandwidth;
 
+  /**
+   * @brief Sweep start frequency (Hz)
+   *
+   */
+  double d_start_freq;
+
 public:
   /**
    * @brief Construct a new Linear FM waveform object.
@@ -32,9 +38,10 @@ public:
    * @param pulse_width Pulse width (s)
    * @param prf Pulse repetition frequency (Hz)
    * @param samp_rate Sample rate (samples/s)
+   * @param start_freq Starting sweep frequency (Hz)
    */
   LinearFMWaveform(double bandwidth, double pulse_width, double samp_rate,
-                   double prf = 0);
+                   double prf = 0, double start_freq = 0);
 
   /**
    * @brief Construct a new Linear FM Waveform object
@@ -43,9 +50,10 @@ public:
    * @param pulse_width Pulse width (s)
    * @param prf Vector of pulse repetition frequency values (Hz)
    * @param samp_rate Sample rate (samples/s)
+   * @param start_freq Starting sweep frequency (Hz)
    */
   LinearFMWaveform(double bandwidth, double pulse_width, double samp_rate,
-                   std::vector<double> prf);
+                   std::vector<double> prf, double start_freq = 0);
 
   /**
    * @brief Destroy the Linear FM Waveform object

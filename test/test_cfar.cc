@@ -19,11 +19,9 @@ TEST_F(CFARTest, BinaryMatrix) {
   // Expected values
   int num_detections_expected = 2;
   af::array detections_expected = matrix;
-  af::array indices_expected(af::dim4(2, 2), f32);
-  indices_expected(0, 0) = 5;
-  indices_expected(0, 1) = 4;
-  indices_expected(1, 0) = 60;
-  indices_expected(1, 1) = 40;
+  af::array indices_expected(af::dim4(2), f32);
+  indices_expected(0) = 4*matrix.dims(0) + 5;
+  indices_expected(1) = 40*matrix.dims(0) + 60;
   // indices_expected.row(0) = {5, 4};
 
   // Create the CFAR object and compute the actual values from the
