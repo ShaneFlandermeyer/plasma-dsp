@@ -20,7 +20,8 @@ TEST_F(LinearFMWaveformTest, SinglePRF) {
   double pulse_width = 100e-6;
   double samp_rate = 10e6;
   double bandwidth = 7.5e6;
-  plasma::LinearFMWaveform waveform(bandwidth, pulse_width, samp_rate);
+  plasma::LinearFMWaveform waveform(bandwidth, pulse_width, samp_rate, 0,
+                                    -bandwidth / 2);
 
   // Generate the expected result
   size_t num_samp_pulse = static_cast<size_t>(pulse_width * samp_rate);
@@ -40,7 +41,7 @@ TEST_F(LinearFMWaveformTest, SinglePRF) {
       reinterpret_cast<std::complex<double> *>(
           waveform.sample().as(c64).host<af::cdouble>()));
   std::vector<std::complex<double>> actual(actual_data.get(),
-                             actual_data.get() + num_samp_pulse);
+                                           actual_data.get() + num_samp_pulse);
   // Check the pulse length
   ASSERT_EQ(actual.size(), expected.size());
 
