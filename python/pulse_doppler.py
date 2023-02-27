@@ -3,7 +3,7 @@ from typing import Optional
 import jax
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
-from lfm import lfm
+from python.linear_fm import lfm
 
 
 def filter(x: jnp.ndarray,
