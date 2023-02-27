@@ -3,7 +3,8 @@ from typing import Optional
 import jax.numpy as jnp
 from matplotlib import pyplot as plt
 
-from python.linear_fm import lfm
+from linear_fm import lfm
+import scipy.constants as sc
 
 
 def delay(x: jnp.ndarray,
@@ -40,12 +41,17 @@ def delay(x: jnp.ndarray,
   return jnp.fft.ifft(x_fft)[:-int_delay_samps]
 
 
+def doppler_shift(center_freq: float,
+                  radial_velocity: float) -> float:
+  wavelength = sc.c / center_freq
+  return 2*radial_velocity/wavelength
+
+
 if __name__ == '__main__':
-  fs = 50e6
+  fs = 100e6
   pw = 10e-6
-  bw = fs / 2
+  bw = 40e6
   start_freq = -bw / 2
-  np = 512
   x = lfm(bandwidth=bw,
           pulsewidth=pw,
           samp_rate=fs,

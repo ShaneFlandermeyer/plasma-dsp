@@ -39,3 +39,6 @@ build/*
 html/
 latex/
 *.bak
+
+# Python
+__pycache__/

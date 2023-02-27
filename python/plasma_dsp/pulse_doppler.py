@@ -3,12 +3,12 @@ from typing import Optional
 import jax
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
-from python.linear_fm import lfm
+from linear_fm import lfm
 
 
-def filter(x: jnp.ndarray,
-           h: jnp.ndarray,
-           axis: int = 0) -> jnp.ndarray:
+def filter_lti(x: jnp.ndarray,
+        h: jnp.ndarray,
+        axis: int = 0) -> jnp.ndarray:
   """
   Compute the response of a linear time invariant (LTI) system 
   h to an input signal x.
@@ -87,7 +87,7 @@ if __name__ == '__main__':
   x = x + 1e0*noise
 
   # Do pulse-doppler processing
-  y = filter(x, h, axis=0)
+  y = filter_lti(x, h, axis=0)
   rdm = process_doppler(y, nfft=2*np)
   rdm = rdm.at[jnp.abs(rdm) < 10**(-80/20)].set(10**(-80/20))
 
