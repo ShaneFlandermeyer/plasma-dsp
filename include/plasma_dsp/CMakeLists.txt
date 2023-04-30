@@ -8,7 +8,7 @@ list(APPEND
   fft.h
   file.h
   fmcw_waveform.h
-  linear_fm_waveform.h
+  lfm.h
   optimization.h
   pcfm.h
   phase_code.h
