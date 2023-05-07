@@ -2,7 +2,7 @@
 #include <iostream>
 namespace plasma {
 
-af::array lfm(double start_Freq, double bandwidth, double pulse_width,
+af::array lfm(double start_freq, double bandwidth, double pulse_width,
               double samp_rate, double prf) {
   // Sample interval
   double ts = 1 / samp_rate;
@@ -10,7 +10,7 @@ af::array lfm(double start_Freq, double bandwidth, double pulse_width,
   af::array t = af::range(af::dim4(n_samp_pulse), -1, f64) * ts;
   af::array phase =
       af::Im * 2 * M_PI *
-      (start_Freq * t + bandwidth / (2 * pulse_width) * af::pow(t, 2));
+      (start_freq * t + bandwidth / (2 * pulse_width) * af::pow(t, 2));
   af::array x = af::exp(phase);
 
   // Zero-pad to PRF

@@ -7,7 +7,7 @@
 
 namespace plasma {
 
-af::array lfm(double start_Freq, double bandwidth, double pulse_width,
+af::array lfm(double start_freq, double bandwidth, double pulse_width,
               double samp_rate, double prf = 0);
               
 } // namespace plasma
