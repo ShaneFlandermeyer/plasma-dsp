@@ -17,7 +17,8 @@ af::array lfm(double start_Freq, double bandwidth, double pulse_width,
   if (prf > 0) {
     size_t n_samp_pri = round(samp_rate / prf);
     size_t n_pad = n_samp_pri - n_samp_pulse;
-    x = af::pad(x, 0, n_pad, AF_PAD_ZERO);
+    af::array zeros = af::constant(af::cdouble(0, 0), af::dim4(n_pad));
+    x = af::join(0, x, zeros);
   }
 
   return x;
