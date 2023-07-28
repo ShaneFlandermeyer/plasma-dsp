@@ -1,0 +1,20 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Plasma DSP
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Shane
+    family-names: Flandermeyer
+    email: shaneflandermeyer@gmail.com
+    affiliation: The University of Oklahoma
+    orcid: 'https://orcid.org/0009-0001-9395-5396'
+repository-code: 'https://github.com/ShaneFlandermeyer/plasma-dsp'
+abstract: >-
+  Plasma DSP is a GPU-accelerated radar signal processing
+  library written in C++
+license: MIT
