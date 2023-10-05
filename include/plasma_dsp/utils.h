@@ -6,12 +6,7 @@
 
 namespace plasma {
   
-template <typename T>
-std::vector<T> to_vector(const af::array & in) {
-  std::vector<T> out(in.elements());
-  in.host(out.data());
-  return out;
-}
+af::array pad(af::array x, size_t pad_width, double value = 0);
 
 }
 

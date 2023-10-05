@@ -7,7 +7,7 @@ list(
   # cfar2d.cc
   fft.cc
   fmcw_waveform.cc
-  linear_fm_waveform.cc
+  lfm.cc
   optimization.cc
   pcfm.cc
   phase_code.cc
