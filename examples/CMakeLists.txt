@@ -12,6 +12,13 @@ target_include_directories(dummy_target PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 add_executable(profm profm.cc)
 target_link_libraries(profm PUBLIC plasma_dsp)
+target_include_directories(profm PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+
+add_executable(parc parcTest.cc)
+target_link_libraries(parc PUBLIC plasma_dsp)
+target_include_directories(parc PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
 
 # add_executable(pulse_doppler pulse_doppler_processing.cc)
 # target_link_libraries(pulse_doppler PUBLIC plasma_dsp)
