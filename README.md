@@ -122,6 +122,3 @@ x = np.array(list(x),dtype=np.complex128)
 plt.plot(np.real(x))
 plt.show()
 ```
-## Publications and Presentations
-- https://pubs.gnuradio.org/index.php/grcon/article/view/121
-- https://events.gnuradio.org/event/18/contributions/253/
